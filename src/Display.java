@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -101,9 +102,25 @@ public class Display extends Application{
         grid.setVgap(5);
         grid.setPadding(new Insets(10,10,20,20));
 
+        //Row 1
         Label Forgot_Password_Label = new Label("Forgot Password");
         Forgot_Password_Label.setFont(Font.font("Tahoma", FontWeight.BOLD, 14));
         grid.add(Forgot_Password_Label,0,0,2,1);
         Forgot_Password_Scene = new Scene(grid,800,600);
+
+        //Row 2
+        Label reset_password_info = new Label("Reset Password through:");
+        reset_password_info.setFont(Font.font("Calibri", FontWeight.NORMAL, 11));
+        grid.add(reset_password_info,0,1,2,1);
+
+        //Row 3
+        Label email_label = new Label();
+        email_label.setText("○ E-mail verification:");
+        email_label.setFont(Font.font("Calibri", FontWeight.NORMAL, 11));
+        TextField email_Field = new TextField();
+        email_Field.setText("Enter email");
+        grid.add(email_label, 1,2,1,1);
+        grid.add(email_Field, 2,2,2,1);
+        
     }
 }
