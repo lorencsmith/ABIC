@@ -23,21 +23,27 @@ public class Goal {
      * @pre goalNumber exists
      * @post setGoal is implemented into account
      */
-    public void setGoal(String name, boolean b, int number) {...}
+    public void setGoal(String name, boolean b, int number){
+
+    }
 
     /**
      * removeGoal assumes that there is/are already a goal on the account.
      * @pre setGoal is already implemented into an account
      * @post setGoal is removed
      */
-    public void removeGoal(Goal g) {...}
+    public void removeGoal(Goal g){
+
+    }
 
     /**
      * changeGoalAmount assumes that there is/are already a goal on the account
      * @pre setGoal is already implemented into an account
      * @gost setGoal.goalNumber = changeGoalAmount.amount
      */
-    public void changeGoalAmount(int amount) {...}
+    public void changeGoalAmount(int amount){
+
+    }
 
 
 }

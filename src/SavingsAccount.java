@@ -27,13 +27,20 @@ public class SavingsAccount extends BankAccount {
      * @pre interestRate > 0.00
      * @post balance = balance + balance * interestRate
      */
-    public double addInterest(double balance, double interestRate) {...}
+    public double addInterest(double balance, double interestRate) {
+        return balance;
+    }
 
     /**
      * The canWithdraw() operation checks to see if the user has gone over
      * their number of monthly withdrawals.
      * @post The result of numOfMonthlyWithdrawals < MAX_NUMBER_OF_MONTHLY_WITHDRAWALS:
      */
-    public boolean canWithdraw() {...}
+    public boolean canWithdraw() {
+        if (numOfMonthlyWithdrawals < MAX_NUBMER_OF_MONTHLY_WITHDRAWLS)
+            return true;
+        else
+            return false;
+    }
 
 }

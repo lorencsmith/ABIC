@@ -4,5 +4,4 @@
 public class TellerAccount extends Login {
     private int id;
 
-
 }

@@ -16,11 +16,8 @@ public class Person {
     private String phoneNumber;
 
     private String emailAdress;
+    
+    public void viewInfo(){
 
-
-
-    public void viewInfo() {...}
-
-
-
+    };
 }

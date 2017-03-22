@@ -18,7 +18,15 @@ public class Login {
 
     private final int MAX_NUM_OF_LOGIN_ATTEMPTS = 5;
 
-    public void requestNewPassword() {...}
+    public void requestNewPassword(){
 
-    public boolean accountLocked() {...}
+    };
+
+    public boolean accountLocked(){
+        return canLogin;
+    };
+
+    public static void main(String[] args) {
+        System.out.println("hello world!");
+    }
 }

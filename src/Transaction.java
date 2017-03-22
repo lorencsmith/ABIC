@@ -35,22 +35,30 @@ public class Transaction {
     /**
      * @return The date of the transaction
      */
-    private String getDate() {...}
+    private String getDate() {
+        return date;
+    }
 
     /**
      * @return The time of the transaction
      */
-    private String getTimeStamp() {...}
+    private String getTimeStamp() {
+        return timeStamp;
+    }
 
     /**
      * @return The total amount of the transaction
      */
-    private double getTotalAmount() {...}
+    private double getTotalAmount() {
+        return totalAmount;
+    }
 
     /**
      * @return The category of the transaction
      */
-    private String getCategory() {...}
+    private String getCategory() {
+        return category;
+    }
 
     /**
      * The viewTransaction() operation assumes that there are items
@@ -59,6 +67,9 @@ public class Transaction {
      * @post A list of all items in the transaction with their respective
      * prices
      */
-    private String viewTransaction(HashMap transactionRecord) {...}
+    private String viewTransaction(HashMap transactionRecord) {
+        //Placeholder
+        return "0";
+    }
 
 }

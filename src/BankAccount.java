@@ -38,7 +38,9 @@ public class BankAccount {
      *  @pre 0.00 < amount
      *  @post balance = balance + amount
      */
-    public void deposit(int id, double amount) {...}
+    public void deposit(int id, double amount){
+
+    }
 
     /** The withdraw() operation assumes that the amount withdrawn
      *  is a non-negative number and is less than the amount in the
@@ -49,12 +51,16 @@ public class BankAccount {
      *  @pre amount < balance
      *  @post balance = balance - amount
      */
-    public void withdraw(int id, double amount) {...}
+    public void withdraw(int id, double amount){
+
+    }
 
     /**
      * @return The current total balance in the account
      */
-    public double getBalance() {...}
+    public double getBalance() {
+        return balance;
+    }
 
     /** The transfer() operation assumes that the specified
      *  BankAccount exists, and that the user has sufficient funds
@@ -64,13 +70,17 @@ public class BankAccount {
      *  @post acc.balance += amount
      *  @post this.balance -= amount
      */
-    public void transfer(BankAccount acc, double amount) {...}
+    public void transfer(BankAccount acc, double amount) {
+
+    }
 
     /** The viewTransactions() operation assumes that there are
      *  transactions to view.
      *  @pre number of Transactions > 0
      *  @post List of transactions
      */
-    public void viewTransactions(ArrayList<Transaction> t) {...}
+    public void viewTransactions(ArrayList<Transaction> t) {
+
+    }
 
 }
