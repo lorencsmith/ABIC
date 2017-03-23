@@ -11,14 +11,19 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import sun.java2d.pipe.SpanShapeRenderer;
 
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
+import java.awt.*;
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.logging.SimpleFormatter;
 
 /**
  * Created by Daniel Oh on 3/22/2017.
@@ -134,7 +139,7 @@ public class Display extends Application{
         email_label.setText("○ E-mail verification:");
         email_label.setFont(Font.font("Calibri", FontWeight.NORMAL, 11));
         TextField email_Field = new TextField();
-        email_Field.setText("Enter email");
+        email_Field.setPromptText("Enter email");
         grid.add(email_label, 1,3,1,1);
         grid.add(email_Field, 2,3,2,1);
 
@@ -143,7 +148,7 @@ public class Display extends Application{
         mobile_label.setText("○ Mobile number:");
         mobile_label.setFont(Font.font("Calibri", FontWeight.NORMAL, 11));
         TextField mobile_Field = new TextField();
-        mobile_Field.setText("Enter mobile number");
+        mobile_Field.setPromptText("Enter mobile number");
         grid.add(mobile_label, 1,4,1,1);
         grid.add(mobile_Field,2,4,2,1);
 
@@ -156,11 +161,24 @@ public class Display extends Application{
         ssn_Label.setText("Please verify your Social Security Number: ");
         ssn_Label.setFont(Font.font("Calibri", FontWeight.NORMAL, 11));
         TextField ssn_Field = new TextField();
-        
-        JFormattedTextField ssn_format = new JFormattedTextField();
-
+        ssn_Field.setPromptText("___-__-____");
         grid.add(ssn_Label, 0,6,2,1);
+        grid.add(ssn_Field,2,6,2,1);
 
+        //Row 7
+        Button cancel_Button = new Button("Cancel");
+        cancel_Button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mainStage.setScene(Login_Scene);
+            }
+        });
+        Button submit_Button = new Button("Submit");
+        HBox button_Box = new HBox();
+        button_Box.setSpacing(5);
+        button_Box.setPadding(new Insets(5,5,5,5));
+        button_Box.getChildren().addAll(cancel_Button,submit_Button);
+        grid.add(button_Box, 0,7,3,1);
 
 
     }
