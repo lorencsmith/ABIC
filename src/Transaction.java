@@ -86,11 +86,11 @@ public class Transaction {
      * Method increases or decreases the total amount of the account by value of transAmount.
      * update:3/28/17: added transact method
      */
-    private void transact(transAmount){	
+    private void transact(double transAmount){	
     	if(transAmount >= 0){
-    		amountAvailable += transAmount;
+    		totalAmount += transAmount;
     	}else{
-    		amountAvailable -= transAmount;
+    		totalAmount -= transAmount;
     	}
     }
 
