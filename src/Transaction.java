@@ -50,7 +50,7 @@ public class Transaction {
     }
     /**
      * @return The date of the transaction
-     * update:3/28/17
+     * update:3/28/17: added method to set date
      */
     private String setDate(String newDate) {
     	date = newDate;
@@ -71,6 +71,7 @@ public class Transaction {
     }
     /**
      * @return The total amount of the transaction
+     * update: 3/28/17: added getTransAmount() method 
      */    
     private double getTransAmount(){
     	return transAmount;
