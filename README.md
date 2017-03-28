@@ -6,6 +6,6 @@ Loren Smith |
 Daniel Oh |
 #TODO
 - Everyone commit your name to the readme (makes sure you know how to use git)
-- GUI (Working on it -Daniel)
-- Login Screen (Also Working on it - Daniel)
+- GUI
+- Login Screen
 - Implement classes
