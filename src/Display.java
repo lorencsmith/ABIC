@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,12 +17,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.io.File;
 
 /**
  * Created by Daniel Oh on 3/22/2017.
  * This is Display class for ABIC
+ *
+ * Last Update: 3/28/2017
  */
 public class Display extends Application{
 
@@ -42,7 +44,7 @@ public class Display extends Application{
         mainStage.show();
     }
 
-    public void Login_Scene_Call(){
+    private void Login_Scene_Call(){
         //Main Gridpane set up
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -119,7 +121,7 @@ public class Display extends Application{
 
     }
 
-    public void Employee_Login_Call(){
+    private void Employee_Login_Call(){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(5);
@@ -162,7 +164,7 @@ public class Display extends Application{
         grid.add(password_Label,1,5,1,1);
 
         //Row 6
-        TextField password_Field = new TextField();
+        PasswordField password_Field = new PasswordField();
         grid.add(password_Field, 1, 6,1,1);
 
         //Row 7
@@ -174,6 +176,15 @@ public class Display extends Application{
         submit.setAlignment(Pos.CENTER);
         button_Box.getChildren().addAll(Cancel_Button(),submit);
         grid.add(button_Box,1,7,1,1);
+
+        //Row 8
+        Text console = new Text();
+        console.setText("                     ");
+        console.setFont(Font.font("",FontWeight.NORMAL,11));
+        console.setFill(Color.WHITE);
+        grid.add(console,0,8,7,1);
+
+        //Eventhandler
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -181,6 +192,16 @@ public class Display extends Application{
                 String password = password_Field.getText();
                 //Validate username and password
                 //Search DB
+                if (username.equals("Username") && password.equals("password")){
+                    console.setFill(Color.BLACK);
+                    console.setText("Username & Password match");
+                }
+                else
+                {
+                    console.setFill(Color.RED);
+                    console.setText("Username & Password does not match");
+
+                }
             }
         });
 
@@ -189,7 +210,7 @@ public class Display extends Application{
         mainStage.setScene(Employee_Login_Scene);
     }
 
-    public void User_Login_Call(){
+    private void User_Login_Call(){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(5);
@@ -232,7 +253,7 @@ public class Display extends Application{
         grid.add(password_Label,1,5,1,1);
 
         //Row 6
-        TextField password_Field = new TextField();
+        PasswordField password_Field = new PasswordField();
         grid.add(password_Field, 1, 6,1,1);
 
         //Row 7
@@ -259,7 +280,7 @@ public class Display extends Application{
         mainStage.setScene(User_Login_Scene);
     }
 
-    public void Forgot_Password_Call(){
+    private void Forgot_Password_Call(){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(5);
@@ -336,7 +357,7 @@ public class Display extends Application{
         mainStage.setScene(Forgot_Password_Scene);
     }
 
-    public void Enroll_Call(){
+    private void Enroll_Call(){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(5);
@@ -534,4 +555,5 @@ public class Display extends Application{
         rs.setFill(Color.RED);
         return rs;
     }
+
 }
