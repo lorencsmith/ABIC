@@ -14,6 +14,12 @@ public class SavingsAccount extends BankAccount {
      * The numOfMonthlyWithdrawals should never exceed the
      * maximum number of withdraws;
      */
+    
+    private double interestRate = .05;
+    /**
+    *Saving account will have fixed interest rate of .05% and will be
+    *paid to the account every month.
+    */
     private int numOfMonthlyWithdrawals;
 
     /**
@@ -22,25 +28,26 @@ public class SavingsAccount extends BankAccount {
     private final int MAX_NUBMER_OF_MONTHLY_WITHDRAWLS = 5;
     /**
      * The addInterest() operation assumes that the balance and the interestRate
-     * is non-negative. The operation adds interest to the current balance yearly.
+     * is non-negative. The operation adds interest to the current balance monthly.
      * @pre balance > 0.00
      * @pre interestRate > 0.00
-     * @post balance = balance + balance * interestRate
+     * @post balance = balance * interestRate
      */
-    public double addInterest(double balance, double interestRate) {
-        return balance;
+    public  double addInterest(double balance, double interestRate) {
+        double paidInterest = (balance*interestRate);
+        return paidInterest;
     }
-
-    /**
-     * The canWithdraw() operation checks to see if the user has gone over
-     * their number of monthly withdrawals.
-     * @post The result of numOfMonthlyWithdrawals < MAX_NUMBER_OF_MONTHLY_WITHDRAWALS:
+    
+    /** 
+     *The finalBalance() operation adds the interest paid to the 
+     *account to the current balance and returns the final balance.
+     *@post balance = balance + paidInterest
      */
-    public boolean canWithdraw() {
-        if (numOfMonthlyWithdrawals < MAX_NUBMER_OF_MONTHLY_WITHDRAWLS)
-            return true;
-        else
-            return false;
+    
+    public double newBalance(double balance){
+        double finalBalance = (balance+addInterest());
+        return finalBalance;
+        
     }
 
 }
