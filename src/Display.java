@@ -27,7 +27,7 @@ import java.io.File;
 public class Display extends Application{
 
     Stage mainStage;
-    Scene Login_Scene, Forgot_Password_Scene, Enroll_Scene, Employee_Login_Scene, User_Login_Scene;
+    Scene Login_Scene, Forgot_Password_Scene, Enroll_idpass_Scene ,Enroll_Scene, Employee_Login_Scene, User_Login_Scene;
     File file = new File(".");
     Image Logo = new Image("ABIC_Logo.png");
 
@@ -99,7 +99,7 @@ public class Display extends Application{
         Enroll_Button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Enroll_Call();
+                Enroll_idpass_Call();
             }
         });
 
@@ -332,7 +332,7 @@ public class Display extends Application{
         ssn_Label.setText("Please verify your Social Security Number: ");
         ssn_Label.setFont(Font.font("Calibri", FontWeight.NORMAL, 11));
         TextField ssn_Field = new TextField();
-        ssn_Field.setPromptText("___-__-____");
+        ssn_Field.setPromptText("_________");
         grid.add(ssn_Label, 0,6,2,1);
         grid.add(ssn_Field,2,6,2,1);
 
@@ -356,6 +356,73 @@ public class Display extends Application{
         mainStage.setScene(Forgot_Password_Scene);
     }
 
+    private void Enroll_idpass_Call(){
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(5);
+        grid.setVgap(5);
+        grid.setPadding(new Insets(10,10,20,20));
+        grid.setStyle("-fx-background-color: white");
+
+        //Row 0
+        ImageView LogoView = new ImageView();
+        LogoView.setImage(Logo);
+        LogoView.setFitWidth(Logo.getWidth()/4);
+        LogoView.setFitHeight(Logo.getHeight()/4);
+        grid.add(LogoView,3,0,3,1);
+
+        //Row 1
+        Label username_Label = new Label();
+        username_Label.setText("username");
+        grid.add(username_Label,0,1,1,1);
+
+        //Row 2
+        TextField username_Field = new TextField();
+        username_Field.setPromptText("Enter username");
+        grid.add(username_Field,0,2,1,1);
+
+        //Row 3
+        Label password_Label = new Label();
+        password_Label.setText("Enter password");
+        grid.add(password_Label,0,3,1,1);
+
+        //Row 4
+        PasswordField password_Field = new PasswordField();
+        grid.add(password_Field,0,4,1,1);
+
+        //Row 5
+        HBox button_Box = new HBox();
+        Button submit = new Button();
+        submit.setText("Submit");
+
+        submit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String id = username_Field.getText();
+                String password = password_Field.getText();
+            }
+        });
+
+        Button next = new Button();
+        next.setText("PH");
+        next.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Enroll_Call();
+            }
+        });
+
+        button_Box.getChildren().addAll(submit,Cancel_Button(),next);
+
+        grid.add(button_Box,0,5,1,1);
+
+
+        //Start the scene
+        Enroll_idpass_Scene = new Scene(grid, 800,600);
+        mainStage.setScene(Enroll_idpass_Scene);
+
+    }
+
     private void Enroll_Call(){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -369,7 +436,7 @@ public class Display extends Application{
         LogoView.setImage(Logo);
         LogoView.setFitWidth(Logo.getWidth()/4);
         LogoView.setFitHeight(Logo.getHeight()/4);
-        grid.add(LogoView,6,1,3,1);
+        grid.add(LogoView,3,1,3,1);
 
         //Row 1
         Label Welcome_Logo = new Label();
@@ -392,8 +459,11 @@ public class Display extends Application{
         First_Name_Box.getChildren().addAll(First_Name_Label,red_star());
         TextField First_Name_Field = new TextField();
         First_Name_Field.setPromptText("Enter First Name");
+        Label First_Name_Console = new Label();
+        First_Name_Console.setText("");
         grid.add(First_Name_Box,0,3,1,1);
         grid.add(First_Name_Field, 1, 3,1,1);
+        grid.add(First_Name_Console,2,3,1,1);
 
         //Row 4
         Label First_Name_Info = new Label();
@@ -410,8 +480,11 @@ public class Display extends Application{
         Last_Name_Box.getChildren().addAll(Last_Name_Label,red_star());
         TextField Last_Name_Field = new TextField();
         Last_Name_Field.setPromptText("Enter Last Name");
+        Label Last_Name_Console = new Label();
+        Last_Name_Console.setText("");
         grid.add(Last_Name_Box,0,5,1,1);
         grid.add(Last_Name_Field, 1, 5,1,1);
+        grid.add(Last_Name_Console,2,5,1,1);
 
         //Row 6
         Label Last_Name_Info = new Label();
@@ -427,9 +500,12 @@ public class Display extends Application{
         ssn_Label.setFont(Font.font("",FontWeight.BOLD, 11));
         ssn_Box.getChildren().addAll(ssn_Label,red_star());
         TextField ssn_Field = new TextField();
-        ssn_Field.setPromptText("___-__-____");
+        ssn_Field.setPromptText("_________");
+        Label ssn_Console = new Label();
+        ssn_Console.setText("");
         grid.add(ssn_Box,0,7,1,1);
         grid.add(ssn_Field, 1, 7,1,1);
+        grid.add(ssn_Console,2,7,1,1);
 
         //Row 8
         HBox pAccount_Box = new HBox();
@@ -439,9 +515,12 @@ public class Display extends Application{
         pAccount_Label.setFont(Font.font("",FontWeight.BOLD, 11));
         pAccount_Box.getChildren().addAll(pAccount_Label,red_star());
         TextField pAccount_Field = new TextField();
-        pAccount_Field.setPromptText("___-__-____");
+        pAccount_Field.setPromptText("_________");
+        Label pAccount_Console = new Label();
+        pAccount_Console.setText("");
         grid.add(pAccount_Box,0,8,1,1);
         grid.add(pAccount_Field, 1, 8,1,1);
+        grid.add(pAccount_Console,2,8,1,1);
 
         //Row 9
         Label pAccount_Info = new Label();
@@ -459,8 +538,11 @@ public class Display extends Application{
         dob_Box.getChildren().addAll(dob_Label,red_star());
         TextField dob_Field = new TextField();
         dob_Field.setPromptText("MM/DD/YYYY");
+        Label dob_Console = new Label();
+        dob_Console.setText("");
         grid.add(dob_Box,0,10,1,1);
         grid.add(dob_Field, 1, 10,1,1);
+        grid.add(dob_Console,2,10,1,1);
 
         //Row 11
         HBox wPhone_Box = new HBox();
@@ -471,8 +553,11 @@ public class Display extends Application{
         wPhone_Box.getChildren().addAll(wPhone_Label,red_star());
         TextField wPhone_Field = new TextField();
         wPhone_Field.setPromptText("XXX-XXX-XXXX");
+        Label wPhone_Console = new Label();
+        wPhone_Console.setText("");
         grid.add(wPhone_Box,0,11,1,1);
         grid.add(wPhone_Field, 1, 11,1,1);
+        grid.add(wPhone_Console,2,11,1,1);
 
 
         //Row 12
@@ -484,8 +569,11 @@ public class Display extends Application{
         hPhone_Box.getChildren().addAll(hPhone_Label,red_star());
         TextField hPhone_Field = new TextField();
         hPhone_Field.setPromptText("XXX-XXX-XXXX");
+        Label hPhone_Console = new Label();
+        hPhone_Console.setText("");
         grid.add(hPhone_Box,0,12,1,1);
         grid.add(hPhone_Field, 1, 12,1,1);
+        grid.add(hPhone_Console, 2, 12,1,1);
 
         //Row 13
         Label phone_Info = new Label();
@@ -515,7 +603,10 @@ public class Display extends Application{
         TextField address2_Field = new TextField();
         address2_Field.setPromptText("Apartment, suite, unit");
         address2_box.getChildren().addAll(address2_Label,address2_Field);
-        grid.add(address2_box,2,14,2,1);
+        Label address_Console = new Label();
+        address_Console.setText("");
+        grid.add(address2_box,2,14,1,1);
+        grid.add(address_Console,3,14,1,1);
 
         //Row 16
         HBox city_Box = new HBox();
@@ -526,8 +617,11 @@ public class Display extends Application{
         city_Box.getChildren().addAll(city_Label,red_star());
         TextField city_Field = new TextField();
         city_Field.setPromptText("Enter City");
+        Label city_Console = new Label();
+        city_Console.setText("");
         grid.add(city_Box,0,16,1,1);
         grid.add(city_Field, 1, 16,1,1);
+        grid.add(city_Console,2,16,1,1);
 
         //Row 17
         HBox State_Box = new HBox();
@@ -590,10 +684,12 @@ public class Display extends Application{
                 );
         final ComboBox state_combo_box = new ComboBox(states);
         state_combo_box.setMaxWidth(Double.MAX_VALUE);
-
+        Label state_Console = new Label();
+        state_Console.setText("");
         State_Box.getChildren().addAll(State_Label,red_star());
         grid.add(State_Box,0,17,1,1);
         grid.add(state_combo_box,1,17,1,1);
+        grid.add(state_Console,2,17,1,1);
 
         //Row 18
         HBox zip_Box = new HBox();
@@ -604,9 +700,12 @@ public class Display extends Application{
         zip_Box.getChildren().addAll(zip_Label,red_star());
         TextField zip_Field = new TextField();
         zip_Field.setPromptText("Enter Zip");
+        Label zip_Console = new Label();
+        zip_Console.setText("");
         grid.add(zip_Box,0,18,1,1);
         grid.add(zip_Field, 1, 18,1,1);
-        
+        grid.add(zip_Console,2,18,1,1);
+
         //Row 19
         HBox address_Info_Box = new HBox();
         Label address_Info1 = new Label();
@@ -631,6 +730,50 @@ public class Display extends Application{
             }
         });
         grid.add(button_Box,3,20,1,1);
+
+        submit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //validate inputs and compare it with db
+                boolean passed = true;
+                if (First_Name_Field.getText().isEmpty()){
+                    First_Name_Console.setTextFill(Color.RED);
+                    First_Name_Console.setText("Please enter first name");
+                    passed = false;
+                }
+                else
+                    First_Name_Console.setText("");
+
+                if(Last_Name_Field.getText().isEmpty()){
+                    Last_Name_Console.setTextFill(Color.RED);
+                    Last_Name_Console.setText("Please enter last name");
+                    passed = false;
+                }
+                else
+                    Last_Name_Console.setText("");
+
+                if(ssn_Field.getText().isEmpty()){
+                    ssn_Console.setTextFill(Color.RED);
+                    ssn_Console.setText("Please enter Social Security Number");
+                }
+                else
+                    ssn_Console.setText("");
+
+                if(pAccount_Field.getText().isEmpty()){
+                    pAccount_Console.setTextFill(Color.RED);
+                    pAccount_Console.setText("Please enter Primary Billing Account");
+                }
+                else
+                    pAccount_Console.setText("");
+
+                if(dob_Field.getText().isEmpty()){
+                    dob_Console.setTextFill(Color.RED);
+                    dob_Console.setText("Please Enter Date of Birth");
+                }
+                else
+                    dob_Console.setText("");
+            }
+        });
 
         //Start new screen
         Enroll_Scene = new Scene(grid, 800,600);
