@@ -43,12 +43,17 @@ public class Display extends Application{
 
     @Override
     public void start(Stage primaryStage) {
+        //CAll Login scene at the start of the program
         mainStage = primaryStage;
         Login_Scene_Call();
-        mainStage.setTitle("ABIC");
+        mainStage.setTitle("");
         mainStage.show();
     }
 
+    /**
+     * Login Scene will be called at the beginning of the program
+     * And it will be the main menu throughout the program
+     */
     private void Login_Scene_Call(){
         //Main Gridpane set up
         GridPane grid = new GridPane();
@@ -285,6 +290,11 @@ public class Display extends Application{
         mainStage.setScene(User_Login_Scene);
     }
 
+    /**
+     * Forgot password scene will be called when user presses forgot password button
+     * it will search and validate the input using database and return current password back to user
+     * Since the program is strictly used in infranet, it won't involve sending emails
+     */
     private void Forgot_Password_Call(){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -362,6 +372,10 @@ public class Display extends Application{
         mainStage.setScene(Forgot_Password_Scene);
     }
 
+    /**
+     * Program will ask user to input username and password for enrollment.
+     * it will take username parameter and search the database to see if it already exists in the database
+     */
     private void Enroll_idpass_Call(){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -437,6 +451,10 @@ public class Display extends Application{
 
     }
 
+    /**
+     * After usernamd and password is validated, program will ask for personal information and validate it.
+     * After validation, it will store the data into database
+     */
     private void Enroll_Call(){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -811,7 +829,6 @@ public class Display extends Application{
                 else
                     city_Console.setText("");
 
-
                 if(state_combo_box.getValue() == null){
                     state_Console.setText("Please choose State");
                     passed = false;
@@ -833,7 +850,6 @@ public class Display extends Application{
                 if (passed){
                     System.out.println("Passed!");
                 }
-
             }
         });
 
@@ -842,6 +858,9 @@ public class Display extends Application{
         mainStage.setScene(Enroll_Scene);
     }
 
+    /**
+     * @return Return cancel button that will take user back to main menu(login scene)
+     */
     private Button Cancel_Button(){
         Button cancel_Button = new Button("Cancel");
         cancel_Button.setOnAction(new EventHandler<ActionEvent>() {
@@ -853,6 +872,9 @@ public class Display extends Application{
         return cancel_Button;
     }
 
+    /**
+     * @return red-colored * to be used in various labels
+     */
     public Text red_star(){
         //Red Star
         Text rs = new Text();
