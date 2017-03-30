@@ -447,10 +447,7 @@ public class Display extends Application{
                 }
             }
         });
-<<<<<<< HEAD
 
-=======
->>>>>>> 3447326851d9a3953734343e4b708e2a6848734c
         button_Box.setAlignment(Pos.CENTER_RIGHT);
         button_Box.setSpacing(5);
         button_Box.getChildren().addAll(Cancel_Button(),submit);
@@ -861,7 +858,7 @@ public class Display extends Application{
                 if (passed){
                     String sql = String.format("INSERT INTO CUSTOMER ('FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER', ID)" +
                                     "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", (SELECT ID FROM 'LOCAL ACCOUNT' WHERE USERNAME = \"%s\" limit 1))",
-                            First_Name_Field.getText(), Last_Name_Field.getText(), ssn_Console.getText(), dob_Console.getText(), address_Field.getText(), city_Console.getText(), state_Console.getText(),
+                            First_Name_Field.getText(), Last_Name_Field.getText(), ssn_Field.getText(), dob_Console.getText(), address_Field.getText(), city_Console.getText(), state_Console.getText(),
                             zip_Console.getText(),hPhone_Console.getText(), wPhone_Console.getText(), "test");
 
 
