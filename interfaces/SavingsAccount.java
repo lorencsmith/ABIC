@@ -32,18 +32,23 @@ public class SavingsAccount extends BankAccount {
      * @post balance = balance * interestRate
      */
     public  double addInterest(double balance, double interestRate) {
-        double paidInterest = (balance*interestRate);
+        double paidInterest = (balance * interestRate);
         return paidInterest;
     }
     
     /** 
-     *The finalBalance() operation adds the interest paid to the 
+     *The newBalance() operation adds the interest paid to the 
      *account to the current balance and returns the final balance.
      *@post balance = balance + paidInterest
      */
     
+<<<<<<< HEAD:src/SavingsAccount.java
     public double newBalance(double balance){
         double finalBalance = (balance+addInterest(balance ,interestRate));
+=======
+    public double newBalance(double balance, double paidInterest){
+        double finalBalance = (balance + paidInterest);
+>>>>>>> 4a222c52ca86e52f721725bf760cf4e7e377ba05:interfaces/SavingsAccount.java
         return finalBalance;
     }
 

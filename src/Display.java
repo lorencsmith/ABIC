@@ -1,3 +1,4 @@
+import com.sun.org.apache.xpath.internal.SourceTree;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,8 +17,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.time.LocalDate;
+import java.util.Random;
 
 /**
  * Created by Daniel Oh on 3/22/2017.
@@ -272,6 +276,7 @@ public class Display extends Application{
                 String password = password_Field.getText();
                 //Validate username and password
                 //Search DB
+
             }
         });
 
@@ -399,8 +404,16 @@ public class Display extends Application{
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                String id = username_Field.getText();
+                String username = username_Field.getText();
                 String password = password_Field.getText();
+                Random rand = new Random();
+                int randomNumber = rand.nextInt(99999999);
+
+                String sql = String.format("INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
+                        "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
+
+                DatabaseDriver.insert(sql);
+                DatabaseDriver.viewTable();
             }
         });
 
