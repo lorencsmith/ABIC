@@ -858,8 +858,8 @@ public class Display extends Application{
                 if (passed){
                     String sql = String.format("INSERT INTO CUSTOMER ('FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER', ID)" +
                                     "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", (SELECT ID FROM 'LOCAL ACCOUNT' WHERE USERNAME = \"%s\" limit 1))",
-                            First_Name_Field.getText(), Last_Name_Field.getText(), ssn_Field.getText(), dob_Console.getText(), address_Field.getText(), city_Console.getText(), state_Console.getText(),
-                            zip_Console.getText(),hPhone_Console.getText(), wPhone_Console.getText(), "test");
+                            First_Name_Field.getText(), Last_Name_Field.getText(), ssn_Field.getText(), datePicker.getValue().toString(), address_Field.getText(), city_Field.getText(), state_combo_box.getValue().toString(),
+                            zip_Field.getText(),hPhone_Field.getText(), wPhone_Field.getText(), "qqq");
 
 
                     DatabaseDriver.insert(sql);
