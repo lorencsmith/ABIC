@@ -414,7 +414,7 @@ public class Display extends Application{
                         "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
 
                 DatabaseDriver.insert(sql);
-                DatabaseDriver.viewTable();
+                DatabaseDriver.viewTable("'LOCAL ACCOUNT'");
             }
         });
 
