@@ -6,6 +6,8 @@ import java.util.HashMap;
  *  the transaction falls into, as well as the date the time of the transaction.
  */
 public class Transaction {
+    
+    
 
     /**
      * The date is formatted as follows MM/DD/YYYY
@@ -43,11 +45,24 @@ public class Transaction {
     private HashMap<String, Float> transactionRecord;
 
     /**
+     * Transaction class constructor.
+     *
+     */
+    Transaction(String currentDate, String time, double transValue, double amountAvail){
+        this.date = currentDate;
+        this.timeStamp = time;
+        this.transAmount = transValue;
+        this.totalAmount = amountAvail;
+    }
+    
+    /**
      * @return The date of the transaction
      */
     private String getDate() {
         return date;
     }
+    
+    
     /**
      * @return The date of the transaction
      * update:3/28/17: added method to set date
@@ -105,5 +120,8 @@ public class Transaction {
         //Placeholder
         return "0";
     }
-
+    Transaction testCase = new Transaction(date.getDate(), time.getTimeStamp(), transValue.getTransAmount(), totalAmount.getTotalAmount());
+    
+    System.out.println("date: " + testCase.currentDate, "time: " + testCase.time,
+                       "Amount of transaction: " + testCase.transValue, "Available Amount: " + testCase.amountAvail);
 }
