@@ -529,9 +529,6 @@ public class Display extends Application{
         grid.add(pAccount_Info,0,8,3,1);
 
         //Row 9
-
-
-        //Row 10
         HBox dob_Box = new HBox();
         dob_Box.setAlignment(Pos.CENTER_LEFT);
         Label dob_Label = new Label();
@@ -548,11 +545,11 @@ public class Display extends Application{
         });
         Label dob_Console = new Label();
         dob_Console.setText("");
-        grid.add(dob_Box,0,10,1,1);
-        grid.add(datePicker,1,10,1,1);
-        grid.add(dob_Console,2,10,1,1);
+        grid.add(dob_Box,0,9,1,1);
+        grid.add(datePicker,1,9,1,1);
+        grid.add(dob_Console,2,9,1,1);
 
-        //Row 11
+        //Row 10
         HBox hPhone_Box = new HBox();
         hPhone_Box.setAlignment(Pos.CENTER_LEFT);
         Label hPhone_Label = new Label();
@@ -563,11 +560,11 @@ public class Display extends Application{
         hPhone_Field.setPromptText("XXX-XXX-XXXX");
         Label hPhone_Console = new Label();
         hPhone_Console.setText("");
-        grid.add(hPhone_Box,0,11,1,1);
-        grid.add(hPhone_Field, 1, 11,1,1);
-        grid.add(hPhone_Console, 2, 11,1,1);
+        grid.add(hPhone_Box,0,10,1,1);
+        grid.add(hPhone_Field, 1, 10,1,1);
+        grid.add(hPhone_Console, 2, 10,1,1);
 
-        //Row 12
+        //Row 11
         HBox wPhone_Box = new HBox();
         wPhone_Box.setAlignment(Pos.CENTER_LEFT);
         Label wPhone_Label = new Label();
@@ -582,14 +579,14 @@ public class Display extends Application{
         grid.add(wPhone_Field, 1, 11,1,1);
         grid.add(wPhone_Console,2,11,1,1);
 
-        //Row 13
+        //Row 12
         Label phone_Info = new Label();
-        phone_Info.setText("If only one phone number is available, please enter it in Home and Work phone categories.");
+        phone_Info.setText("If only one phone number is available, please enter it in Home phone categories.");
         phone_Info.setFont(Font.font("",FontWeight.NORMAL,11));
         phone_Info.setWrapText(true);
-        grid.add(phone_Info,0,13,3,1);
+        grid.add(phone_Info,0,12,3,1);
 
-        //Row 14
+        //Row 13
         HBox address_Box = new HBox();
         address_Box.setAlignment(Pos.CENTER_LEFT);
         Label address_Label = new Label();
@@ -598,22 +595,22 @@ public class Display extends Application{
         address_Box.getChildren().addAll(address_Label,red_star());
         TextField address_Field = new TextField();
         address_Field.setPromptText("Street Address");
-        grid.add(address_Box,0,14,1,1);
-        grid.add(address_Field, 1, 14,1,1);
+        Label address_Console = new Label();
+        address_Console.setText("");
+        grid.add(address_Box,0,13,1,1);
+        grid.add(address_Field, 1, 13,1,1);
+        grid.add(address_Console,3,13,1,1);
 
-        //Row 14-2
-        HBox address2_box = new HBox();
-        address2_box.setAlignment(Pos.CENTER_RIGHT);
+        //Row 14
         Label address2_Label = new Label();
-        address2_Label.setText("Address Line 2    ");
+        address2_Label.setText("Address Line 2");
         address2_Label.setFont(Font.font("",FontWeight.NORMAL,11));
         TextField address2_Field = new TextField();
         address2_Field.setPromptText("Apartment, suite, unit");
-        address2_box.getChildren().addAll(address2_Label,address2_Field);
-        Label address_Console = new Label();
-        address_Console.setText("");
-        grid.add(address2_box,2,14,1,1);
-        grid.add(address_Console,3,14,1,1);
+        grid.add(address2_Label,0,14,1,1);
+        grid.add(address2_Field,1,14,1,1);
+
+        //Row 15
 
         //Row 16
         HBox city_Box = new HBox();
@@ -772,12 +769,13 @@ public class Display extends Application{
                     ssn_Console.setText("Please enter Social Security Number");
                     passed = false;
                 }
-                else if (ssn_Field.getText().length() != 9) {
-                    ssn_Console.setText("Please enter correct Social Security Number");
+                else if(ssn_Field.getText().matches("[0-9]+") && ssn_Field.getText().length() == 9){
+                    ssn_Console.setText("");
+                }
+                else{
+                    ssn_Console.setText("Invalid Social Security Number");
                     passed = false;
                 }
-                else
-                    ssn_Console.setText("");
 
                 if(datePicker.getValue() == null){
                     dob_Console.setText("Please enter Date of Birth");
@@ -790,8 +788,14 @@ public class Display extends Application{
                     hPhone_Console.setText("Please Enter Home Phone");
                     passed = false;
                 }
-                else
+                else if(hPhone_Field.getText().matches("[0-9]+") && hPhone_Field.getText().length() == 10){
                     hPhone_Console.setText("");
+                }
+                else{
+                    hPhone_Console.setText("Invalid Phone number");
+                    passed = false;
+                }
+
 
                 if(address_Field.getText().isEmpty()){
                     address_Console.setText("Please Enter Address");
@@ -819,8 +823,17 @@ public class Display extends Application{
                     zip_Console.setText("Please enter Zip code");
                     passed = false;
                 }
-                else
+                else if (zip_Field.getText().matches("[0-9]+") && zip_Field.getText().length() == 5){
                     zip_Console.setText("");
+                }
+                else {
+                    zip_Console.setText("Invalid Zip Code");
+                    passed = false;
+                }
+                if (passed){
+                    System.out.println("Passed!");
+                }
+
             }
         });
 
