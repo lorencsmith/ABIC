@@ -17,7 +17,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import javax.xml.crypto.Data;
 import java.io.File;
 import java.time.LocalDate;
@@ -415,32 +414,41 @@ public class Display extends Application{
         Button submit = new Button();
         submit.setText("Submit");
 
+        //Row 6
+        Label username_Console = new Label();
+        username_Console.setTextFill(Color.RED);
+        username_Console.setText("");
+        grid.add(username_Console,0,6,1,1);
+
+        /**
+          EventHandle
+            If username or password textfield is empty, it will ask user to enter ther fields
+            else it will add teh value into database and proceed to next screen
+         */
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                boolean passed = true;
                 String username = username_Field.getText();
                 String password = password_Field.getText();
-                Random rand = new Random();
-                int randomNumber = rand.nextInt(99999999);
+                if (username.isEmpty() || password.isEmpty()){
+                    username_Console.setText("Please enter Username and Password");
+                }
+                else {
+                    Random rand = new Random();
+                    int randomNumber = rand.nextInt(99999999);
+                    String sql = String.format("INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
+                            "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
 
-                String sql = String.format("INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
-                        "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
-
-                DatabaseDriver.insert(sql);
-                DatabaseDriver.viewTable();
+                    DatabaseDriver.insert(sql);
+                    DatabaseDriver.viewTable();
+                    Enroll_Call();
+                }
             }
         });
 
-        Button next = new Button();
-        next.setText("PH");
-        next.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Enroll_Call();
-            }
-        });
-
-        button_Box.getChildren().addAll(submit,Cancel_Button(),next);
+        button_Box.setAlignment(Pos.CENTER_RIGHT);
+        button_Box.getChildren().addAll(submit,Cancel_Button());
 
         grid.add(button_Box,0,5,1,1);
 
@@ -575,7 +583,7 @@ public class Display extends Application{
         hPhone_Label.setFont(Font.font("",FontWeight.BOLD, 11));
         hPhone_Box.getChildren().addAll(hPhone_Label,red_star());
         TextField hPhone_Field = new TextField();
-        hPhone_Field.setPromptText("XXX-XXX-XXXX");
+        hPhone_Field.setPromptText("XXXXXXXXXX");
         Label hPhone_Console = new Label();
         hPhone_Console.setText("");
         grid.add(hPhone_Box,0,10,1,1);
@@ -590,7 +598,7 @@ public class Display extends Application{
         wPhone_Label.setFont(Font.font("",FontWeight.NORMAL, 11));
         wPhone_Box.getChildren().addAll(wPhone_Label);
         TextField wPhone_Field = new TextField();
-        wPhone_Field.setPromptText("XXX-XXX-XXXX");
+        wPhone_Field.setPromptText("XXXXXXXXXX");
         Label wPhone_Console = new Label();
         wPhone_Console.setText("");
         grid.add(wPhone_Box,0,11,1,1);
@@ -599,7 +607,7 @@ public class Display extends Application{
 
         //Row 12
         Label phone_Info = new Label();
-        phone_Info.setText("If only one phone number is available, please enter it in Home phone categories.");
+        phone_Info.setText("If only one phone number is available, please enter it in Home phone categories. No Dashes");
         phone_Info.setFont(Font.font("",FontWeight.NORMAL,11));
         phone_Info.setWrapText(true);
         grid.add(phone_Info,0,12,3,1);
@@ -617,7 +625,7 @@ public class Display extends Application{
         address_Console.setText("");
         grid.add(address_Box,0,13,1,1);
         grid.add(address_Field, 1, 13,1,1);
-        grid.add(address_Console,3,13,1,1);
+        grid.add(address_Console,2,13,1,1);
 
         //Row 14
         Label address2_Label = new Label();
