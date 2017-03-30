@@ -431,22 +431,29 @@ public class Display extends Application{
                 boolean passed = true;
                 String username = username_Field.getText();
                 String password = password_Field.getText();
-
-                Random rand = new Random();
-                int randomNumber = rand.nextInt(99999999);
-
-
-
-                String sql = String.format("INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
-                        "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
-
-                DatabaseDriver.insert(sql);
-                DatabaseDriver.viewTable("'LOCAL ACCOUNT'");
+                //If the username or password field is empty, it will ask user to fill the field
+                if (username.isEmpty() || password.isEmpty()){
+                    username_Console.setText("Please Enter username and password");
+                    passed = false;
+                }
+                else{
+                    Random rand = new Random();
+                    int randomNumber = rand.nextInt(99999999);
+                    String sql = String.format("INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
+                            "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
+                    DatabaseDriver.insert(sql);
+                    DatabaseDriver.viewTable("'LOCAL ACCOUNT'");
+                    Enroll_Call();
+                }
             }
         });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3447326851d9a3953734343e4b708e2a6848734c
         button_Box.setAlignment(Pos.CENTER_RIGHT);
-        button_Box.getChildren().addAll(submit,Cancel_Button());
+        button_Box.setSpacing(5);
+        button_Box.getChildren().addAll(Cancel_Button(),submit);
 
         grid.add(button_Box,0,5,1,1);
 
@@ -498,6 +505,10 @@ public class Display extends Application{
         TextField First_Name_Field = new TextField();
         First_Name_Field.setPromptText("Enter First Name");
         Label First_Name_Console = new Label();
+        /**
+         * ***_Console is a label that will only appear when user pressed submit, and when there is/are an invalid
+         * input. Once user inputs valid value, it will disappear
+         */
         First_Name_Console.setText("");
         grid.add(First_Name_Box,0,3,1,1);
         grid.add(First_Name_Field, 1, 3,1,1);

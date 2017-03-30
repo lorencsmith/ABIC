@@ -73,6 +73,40 @@ public class DatabaseDriver {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }
+        System.out.println("Viewing Table");
+
+    }
+
+    public static void insert() {
+        String url = "jdbc:sqllite:/Database Files/Main.db";
+
+        Connection c = null;
+        Statement stmt = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:./Database Files/Main.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database Successfully");
+
+            stmt = c.createStatement();
+            String sql = "INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD) " +
+                         "VALUES (14, \"ADMIN\", \"1234\");";
+            stmt.executeUpdate(sql);
+
+            sql = "INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD) " +
+            "VALUES (235, \"ADMIN\", \"1234\");";
+            stmt.executeUpdate(sql);
+
+            stmt.close();
+            c.commit();
+            c.close();
+
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+        System.out.println("Records created successfully");
     }
 
     public static void insert(String sql) {
@@ -141,7 +175,6 @@ public class DatabaseDriver {
                 "  ON UPDATE SET NULL\n" +
                 ")";
     }
-
 
     public static void main(String[] args) {
         createNewDatabase("Main.db");
