@@ -8,8 +8,6 @@ public class SavingsAccount extends BankAccount {
     /**
      * The interestRate should fall between 0.01% to 0.09%
      */
-    private double interestRate;
-
     /**
      * The numOfMonthlyWithdrawals should never exceed the
      * maximum number of withdraws;
@@ -45,9 +43,8 @@ public class SavingsAccount extends BankAccount {
      */
     
     public double newBalance(double balance){
-        double finalBalance = (balance+addInterest());
+        double finalBalance = (balance+addInterest(balance ,interestRate));
         return finalBalance;
-        
     }
 
 }
