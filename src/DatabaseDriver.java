@@ -8,6 +8,9 @@ public class DatabaseDriver {
 
     public static void createNewDatabase(String filename) {
         String url = "jdbc:sqlite:./Database Files/" + filename;
+        //String url = "jdbc:sqllite:\\Database Files\\" + filename;
+
+        System.out.println("The URL is: " + url);
 
         try (Connection conn = DriverManager.getConnection(url)) {
             if (conn != null) {
@@ -112,6 +115,32 @@ public class DatabaseDriver {
         System.out.println("Records created successfully");
     }
 
+    public static void insert(String sql) {
+        String url = "jdbc:sqllite:/Database Files/Main.db";
+
+        Connection c = null;
+        Statement stmt = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:./Database Files/Main.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database Successfully");
+
+            stmt = c.createStatement();
+            stmt.executeUpdate(sql);
+
+            stmt.close();
+            c.commit();
+            c.close();
+
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+        System.out.println("Records created successfully");
+    }
+
     /**
      * LOCAL ACCOUNT table consists of
      * ID: RANDOM #
@@ -132,9 +161,9 @@ public class DatabaseDriver {
 
 
     public static void main(String[] args) {
-        //createNewTable(localAccount());
-        //insert();
-        viewTable();
+        createNewDatabase("Main.db");
+        createNewTable(localAccount());
+        //viewTable();
     }
 
 
