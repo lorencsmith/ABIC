@@ -444,7 +444,7 @@ public class Display extends Application{
                 DatabaseDriver.viewTable("'LOCAL ACCOUNT'");
             }
         });
-        
+
         button_Box.setAlignment(Pos.CENTER_RIGHT);
         button_Box.getChildren().addAll(submit,Cancel_Button());
 
@@ -750,15 +750,9 @@ public class Display extends Application{
         submit.setText("Submit");
         submit.setAlignment(Pos.CENTER);
         button_Box.getChildren().addAll(Cancel_Button(), submit);
-        submit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //Validate if the informations are correct
-                //Save the values in the textfield into database
-            }
-        });
         grid.add(button_Box,3,20,1,1);
 
+        //EventHandler
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -854,8 +848,20 @@ public class Display extends Application{
                     passed = false;
                 }
                 if (passed){
+                    String sql = String.format("INSERT INTO CUSTOMER ('FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER', ID)" +
+                                    "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", (SELECT ID FROM 'LOCAL ACCOUNT' WHERE USERNAME = \"%s\" limit 1))",
+                            First_Name_Field.getText(), Last_Name_Field.getText(), ssn_Console.getText(), dob_Console.getText(), address_Field.getText(), city_Console.getText(), state_Console.getText(),
+                            zip_Console.getText(),hPhone_Console.getText(), wPhone_Console.getText(), "test");
+
+
+                    DatabaseDriver.insert(sql);
+                    DatabaseDriver.viewTable("CUSTOMER");
+
                     System.out.println("Passed!");
                 }
+
+
+
             }
         });
 

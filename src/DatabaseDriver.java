@@ -145,8 +145,8 @@ public class DatabaseDriver {
 
     public static void main(String[] args) {
         createNewDatabase("Main.db");
-        //createNewTable(createLocalAccount());
-        //createNewTable(createCustomer());
+        createNewTable(createLocalAccount());
+        createNewTable(createCustomer());
 
         Random rand = new Random();
         int randomNumber = rand.nextInt(99999999);
@@ -154,24 +154,24 @@ public class DatabaseDriver {
 
 
 
-
-
-        String sql = String.format("INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
-                "VALUES (%d, \"%s\", \"%s\")", randomNumber, "admin", "password");
-        viewTable("'LOCAL ACCOUNT'");
-
-        insert(sql);
-
-        sql = String.format("INSERT INTO CUSTOMER ('FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER', ID)" +
-                "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", (SELECT ID FROM 'LOCAL ACCOUNT' WHERE USERNAME = 'admin' limit 1))",  "one", "two", "three", "four", "five", "six", "seven",
-                                                                                                      "eight", "nine", "ten");
-
-//        String test = String.format("INSERT INTO CUSTOMER ('FIRST NAME')" +
-//                "VALUES (\"%s\")", "one");
-
-        insert(sql);
-
-        viewTable("CUSTOMER");
+//
+//
+//        String sql = String.format("INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
+//                "VALUES (%d, \"%s\", \"%s\")", randomNumber, "admin", "password");
+//        viewTable("'LOCAL ACCOUNT'");
+//
+//        insert(sql);
+//
+//        sql = String.format("INSERT INTO CUSTOMER ('FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER', ID)" +
+//                "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", (SELECT ID FROM 'LOCAL ACCOUNT' WHERE USERNAME = 'admin' limit 1))",  "one", "two", "three", "four", "five", "six", "seven",
+//                                                                                                      "eight", "nine", "ten");
+//
+////        String test = String.format("INSERT INTO CUSTOMER ('FIRST NAME')" +
+////                "VALUES (\"%s\")", "one");
+//
+//        insert(sql);
+//
+//        viewTable("CUSTOMER");
 
     }
 
