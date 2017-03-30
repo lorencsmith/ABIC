@@ -500,6 +500,10 @@ public class Display extends Application{
         TextField First_Name_Field = new TextField();
         First_Name_Field.setPromptText("Enter First Name");
         Label First_Name_Console = new Label();
+        /**
+         * ***_Console is a label that will only appear when user pressed submit, and when there is/are an invalid
+         * input. Once user inputs valid value, it will disappear
+         */
         First_Name_Console.setText("");
         grid.add(First_Name_Box,0,3,1,1);
         grid.add(First_Name_Field, 1, 3,1,1);
