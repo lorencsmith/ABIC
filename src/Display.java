@@ -17,6 +17,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.File;
+import java.time.LocalDate;
 
 /**
  * Created by Daniel Oh on 3/22/2017.
@@ -508,26 +509,14 @@ public class Display extends Application{
         grid.add(ssn_Console,2,7,1,1);
 
         //Row 8
-        HBox pAccount_Box = new HBox();
-        pAccount_Box.setAlignment(Pos.CENTER_LEFT);
-        Label pAccount_Label = new Label();
-        pAccount_Label.setText("Primary Billing Account");
-        pAccount_Label.setFont(Font.font("",FontWeight.BOLD, 11));
-        pAccount_Box.getChildren().addAll(pAccount_Label,red_star());
-        TextField pAccount_Field = new TextField();
-        pAccount_Field.setPromptText("_________");
-        Label pAccount_Console = new Label();
-        pAccount_Console.setText("");
-        grid.add(pAccount_Box,0,8,1,1);
-        grid.add(pAccount_Field, 1, 8,1,1);
-        grid.add(pAccount_Console,2,8,1,1);
-
-        //Row 9
         Label pAccount_Info = new Label();
         pAccount_Info.setText("This account may be subject to billing or fees per our Terms and Conditions agreement. Enter numbers only as they appear on your monthly account statement. Do not use spaces or dashes.");
         pAccount_Info.setFont(Font.font("",FontWeight.NORMAL, 11));
         pAccount_Info.setWrapText(true);
-        grid.add(pAccount_Info,0,9,3,1);
+        grid.add(pAccount_Info,0,8,3,1);
+
+        //Row 9
+
 
         //Row 10
         HBox dob_Box = new HBox();
@@ -536,31 +525,21 @@ public class Display extends Application{
         dob_Label.setText("Date of Birth");
         dob_Label.setFont(Font.font("",FontWeight.BOLD, 11));
         dob_Box.getChildren().addAll(dob_Label,red_star());
-        TextField dob_Field = new TextField();
-        dob_Field.setPromptText("MM/DD/YYYY");
+        final DatePicker datePicker = new DatePicker();
+        datePicker.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                LocalDate date = datePicker.getValue();
+
+            }
+        });
         Label dob_Console = new Label();
         dob_Console.setText("");
         grid.add(dob_Box,0,10,1,1);
-        grid.add(dob_Field, 1, 10,1,1);
+        grid.add(datePicker,1,10,1,1);
         grid.add(dob_Console,2,10,1,1);
 
         //Row 11
-        HBox wPhone_Box = new HBox();
-        wPhone_Box.setAlignment(Pos.CENTER_LEFT);
-        Label wPhone_Label = new Label();
-        wPhone_Label.setText("Work Phone");
-        wPhone_Label.setFont(Font.font("",FontWeight.BOLD, 11));
-        wPhone_Box.getChildren().addAll(wPhone_Label,red_star());
-        TextField wPhone_Field = new TextField();
-        wPhone_Field.setPromptText("XXX-XXX-XXXX");
-        Label wPhone_Console = new Label();
-        wPhone_Console.setText("");
-        grid.add(wPhone_Box,0,11,1,1);
-        grid.add(wPhone_Field, 1, 11,1,1);
-        grid.add(wPhone_Console,2,11,1,1);
-
-
-        //Row 12
         HBox hPhone_Box = new HBox();
         hPhone_Box.setAlignment(Pos.CENTER_LEFT);
         Label hPhone_Label = new Label();
@@ -571,9 +550,24 @@ public class Display extends Application{
         hPhone_Field.setPromptText("XXX-XXX-XXXX");
         Label hPhone_Console = new Label();
         hPhone_Console.setText("");
-        grid.add(hPhone_Box,0,12,1,1);
-        grid.add(hPhone_Field, 1, 12,1,1);
-        grid.add(hPhone_Console, 2, 12,1,1);
+        grid.add(hPhone_Box,0,11,1,1);
+        grid.add(hPhone_Field, 1, 11,1,1);
+        grid.add(hPhone_Console, 2, 11,1,1);
+
+        //Row 12
+        HBox wPhone_Box = new HBox();
+        wPhone_Box.setAlignment(Pos.CENTER_LEFT);
+        Label wPhone_Label = new Label();
+        wPhone_Label.setText("Work Phone");
+        wPhone_Label.setFont(Font.font("",FontWeight.NORMAL, 11));
+        wPhone_Box.getChildren().addAll(wPhone_Label);
+        TextField wPhone_Field = new TextField();
+        wPhone_Field.setPromptText("XXX-XXX-XXXX");
+        Label wPhone_Console = new Label();
+        wPhone_Console.setText("");
+        grid.add(wPhone_Box,0,11,1,1);
+        grid.add(wPhone_Field, 1, 11,1,1);
+        grid.add(wPhone_Console,2,11,1,1);
 
         //Row 13
         Label phone_Info = new Label();
@@ -735,9 +729,19 @@ public class Display extends Application{
             @Override
             public void handle(ActionEvent event) {
                 //validate inputs and compare it with db
+                ssn_Console.setTextFill(Color.RED);
+                First_Name_Console.setTextFill(Color.RED);
+                Last_Name_Console.setTextFill(Color.RED);
+                dob_Console.setTextFill(Color.RED);
+                wPhone_Console.setTextFill(Color.RED);
+                hPhone_Console.setTextFill(Color.RED);
+                address_Console.setTextFill(Color.RED);
+                city_Console.setTextFill(Color.RED);
+                state_Console.setTextFill(Color.RED);
+                zip_Console.setTextFill(Color.RED);
+
                 boolean passed = true;
                 if (First_Name_Field.getText().isEmpty()){
-                    First_Name_Console.setTextFill(Color.RED);
                     First_Name_Console.setText("Please enter first name");
                     passed = false;
                 }
@@ -745,7 +749,6 @@ public class Display extends Application{
                     First_Name_Console.setText("");
 
                 if(Last_Name_Field.getText().isEmpty()){
-                    Last_Name_Console.setTextFill(Color.RED);
                     Last_Name_Console.setText("Please enter last name");
                     passed = false;
                 }
@@ -753,25 +756,58 @@ public class Display extends Application{
                     Last_Name_Console.setText("");
 
                 if(ssn_Field.getText().isEmpty()){
-                    ssn_Console.setTextFill(Color.RED);
                     ssn_Console.setText("Please enter Social Security Number");
+                    passed = false;
+                }
+                else if (ssn_Field.getText().length() != 9) {
+                    ssn_Console.setText("Please enter correct Social Security Number");
+                    passed = false;
                 }
                 else
                     ssn_Console.setText("");
 
-                if(pAccount_Field.getText().isEmpty()){
-                    pAccount_Console.setTextFill(Color.RED);
-                    pAccount_Console.setText("Please enter Primary Billing Account");
-                }
-                else
-                    pAccount_Console.setText("");
-
-                if(dob_Field.getText().isEmpty()){
-                    dob_Console.setTextFill(Color.RED);
-                    dob_Console.setText("Please Enter Date of Birth");
+                if(datePicker.getValue() == null){
+                    dob_Console.setText("Please enter Date of Birth");
+                    passed = false;
                 }
                 else
                     dob_Console.setText("");
+
+                if(hPhone_Field.getText().isEmpty()){
+                    hPhone_Console.setText("Please Enter Home Phone");
+                    passed = false;
+                }
+                else
+                    hPhone_Console.setText("");
+
+                if(address_Field.getText().isEmpty()){
+                    address_Console.setText("Please Enter Address");
+                    passed = false;
+                }
+                else
+                    address_Console.setText("");
+
+                if(city_Field.getText().isEmpty()){
+                    city_Console.setText("Please Enter City");
+                    passed = false;
+                }
+                else
+                    city_Console.setText("");
+
+
+                if(state_combo_box.getValue() == null){
+                    state_Console.setText("Please choose State");
+                    passed = false;
+                }
+                else
+                    state_Console.setText("");
+
+                if(zip_Field.getText().isEmpty()){
+                    zip_Console.setText("Please enter Zip code");
+                    passed = false;
+                }
+                else
+                    zip_Console.setText("");
             }
         });
 
