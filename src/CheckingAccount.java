@@ -5,6 +5,11 @@
  */
 
 public class CheckingAccount extends BankAccount {
+    
+    CheckingAccount(int id, double balance){
+        super(id);
+        this.setBalance(balance);
+    }
 
     /**
      * Since checking account don't balance to go negative,
@@ -14,5 +19,9 @@ public class CheckingAccount extends BankAccount {
      * @post isOverdrafted = true | false
      */
     private boolean isOverdrafted;
+    
+    if((balance - withdraw) < 0) {
+        isOverdrafted = true;
+    }
 
 }
