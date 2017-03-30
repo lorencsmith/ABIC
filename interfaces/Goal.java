@@ -24,7 +24,9 @@ public class Goal {
      * @post setGoal is implemented into account
      */
     public void setGoal(String name, boolean b, int number){
-
+        System.out.println(name);
+        System.out.println(b);
+        System.out.println(number);
     }
 
     /**
@@ -42,7 +44,7 @@ public class Goal {
      * @gost setGoal.goalNumber = changeGoalAmount.amount
      */
     public void changeGoalAmount(int amount){
-
+        System.out.println(amount);
     }
 
 
