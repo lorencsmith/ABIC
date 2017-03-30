@@ -444,31 +444,7 @@ public class Display extends Application{
                 DatabaseDriver.viewTable("'LOCAL ACCOUNT'");
             }
         });
-
-        Button next = new Button();
-        next.setText("PH");
-        next.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Enroll_Call();
-
-                if (username.isEmpty() || password.isEmpty()){
-                    username_Console.setText("Please enter Username and Password");
-                }
-                else {
-                    Random rand = new Random();
-                    int randomNumber = rand.nextInt(99999999);
-                    String sql = String.format("INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
-                            "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
-
-                    DatabaseDriver.insert(sql);
-                    DatabaseDriver.viewTable();
-                    Enroll_Call();
-                }
-
-            }
-        });
-
+        
         button_Box.setAlignment(Pos.CENTER_RIGHT);
         button_Box.getChildren().addAll(submit,Cancel_Button());
 
