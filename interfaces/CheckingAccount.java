@@ -11,6 +11,9 @@ public class CheckingAccount extends BankAccount {
         this.setBalance(balance);
     }
 
+    System.out.println(id);
+    System.out.println(balance);
+
     /**
      * Since checking account don't balance to go negative,
      * if balance - withdraw is < 0, it will set isOverdrafted to true and stop the transaction
@@ -19,7 +22,7 @@ public class CheckingAccount extends BankAccount {
      * @post isOverdrafted = true | false
      */
     private boolean isOverdrafted;
-    
+
     if((balance - withdraw) < 0) {
         isOverdrafted = true;
     }
