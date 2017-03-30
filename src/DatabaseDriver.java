@@ -3,6 +3,7 @@
  */
 
 import java.sql.*;
+import java.util.Random;
 
 public class DatabaseDriver {
 
@@ -55,7 +56,7 @@ public class DatabaseDriver {
         System.out.println("Table created successfully");
     }
 
-    public static void viewTable() {
+    public static void viewTable(String tableName) {
         String url = "jdbc:sqllite:/Database Files/Main.db";
 
         Connection c = null;
@@ -66,17 +67,12 @@ public class DatabaseDriver {
             c = DriverManager.getConnection("jdbc:sqlite:./Database Files/Main.db");
             System.out.println("Opened database Successfully");
 
-
-
-            DBTablePrinter.printTable(c, "'LOCAL ACCOUNT'");
-
-
+            DBTablePrinter.printTable(c, tableName);
 
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }
-
         System.out.println("Viewing Table");
 
     }
@@ -146,17 +142,70 @@ public class DatabaseDriver {
      * PASSWORD: STRING
      * Note: Encrypt Password (using SALT)
      */
-    public static String localAccount() {
-        return "CREATE TABLE 'LOCAL ACCOUNT' " +
+    public static String createLocalAccount() {
+        return "CREATE TABLE IF NOT EXISTS 'LOCAL ACCOUNT' " +
                 "(ID INT PRIMARY KEY     NOT NULL," +
                 " USERNAME       TEXT    NOT NULL," +
                 " PASSWORD       INT     NOT NULL)";
     }
 
+    public static String createCustomer() {
+        return "CREATE TABLE CUSTOMER " +
+                "('FIRST NAME'   TEXT  NOT NULL," +
+                "'LAST NAME'    TEXT  NOT NULL," +
+                "'SSN'          TEXT NOT NULL,"  +
+                "DOB            TEXT NOT NULL," +
+                "'ADDRESS'      TEXT  NOT NULL," +
+                "'CITY'         TEXT  NOT NULL," +
+                "'STATE'        TEXT  NOT NULL," +
+                "'ZIP CODE'     INT   NOT NULL," +
+                "'HOME NUMBER' TEXT  NOT NULL," +
+                "'WORK NUMBER'  TEXT NOT NULL," +
+                "ID            INT PRIMARY KEY  NOT NULL, " +
+                "FOREIGN KEY (ID) REFERENCES 'LOCAL ACCOUNT' (ID))";
+
+    }
+
+    public static String testCustomer() {
+        return "CREATE TABLE suppliers (\n" +
+                " supplier_id integer PRIMARY KEY,\n" +
+                " supplier_name text NOT NULL,\n" +
+                " group_id integer,\n" +
+                " FOREIGN KEY (group_id) REFERENCES supplier_groups (group_id) \n" +
+                "  ON UPDATE SET NULL\n" +
+                ")";
+    }
+
     public static void main(String[] args) {
         createNewDatabase("Main.db");
-        createNewTable(localAccount());
-        //viewTable();
+        //createNewTable(createLocalAccount());
+        //createNewTable(createCustomer());
+
+        Random rand = new Random();
+        int randomNumber = rand.nextInt(99999999);
+
+
+
+
+
+
+        String sql = String.format("INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
+                "VALUES (%d, \"%s\", \"%s\")", randomNumber, "admin", "password");
+        viewTable("'LOCAL ACCOUNT'");
+
+        insert(sql);
+
+        sql = String.format("INSERT INTO CUSTOMER ('FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER', ID)" +
+                "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", (SELECT ID FROM 'LOCAL ACCOUNT' WHERE USERNAME = 'admin' limit 1))",  "one", "two", "three", "four", "five", "six", "seven",
+                                                                                                      "eight", "nine", "ten");
+
+//        String test = String.format("INSERT INTO CUSTOMER ('FIRST NAME')" +
+//                "VALUES (\"%s\")", "one");
+
+        insert(sql);
+
+        viewTable("CUSTOMER");
+
     }
 
 

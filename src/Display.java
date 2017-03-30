@@ -431,24 +431,25 @@ public class Display extends Application{
                 boolean passed = true;
                 String username = username_Field.getText();
                 String password = password_Field.getText();
+                //If the username or password field is empty, it will ask user to fill the field
                 if (username.isEmpty() || password.isEmpty()){
-                    username_Console.setText("Please enter Username and Password");
+                    username_Console.setText("Please Enter username and password");
+                    passed = false;
                 }
-                else {
+                else{
                     Random rand = new Random();
                     int randomNumber = rand.nextInt(99999999);
                     String sql = String.format("INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
                             "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
-
                     DatabaseDriver.insert(sql);
-                    DatabaseDriver.viewTable();
+                    DatabaseDriver.viewTable("'LOCAL ACCOUNT'");
                     Enroll_Call();
                 }
             }
         });
-
         button_Box.setAlignment(Pos.CENTER_RIGHT);
-        button_Box.getChildren().addAll(submit,Cancel_Button());
+        button_Box.setSpacing(5);
+        button_Box.getChildren().addAll(Cancel_Button(),submit);
 
         grid.add(button_Box,0,5,1,1);
 
