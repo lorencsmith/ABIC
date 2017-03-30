@@ -1,13 +1,12 @@
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -23,7 +22,7 @@ import java.io.File;
  * Created by Daniel Oh on 3/22/2017.
  * This is Display class for ABIC
  *
- * Last Update: 3/28/2017
+ * Last Update: 3/30/2017
  */
 public class Display extends Application{
 
@@ -33,6 +32,7 @@ public class Display extends Application{
     Image Logo = new Image("ABIC_Logo.png");
 
     public static void main(String[] args) {
+
         launch(args);
     }
 
@@ -118,7 +118,6 @@ public class Display extends Application{
         });
         Login_Scene = new Scene(grid, 800,600);
         mainStage.setScene(Login_Scene);
-
     }
 
     private void Employee_Login_Call(){
@@ -370,7 +369,7 @@ public class Display extends Application{
         LogoView.setImage(Logo);
         LogoView.setFitWidth(Logo.getWidth()/4);
         LogoView.setFitHeight(Logo.getHeight()/4);
-        grid.add(LogoView,6,0,3,1);
+        grid.add(LogoView,6,1,3,1);
 
         //Row 1
         Label Welcome_Logo = new Label();
@@ -499,24 +498,125 @@ public class Display extends Application{
         HBox address_Box = new HBox();
         address_Box.setAlignment(Pos.CENTER_LEFT);
         Label address_Label = new Label();
-        address_Label.setText("Address");
+        address_Label.setText("Address Line 1");
         address_Label.setFont(Font.font("",FontWeight.BOLD, 11));
         address_Box.getChildren().addAll(address_Label,red_star());
         TextField address_Field = new TextField();
-        address_Field.setPromptText("Enter Address");
+        address_Field.setPromptText("Street Address");
         grid.add(address_Box,0,14,1,1);
         grid.add(address_Field, 1, 14,1,1);
 
-        //Row 15
+        //Row 14-2
+        HBox address2_box = new HBox();
+        address2_box.setAlignment(Pos.CENTER_RIGHT);
+        Label address2_Label = new Label();
+        address2_Label.setText("Address Line 2    ");
+        address2_Label.setFont(Font.font("",FontWeight.NORMAL,11));
+        TextField address2_Field = new TextField();
+        address2_Field.setPromptText("Apartment, suite, unit");
+        address2_box.getChildren().addAll(address2_Label,address2_Field);
+        grid.add(address2_box,2,14,2,1);
+
+        //Row 16
+        HBox city_Box = new HBox();
+        city_Box.setAlignment(Pos.CENTER_LEFT);
+        Label city_Label = new Label();
+        city_Label.setText("City");
+        city_Label.setFont(Font.font("",FontWeight.BOLD, 11));
+        city_Box.getChildren().addAll(city_Label,red_star());
+        TextField city_Field = new TextField();
+        city_Field.setPromptText("Enter City");
+        grid.add(city_Box,0,16,1,1);
+        grid.add(city_Field, 1, 16,1,1);
+
+        //Row 17
+        HBox State_Box = new HBox();
+        State_Box.setAlignment(Pos.CENTER_LEFT);
+        Label State_Label = new Label();
+        State_Label.setText("State");
+        State_Label.setFont(Font.font("",FontWeight.BOLD, 11));
+        ObservableList<String> states =
+                FXCollections.observableArrayList(
+                        "Alabama",
+                        "Alaska",
+                        "Arizona",
+                        "Arkansas",
+                        "California",
+                        "Colorado",
+                        "Connecticut",
+                        "Delaware",
+                        "Florida",
+                        "Georgia",
+                        "Hawaii",
+                        "Idaho",
+                        "Illinois",
+                        "Indiana",
+                        "Iowa",
+                        "Kansas",
+                        "Kentucky",
+                        "Louisiana",
+                        "Maine",
+                        "Maryland",
+                        "Massachusetts",
+                        "Michigan",
+                        "Minnesota",
+                        "Mississippi",
+                        "Missouri",
+                        "Montana",
+                        "Nebraska",
+                        "Nevada",
+                        "New Hampshire",
+                        "New Jersey",
+                        "New Mexico",
+                        "New York",
+                        "North Carolina",
+                        "North Dakota",
+                        "Ohio",
+                        "Oklahoma",
+                        "Oregon",
+                        "Pennsylvania",
+                        "Rhode Island",
+                        "South Carolina",
+                        "South Dakota",
+                        "Tennessee",
+                        "Texas",
+                        "Utah",
+                        "Vermont",
+                        "Virginia",
+                        "Washington",
+                        "West Virginia",
+                        "Wisconsin",
+                        "Wyoming"
+                );
+        final ComboBox state_combo_box = new ComboBox(states);
+        state_combo_box.setMaxWidth(Double.MAX_VALUE);
+
+        State_Box.getChildren().addAll(State_Label,red_star());
+        grid.add(State_Box,0,17,1,1);
+        grid.add(state_combo_box,1,17,1,1);
+
+        //Row 18
+        HBox zip_Box = new HBox();
+        zip_Box.setAlignment(Pos.CENTER_LEFT);
+        Label zip_Label = new Label();
+        zip_Label.setText("Zip Code");
+        zip_Label.setFont(Font.font("",FontWeight.BOLD, 11));
+        zip_Box.getChildren().addAll(zip_Label,red_star());
+        TextField zip_Field = new TextField();
+        zip_Field.setPromptText("Enter Zip");
+        grid.add(zip_Box,0,18,1,1);
+        grid.add(zip_Field, 1, 18,1,1);
+        
+        //Row 19
         HBox address_Info_Box = new HBox();
         Label address_Info1 = new Label();
         address_Info1.setText("All Fields marked with an asterisk (");
         Label address_Info2 = new Label();
         address_Info2.setText(") are required.");
         address_Info_Box.getChildren().addAll(address_Info1,red_star(),address_Info2);
-        grid.add(address_Info_Box,0,15,3,1);
+        grid.add(address_Info_Box,0,19,3,1);
 
-        //Row 16
+        //Row 20
         HBox button_Box = new HBox();
         button_Box.setSpacing(5);
         Button submit = new Button();
@@ -530,7 +630,7 @@ public class Display extends Application{
                 //Save the values in the textfield into database
             }
         });
-        grid.add(button_Box,3,16,1,1);
+        grid.add(button_Box,3,20,1,1);
 
         //Start new screen
         Enroll_Scene = new Scene(grid, 800,600);
