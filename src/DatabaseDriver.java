@@ -102,8 +102,6 @@ public class DatabaseDriver {
             "VALUES (235, \"ADMIN\", \"1234\");";
             stmt.executeUpdate(sql);
 
-
-
             stmt.close();
             c.commit();
             c.close();
@@ -154,11 +152,6 @@ public class DatabaseDriver {
                 " USERNAME       TEXT    NOT NULL," +
                 " PASSWORD       INT     NOT NULL)";
     }
-
-
-
-
-
 
     public static void main(String[] args) {
         createNewDatabase("Main.db");
