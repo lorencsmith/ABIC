@@ -17,9 +17,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import javax.xml.crypto.Data;
 import java.io.File;
+import java.time.LocalDate;
 import java.util.Random;
 
 /**
@@ -42,12 +42,17 @@ public class Display extends Application{
 
     @Override
     public void start(Stage primaryStage) {
+        //CAll Login scene at the start of the program
         mainStage = primaryStage;
         Login_Scene_Call();
-        mainStage.setTitle("ABIC");
+        mainStage.setTitle("");
         mainStage.show();
     }
 
+    /**
+     * Login Scene will be called at the beginning of the program
+     * And it will be the main menu throughout the program
+     */
     private void Login_Scene_Call(){
         //Main Gridpane set up
         GridPane grid = new GridPane();
@@ -284,6 +289,11 @@ public class Display extends Application{
         mainStage.setScene(User_Login_Scene);
     }
 
+    /**
+     * Forgot password scene will be called when user presses forgot password button
+     * it will search and validate the input using database and return current password back to user
+     * Since the program is strictly used in infranet, it won't involve sending emails
+     */
     private void Forgot_Password_Call(){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -361,6 +371,10 @@ public class Display extends Application{
         mainStage.setScene(Forgot_Password_Scene);
     }
 
+    /**
+     * Program will ask user to input username and password for enrollment.
+     * it will take username parameter and search the database to see if it already exists in the database
+     */
     private void Enroll_idpass_Call(){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -400,11 +414,24 @@ public class Display extends Application{
         Button submit = new Button();
         submit.setText("Submit");
 
+        //Row 6
+        Label username_Console = new Label();
+        username_Console.setTextFill(Color.RED);
+        username_Console.setText("");
+        grid.add(username_Console,0,6,1,1);
+
+        /**
+          EventHandle
+            If username or password textfield is empty, it will ask user to enter ther fields
+            else it will add teh value into database and proceed to next screen
+         */
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                boolean passed = true;
                 String username = username_Field.getText();
                 String password = password_Field.getText();
+
                 Random rand = new Random();
                 int randomNumber = rand.nextInt(99999999);
 
@@ -424,10 +451,26 @@ public class Display extends Application{
             @Override
             public void handle(ActionEvent event) {
                 Enroll_Call();
+
+                if (username.isEmpty() || password.isEmpty()){
+                    username_Console.setText("Please enter Username and Password");
+                }
+                else {
+                    Random rand = new Random();
+                    int randomNumber = rand.nextInt(99999999);
+                    String sql = String.format("INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
+                            "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
+
+                    DatabaseDriver.insert(sql);
+                    DatabaseDriver.viewTable();
+                    Enroll_Call();
+                }
+
             }
         });
 
-        button_Box.getChildren().addAll(submit,Cancel_Button(),next);
+        button_Box.setAlignment(Pos.CENTER_RIGHT);
+        button_Box.getChildren().addAll(submit,Cancel_Button());
 
         grid.add(button_Box,0,5,1,1);
 
@@ -438,6 +481,10 @@ public class Display extends Application{
 
     }
 
+    /**
+     * After usernamd and password is validated, program will ask for personal information and validate it.
+     * After validation, it will store the data into database
+     */
     private void Enroll_Call(){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -523,59 +570,34 @@ public class Display extends Application{
         grid.add(ssn_Console,2,7,1,1);
 
         //Row 8
-        HBox pAccount_Box = new HBox();
-        pAccount_Box.setAlignment(Pos.CENTER_LEFT);
-        Label pAccount_Label = new Label();
-        pAccount_Label.setText("Primary Billing Account");
-        pAccount_Label.setFont(Font.font("",FontWeight.BOLD, 11));
-        pAccount_Box.getChildren().addAll(pAccount_Label,red_star());
-        TextField pAccount_Field = new TextField();
-        pAccount_Field.setPromptText("_________");
-        Label pAccount_Console = new Label();
-        pAccount_Console.setText("");
-        grid.add(pAccount_Box,0,8,1,1);
-        grid.add(pAccount_Field, 1, 8,1,1);
-        grid.add(pAccount_Console,2,8,1,1);
-
-        //Row 9
         Label pAccount_Info = new Label();
         pAccount_Info.setText("This account may be subject to billing or fees per our Terms and Conditions agreement. Enter numbers only as they appear on your monthly account statement. Do not use spaces or dashes.");
         pAccount_Info.setFont(Font.font("",FontWeight.NORMAL, 11));
         pAccount_Info.setWrapText(true);
-        grid.add(pAccount_Info,0,9,3,1);
+        grid.add(pAccount_Info,0,8,3,1);
 
-        //Row 10
+        //Row 9
         HBox dob_Box = new HBox();
         dob_Box.setAlignment(Pos.CENTER_LEFT);
         Label dob_Label = new Label();
         dob_Label.setText("Date of Birth");
         dob_Label.setFont(Font.font("",FontWeight.BOLD, 11));
         dob_Box.getChildren().addAll(dob_Label,red_star());
-        TextField dob_Field = new TextField();
-        dob_Field.setPromptText("MM/DD/YYYY");
+        final DatePicker datePicker = new DatePicker();
+        datePicker.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                LocalDate date = datePicker.getValue();
+
+            }
+        });
         Label dob_Console = new Label();
         dob_Console.setText("");
-        grid.add(dob_Box,0,10,1,1);
-        grid.add(dob_Field, 1, 10,1,1);
-        grid.add(dob_Console,2,10,1,1);
+        grid.add(dob_Box,0,9,1,1);
+        grid.add(datePicker,1,9,1,1);
+        grid.add(dob_Console,2,9,1,1);
 
-        //Row 11
-        HBox wPhone_Box = new HBox();
-        wPhone_Box.setAlignment(Pos.CENTER_LEFT);
-        Label wPhone_Label = new Label();
-        wPhone_Label.setText("Work Phone");
-        wPhone_Label.setFont(Font.font("",FontWeight.BOLD, 11));
-        wPhone_Box.getChildren().addAll(wPhone_Label,red_star());
-        TextField wPhone_Field = new TextField();
-        wPhone_Field.setPromptText("XXX-XXX-XXXX");
-        Label wPhone_Console = new Label();
-        wPhone_Console.setText("");
-        grid.add(wPhone_Box,0,11,1,1);
-        grid.add(wPhone_Field, 1, 11,1,1);
-        grid.add(wPhone_Console,2,11,1,1);
-
-
-        //Row 12
+        //Row 10
         HBox hPhone_Box = new HBox();
         hPhone_Box.setAlignment(Pos.CENTER_LEFT);
         Label hPhone_Label = new Label();
@@ -583,21 +605,36 @@ public class Display extends Application{
         hPhone_Label.setFont(Font.font("",FontWeight.BOLD, 11));
         hPhone_Box.getChildren().addAll(hPhone_Label,red_star());
         TextField hPhone_Field = new TextField();
-        hPhone_Field.setPromptText("XXX-XXX-XXXX");
+        hPhone_Field.setPromptText("XXXXXXXXXX");
         Label hPhone_Console = new Label();
         hPhone_Console.setText("");
-        grid.add(hPhone_Box,0,12,1,1);
-        grid.add(hPhone_Field, 1, 12,1,1);
-        grid.add(hPhone_Console, 2, 12,1,1);
+        grid.add(hPhone_Box,0,10,1,1);
+        grid.add(hPhone_Field, 1, 10,1,1);
+        grid.add(hPhone_Console, 2, 10,1,1);
 
-        //Row 13
+        //Row 11
+        HBox wPhone_Box = new HBox();
+        wPhone_Box.setAlignment(Pos.CENTER_LEFT);
+        Label wPhone_Label = new Label();
+        wPhone_Label.setText("Work Phone");
+        wPhone_Label.setFont(Font.font("",FontWeight.NORMAL, 11));
+        wPhone_Box.getChildren().addAll(wPhone_Label);
+        TextField wPhone_Field = new TextField();
+        wPhone_Field.setPromptText("XXXXXXXXXX");
+        Label wPhone_Console = new Label();
+        wPhone_Console.setText("");
+        grid.add(wPhone_Box,0,11,1,1);
+        grid.add(wPhone_Field, 1, 11,1,1);
+        grid.add(wPhone_Console,2,11,1,1);
+
+        //Row 12
         Label phone_Info = new Label();
-        phone_Info.setText("If only one phone number is available, please enter it in Home and Work phone categories.");
+        phone_Info.setText("If only one phone number is available, please enter it in Home phone categories. No Dashes");
         phone_Info.setFont(Font.font("",FontWeight.NORMAL,11));
         phone_Info.setWrapText(true);
-        grid.add(phone_Info,0,13,3,1);
+        grid.add(phone_Info,0,12,3,1);
 
-        //Row 14
+        //Row 13
         HBox address_Box = new HBox();
         address_Box.setAlignment(Pos.CENTER_LEFT);
         Label address_Label = new Label();
@@ -606,22 +643,22 @@ public class Display extends Application{
         address_Box.getChildren().addAll(address_Label,red_star());
         TextField address_Field = new TextField();
         address_Field.setPromptText("Street Address");
-        grid.add(address_Box,0,14,1,1);
-        grid.add(address_Field, 1, 14,1,1);
+        Label address_Console = new Label();
+        address_Console.setText("");
+        grid.add(address_Box,0,13,1,1);
+        grid.add(address_Field, 1, 13,1,1);
+        grid.add(address_Console,2,13,1,1);
 
-        //Row 14-2
-        HBox address2_box = new HBox();
-        address2_box.setAlignment(Pos.CENTER_RIGHT);
+        //Row 14
         Label address2_Label = new Label();
-        address2_Label.setText("Address Line 2    ");
+        address2_Label.setText("Address Line 2");
         address2_Label.setFont(Font.font("",FontWeight.NORMAL,11));
         TextField address2_Field = new TextField();
         address2_Field.setPromptText("Apartment, suite, unit");
-        address2_box.getChildren().addAll(address2_Label,address2_Field);
-        Label address_Console = new Label();
-        address_Console.setText("");
-        grid.add(address2_box,2,14,1,1);
-        grid.add(address_Console,3,14,1,1);
+        grid.add(address2_Label,0,14,1,1);
+        grid.add(address2_Field,1,14,1,1);
+
+        //Row 15
 
         //Row 16
         HBox city_Box = new HBox();
@@ -750,9 +787,19 @@ public class Display extends Application{
             @Override
             public void handle(ActionEvent event) {
                 //validate inputs and compare it with db
+                ssn_Console.setTextFill(Color.RED);
+                First_Name_Console.setTextFill(Color.RED);
+                Last_Name_Console.setTextFill(Color.RED);
+                dob_Console.setTextFill(Color.RED);
+                wPhone_Console.setTextFill(Color.RED);
+                hPhone_Console.setTextFill(Color.RED);
+                address_Console.setTextFill(Color.RED);
+                city_Console.setTextFill(Color.RED);
+                state_Console.setTextFill(Color.RED);
+                zip_Console.setTextFill(Color.RED);
+
                 boolean passed = true;
                 if (First_Name_Field.getText().isEmpty()){
-                    First_Name_Console.setTextFill(Color.RED);
                     First_Name_Console.setText("Please enter first name");
                     passed = false;
                 }
@@ -760,7 +807,6 @@ public class Display extends Application{
                     First_Name_Console.setText("");
 
                 if(Last_Name_Field.getText().isEmpty()){
-                    Last_Name_Console.setTextFill(Color.RED);
                     Last_Name_Console.setText("Please enter last name");
                     passed = false;
                 }
@@ -768,25 +814,72 @@ public class Display extends Application{
                     Last_Name_Console.setText("");
 
                 if(ssn_Field.getText().isEmpty()){
-                    ssn_Console.setTextFill(Color.RED);
                     ssn_Console.setText("Please enter Social Security Number");
+                    passed = false;
                 }
-                else
+                else if(ssn_Field.getText().matches("[0-9]+") && ssn_Field.getText().length() == 9){
                     ssn_Console.setText("");
-
-                if(pAccount_Field.getText().isEmpty()){
-                    pAccount_Console.setTextFill(Color.RED);
-                    pAccount_Console.setText("Please enter Primary Billing Account");
                 }
-                else
-                    pAccount_Console.setText("");
+                else{
+                    ssn_Console.setText("Invalid Social Security Number");
+                    passed = false;
+                }
 
-                if(dob_Field.getText().isEmpty()){
-                    dob_Console.setTextFill(Color.RED);
-                    dob_Console.setText("Please Enter Date of Birth");
+                if(datePicker.getValue() == null){
+                    dob_Console.setText("Please enter Date of Birth");
+                    passed = false;
                 }
                 else
                     dob_Console.setText("");
+
+                if(hPhone_Field.getText().isEmpty()){
+                    hPhone_Console.setText("Please Enter Home Phone");
+                    passed = false;
+                }
+                else if(hPhone_Field.getText().matches("[0-9]+") && hPhone_Field.getText().length() == 10){
+                    hPhone_Console.setText("");
+                }
+                else{
+                    hPhone_Console.setText("Invalid Phone number");
+                    passed = false;
+                }
+
+
+                if(address_Field.getText().isEmpty()){
+                    address_Console.setText("Please Enter Address");
+                    passed = false;
+                }
+                else
+                    address_Console.setText("");
+
+                if(city_Field.getText().isEmpty()){
+                    city_Console.setText("Please Enter City");
+                    passed = false;
+                }
+                else
+                    city_Console.setText("");
+
+                if(state_combo_box.getValue() == null){
+                    state_Console.setText("Please choose State");
+                    passed = false;
+                }
+                else
+                    state_Console.setText("");
+
+                if(zip_Field.getText().isEmpty()){
+                    zip_Console.setText("Please enter Zip code");
+                    passed = false;
+                }
+                else if (zip_Field.getText().matches("[0-9]+") && zip_Field.getText().length() == 5){
+                    zip_Console.setText("");
+                }
+                else {
+                    zip_Console.setText("Invalid Zip Code");
+                    passed = false;
+                }
+                if (passed){
+                    System.out.println("Passed!");
+                }
             }
         });
 
@@ -795,6 +888,9 @@ public class Display extends Application{
         mainStage.setScene(Enroll_Scene);
     }
 
+    /**
+     * @return Return cancel button that will take user back to main menu(login scene)
+     */
     private Button Cancel_Button(){
         Button cancel_Button = new Button("Cancel");
         cancel_Button.setOnAction(new EventHandler<ActionEvent>() {
@@ -806,6 +902,9 @@ public class Display extends Application{
         return cancel_Button;
     }
 
+    /**
+     * @return red-colored * to be used in various labels
+     */
     public Text red_star(){
         //Red Star
         Text rs = new Text();
