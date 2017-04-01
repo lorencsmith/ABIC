@@ -859,7 +859,11 @@ public class Display extends Application{
                     String sql = String.format("INSERT INTO CUSTOMER ('FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER', ID)" +
                                     "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", (SELECT ID FROM 'LOCAL ACCOUNT' WHERE USERNAME = \"%s\" limit 1))",
                             First_Name_Field.getText(), Last_Name_Field.getText(), ssn_Field.getText(), datePicker.getValue().toString(), address_Field.getText(), city_Field.getText(), state_combo_box.getValue().toString(),
+<<<<<<< HEAD
                             zip_Console.getText(),hPhone_Console.getText(), wPhone_Console.getText(), "test");
+=======
+                            zip_Field.getText(),hPhone_Field.getText(), wPhone_Field.getText(), "qqq");
+>>>>>>> f3f86470d15e8202a08e4d25bbbca1268b44e99a
 
 
                     DatabaseDriver.insert(sql);
