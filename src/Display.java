@@ -443,7 +443,7 @@ public class Display extends Application{
                             "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
                     DatabaseDriver.insert(sql);
                     DatabaseDriver.viewTable("'LOCAL ACCOUNT'");
-                    Enroll_Call();
+                    Enroll_Call(username);
                 }
             }
         });
@@ -465,7 +465,7 @@ public class Display extends Application{
      * After usernamd and password is validated, program will ask for personal information and validate it.
      * After validation, it will store the data into database
      */
-    private void Enroll_Call(){
+    private void Enroll_Call(String username){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(5);
@@ -718,7 +718,7 @@ public class Display extends Application{
                         "Wisconsin",
                         "Wyoming"
                 );
-        final ComboBox state_combo_box = new ComboBox(states);
+        ComboBox state_combo_box = new ComboBox(states);
         state_combo_box.setMaxWidth(Double.MAX_VALUE);
         Label state_Console = new Label();
         state_Console.setText("");
@@ -858,7 +858,7 @@ public class Display extends Application{
                 if (passed){
                     String sql = String.format("INSERT INTO CUSTOMER ('FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER', ID)" +
                                     "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", (SELECT ID FROM 'LOCAL ACCOUNT' WHERE USERNAME = \"%s\" limit 1))",
-                            First_Name_Field.getText(), Last_Name_Field.getText(), ssn_Field.getText(), dob_Console.getText(), address_Field.getText(), city_Console.getText(), state_Console.getText(),
+                            First_Name_Field.getText(), Last_Name_Field.getText(), ssn_Field.getText(), datePicker.getValue().toString(), address_Field.getText(), city_Field.getText(), state_combo_box.getValue().toString(),
                             zip_Console.getText(),hPhone_Console.getText(), wPhone_Console.getText(), "test");
 
 
@@ -867,9 +867,6 @@ public class Display extends Application{
 
                     System.out.println("Passed!");
                 }
-
-
-
             }
         });
 
