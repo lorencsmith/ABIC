@@ -109,6 +109,31 @@ public class DatabaseDriver {
         System.out.println("Records created successfully");
     }
 
+    public static void search(String sql) {
+        String url = "jdbc:sqllite:/Database Files/Main.db";
+
+        Connection c = null;
+        Statement stmt = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:./Database Files/Main.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database Successfully");
+
+            stmt = c.createStatement();
+            stmt.executeUpdate(sql);
+
+            stmt.close();
+            c.commit();
+            c.close();
+
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+    }
+
     public static void insert(String sql) {
         String url = "jdbc:sqllite:/Database Files/Main.db";
 
