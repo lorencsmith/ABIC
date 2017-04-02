@@ -2,6 +2,8 @@
  * Created by Grandy Nguyen on 3/29/2017.
  */
 
+import com.sun.istack.internal.NotNull;
+
 import java.sql.*;
 import java.util.Random;
 
@@ -26,7 +28,6 @@ public class DatabaseDriver {
     }
 
     /**
-     *
      * @param sql SQL statement in the form of a string
      */
 
@@ -47,10 +48,8 @@ public class DatabaseDriver {
             stmt.close();
             c.close();
 
-
-
         } catch (Exception e) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
         System.out.println("Table created successfully");
@@ -70,14 +69,14 @@ public class DatabaseDriver {
             DBTablePrinter.printTable(c, tableName);
 
         } catch (Exception e) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
         System.out.println("Viewing Table");
 
     }
 
-    public static void insert() {
+    public static void run(String sql) {
         String url = "jdbc:sqllite:/Database Files/Main.db";
 
         Connection c = null;
@@ -90,12 +89,6 @@ public class DatabaseDriver {
             System.out.println("Opened database Successfully");
 
             stmt = c.createStatement();
-            String sql = "INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD) " +
-                         "VALUES (14, \"ADMIN\", \"1234\");";
-            stmt.executeUpdate(sql);
-
-            sql = "INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD) " +
-            "VALUES (235, \"ADMIN\", \"1234\");";
             stmt.executeUpdate(sql);
 
             stmt.close();
@@ -103,7 +96,7 @@ public class DatabaseDriver {
             c.close();
 
         } catch (Exception e) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
         System.out.println("Records created successfully");
@@ -134,30 +127,30 @@ public class DatabaseDriver {
         }
     }
 
-    public static void insert(String sql) {
+    public static boolean checkDuplicates(String field, String Table, String check) {
         String url = "jdbc:sqllite:/Database Files/Main.db";
 
         Connection c = null;
-        Statement stmt = null;
+        ResultSet result = null;
 
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:./Database Files/Main.db");
-            c.setAutoCommit(false);
-            System.out.println("Opened database Successfully");
 
-            stmt = c.createStatement();
-            stmt.executeUpdate(sql);
+            String sql = String.format("SELECT \"%s\" FROM \"%s\" WHERE \"%s\"", field, Table, check);
+            Statement stmt = c.createStatement();
 
-            stmt.close();
-            c.commit();
-            c.close();
+            result = stmt.executeQuery(sql);
+            if (!result.isBeforeFirst()) {
+
+                return false;
+            }
 
         } catch (Exception e) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Records created successfully");
+        return true;
     }
 
     /**
@@ -167,18 +160,20 @@ public class DatabaseDriver {
      * PASSWORD: STRING
      * Note: Encrypt Password (using SALT)
      */
+
+
     public static String createLocalAccount() {
         return "CREATE TABLE IF NOT EXISTS 'LOCAL ACCOUNT' " +
                 "(ID INT PRIMARY KEY     NOT NULL," +
-                " USERNAME       TEXT    NOT NULL," +
+                " USERNAME       TEXT    NOT NULL UNIQUE," +
                 " PASSWORD       INT     NOT NULL)";
     }
 
     public static String createCustomer() {
-        return "CREATE TABLE CUSTOMER " +
+        return "CREATE TABLE IF NOT EXISTS CUSTOMER  " +
                 "('FIRST NAME'   TEXT  NOT NULL," +
                 "'LAST NAME'    TEXT  NOT NULL," +
-                "'SSN'          TEXT NOT NULL,"  +
+                "'SSN'          TEXT NOT NULL," +
                 "DOB            TEXT NOT NULL," +
                 "'ADDRESS'      TEXT  NOT NULL," +
                 "'CITY'         TEXT  NOT NULL," +
@@ -188,7 +183,6 @@ public class DatabaseDriver {
                 "'WORK NUMBER'  TEXT NOT NULL," +
                 "ID            INT PRIMARY KEY  NOT NULL, " +
                 "FOREIGN KEY (ID) REFERENCES 'LOCAL ACCOUNT' (ID))";
-
     }
 
     public static String testCustomer() {
@@ -205,31 +199,6 @@ public class DatabaseDriver {
         createNewDatabase("Main.db");
         createNewTable(createLocalAccount());
         createNewTable(createCustomer());
-
-        Random rand = new Random();
-        int randomNumber = rand.nextInt(99999999);
-
-
-
-
-//
-//
-//        String sql = String.format("INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
-//                "VALUES (%d, \"%s\", \"%s\")", randomNumber, "admin", "password");
-//        viewTable("'LOCAL ACCOUNT'");
-//
-//        insert(sql);
-//
-//        sql = String.format("INSERT INTO CUSTOMER ('FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER', ID)" +
-//                "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", (SELECT ID FROM 'LOCAL ACCOUNT' WHERE USERNAME = 'admin' limit 1))",  "one", "two", "three", "four", "five", "six", "seven",
-//                                                                                                      "eight", "nine", "ten");
-//
-////        String test = String.format("INSERT INTO CUSTOMER ('FIRST NAME')" +
-////                "VALUES (\"%s\")", "one");
-//
-//        insert(sql);
-//
-//        viewTable("CUSTOMER");
 
     }
 
