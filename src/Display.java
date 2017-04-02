@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -438,7 +440,8 @@ public class Display extends Application{
                 }
                 else{
                     Random rand = new Random();
-                    int randomNumber = rand.nextInt(99999999);
+                    //Generating random number for account number
+                    int randomNumber = rand.nextInt(99999999-10000000+1)+10000000;
                     String sql = String.format("INSERT INTO 'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
                             "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
                     DatabaseDriver.insert(sql);
@@ -859,11 +862,7 @@ public class Display extends Application{
                     String sql = String.format("INSERT INTO CUSTOMER ('FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER', ID)" +
                                     "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", (SELECT ID FROM 'LOCAL ACCOUNT' WHERE USERNAME = \"%s\" limit 1))",
                             First_Name_Field.getText(), Last_Name_Field.getText(), ssn_Field.getText(), datePicker.getValue().toString(), address_Field.getText(), city_Field.getText(), state_combo_box.getValue().toString(),
-<<<<<<< HEAD
-                            zip_Console.getText(),hPhone_Console.getText(), wPhone_Console.getText(), "test");
-=======
                             zip_Field.getText(),hPhone_Field.getText(), wPhone_Field.getText(), "qqq");
->>>>>>> f3f86470d15e8202a08e4d25bbbca1268b44e99a
 
 
                     DatabaseDriver.insert(sql);
@@ -882,6 +881,55 @@ public class Display extends Application{
     /**
      * @return Return cancel button that will take user back to main menu(login scene)
      */
+
+    private void Post_Login_Call(){
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(5);
+        grid.setVgap(5);
+        grid.setPadding(new Insets(10,10,20,20));
+        grid.setStyle("-fx-background-color: white");
+
+        //Row 0 (Logo)
+        ImageView LogoView = new ImageView();
+        LogoView.setImage(Logo);
+        LogoView.setFitWidth(Logo.getWidth()/4);
+        LogoView.setFitHeight(Logo.getHeight()/4);
+        grid.add(LogoView,4,0,1,1);
+
+        //Row 1
+        Label account_Detail = new Label();
+        account_Detail.setText("Account Details");
+        account_Detail.setFont(Font.font("",FontWeight.BOLD,12));
+        grid.add(account_Detail,1,1,1,1);
+
+        //Row 2
+        Hyperlink overview_Link = new Hyperlink();
+        overview_Link.setText("Overview");
+        overview_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        overview_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                overview_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        overview_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                overview_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        overview_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Post_Login_Call();
+            }
+        });
+        grid.add(overview_Link,0,2,1,1);
+
+    }
+
+
     private Button Cancel_Button(){
         Button cancel_Button = new Button("Cancel");
         cancel_Button.setOnAction(new EventHandler<ActionEvent>() {
