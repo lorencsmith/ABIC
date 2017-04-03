@@ -447,9 +447,9 @@ public class Display extends Application {
                         sql = String.format("INSERT INTO  'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
                                 "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
 
-                        if (DatabaseDriver.checkDuplicates("USERNAME", "LOCAL ACCOUNT", "USERNAME=" + username)) {
+                        if (!DatabaseDriver.checkDuplicates(username)) {
 
-                            //DatabaseDriver.run(sql);
+                            DatabaseDriver.run(sql);
                             DatabaseDriver.viewTable("'LOCAL ACCOUNT'");
                             Enroll_Call(username);
                         }

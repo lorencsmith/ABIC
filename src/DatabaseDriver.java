@@ -103,32 +103,42 @@ public class DatabaseDriver {
     }
 
 
-    public static boolean checkDuplicates(String field, String Table, String check) {
+    public static boolean checkDuplicates(String username) {
         String url = "jdbc:sqllite:/Database Files/Main.db";
 
-        Connection c = null;
-        ResultSet result = null;
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement pstmt = null;
+
+        int count = 0;
+
+        boolean value = false;
 
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:./Database Files/Main.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:./Database Files/Main.db");
 
-            String sql = String.format("SELECT \"%s\" FROM \"%s\" WHERE \"%s\"", field, Table, check);
-            Statement stmt = c.createStatement();
+            String query = "SELECT COUNT(*) FROM 'LOCAL ACCOUNT' WHERE USERNAME = ?";
+            pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, username);
+            rs = pstmt.executeQuery();
 
-            result = stmt.executeQuery(sql);
-            if (!result.isBeforeFirst()) {
-
-                return false;
+            while (rs.next()) {
+                count = rs.getInt("COUNT(*)");
             }
+
+            if (count > 0) {
+                value = true;
+            }
+
+            System.out.println(value);
 
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        return true;
+        return value;
     }
-
+    
     /**
      * LOCAL ACCOUNT table consists of
      * ID: RANDOM #
@@ -139,7 +149,7 @@ public class DatabaseDriver {
     public static String createLocalAccount() {
         return "CREATE TABLE IF NOT EXISTS 'LOCAL ACCOUNT' " +
                 "(ID INT PRIMARY KEY     NOT NULL," +
-                " USERNAME       TEXT    NOT NULL UNIQUE," +
+                " USERNAME       TEXT    NOT NULL," +
                 " PASSWORD       INT     NOT NULL)";
     }
 
