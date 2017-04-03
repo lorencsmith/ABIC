@@ -36,7 +36,7 @@ import java.util.Random;
 public class Display extends Application {
 
     Stage mainStage;
-    Scene Login_Scene, Forgot_Password_Scene, Enroll_idpass_Scene, Enroll_Scene, Employee_Login_Scene, User_Login_Scene;
+    Scene Login_Scene, Forgot_Password_Scene, Enroll_idpass_Scene, Enroll_Scene, Employee_Login_Scene, User_Login_Scene, Post_Login_Scene;
     File file = new File(".");
     Image Logo = new Image("ABIC_Logo.png");
 
@@ -187,7 +187,15 @@ public class Display extends Application {
         Button submit = new Button();
         submit.setText("Submit");
         submit.setAlignment(Pos.CENTER);
-        button_Box.getChildren().addAll(Cancel_Button(), submit);
+        Button postbox = new Button();
+        postbox.setText("PostBOX");
+        postbox.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Post_Login_Call();
+            }
+        });
+        button_Box.getChildren().addAll(Cancel_Button(), submit, postbox);
         grid.add(button_Box, 1, 7, 1, 1);
 
         //Row 8
@@ -450,7 +458,6 @@ public class Display extends Application {
                                 "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
 
                         if (DatabaseDriver.checkDuplicates("USERNAME", "LOCAL ACCOUNT", "USERNAME=" + username)) {
-
                             //DatabaseDriver.run(sql);
                             DatabaseDriver.viewTable("'LOCAL ACCOUNT'");
                             Enroll_Call(username);
@@ -459,15 +466,10 @@ public class Display extends Application {
                             username_Console.setText("Username already Exists.");
                             passed = false;
                         }
-
                     } catch (Exception e) {
-
                         username_Console.setText("Username already Exists.");
                         passed = false;
-
                     }
-
-
                 }
             }
         });
@@ -477,7 +479,6 @@ public class Display extends Application {
         button_Box.getChildren().addAll(Cancel_Button(), submit);
 
         grid.add(button_Box, 0, 5, 1, 1);
-
 
         //Start the scene
         Enroll_idpass_Scene = new Scene(grid, 800, 600);
@@ -936,6 +937,8 @@ public class Display extends Application {
         });
         grid.add(overview_Link,0,2,1,1);
 
+        Post_Login_Scene = new Scene(grid, 800, 600);
+        mainStage.setScene(Post_Login_Scene);
     }
 
 
