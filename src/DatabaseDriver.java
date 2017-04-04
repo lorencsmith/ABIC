@@ -127,30 +127,87 @@ public class DatabaseDriver {
         }
     }
 
-    public static boolean checkDuplicates(String field, String Table, String check) {
+    public void searchAll(String sql){
+        try (Connection conn = this.connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            // loop through the result set
+            while (rs.next()) {
+                System.out.println(rs.getInt("ID") +  "\t" +
+                        rs.getString("USERNAME") + "\t" +
+                        rs.getString("PASSWORD"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void getUsernamePassword(String sql, String username){
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            pstmt.setString(1, username);
+            ResultSet rs  = pstmt.executeQuery();
+
+            // loop through the result set
+            while (rs.next()) {
+                System.out.println(rs.getInt("ID") +  "\t" +
+                        rs.getString("USERNAME") + "\t" +
+                        rs.getString("PASSWORD"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private Connection connect() {
+        // SQLite connection string
+        String url = "jdbc:sqlite:./Database Files/Main.db";
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(url);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return conn;
+    }
+
+    public static boolean checkDuplicates(String username) {
         String url = "jdbc:sqllite:/Database Files/Main.db";
 
-        Connection c = null;
-        ResultSet result = null;
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement pstmt = null;
+
+        int count = 0;
+
+        boolean value = false;
 
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:./Database Files/Main.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:./Database Files/Main.db");
 
-            String sql = String.format("SELECT \"%s\" FROM \"%s\" WHERE \"%s\"", field, Table, check);
-            Statement stmt = c.createStatement();
+            String query = "SELECT COUNT(*) FROM 'LOCAL ACCOUNT' WHERE USERNAME = ?";
+            pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, username);
+            rs = pstmt.executeQuery();
 
-            result = stmt.executeQuery(sql);
-            if (!result.isBeforeFirst()) {
-
-                return false;
+            while (rs.next()) {
+                count = rs.getInt("COUNT(*)");
             }
+
+            if (count > 0) {
+                value = true;
+            }
+
+            System.out.println(value);
 
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        return true;
+        return value;
     }
 
     /**
@@ -165,7 +222,7 @@ public class DatabaseDriver {
     public static String createLocalAccount() {
         return "CREATE TABLE IF NOT EXISTS 'LOCAL ACCOUNT' " +
                 "(ID INT PRIMARY KEY     NOT NULL," +
-                " USERNAME       TEXT    NOT NULL UNIQUE," +
+                " USERNAME       TEXT    NOT NULL," +
                 " PASSWORD       INT     NOT NULL)";
     }
 
@@ -199,7 +256,6 @@ public class DatabaseDriver {
         createNewDatabase("Main.db");
         createNewTable(createLocalAccount());
         createNewTable(createCustomer());
-
     }
 
 

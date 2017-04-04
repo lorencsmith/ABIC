@@ -23,7 +23,10 @@ import org.sqlite.SQLiteException;
 import javax.xml.crypto.Data;
 import java.awt.image.DataBuffer;
 import java.io.File;
+import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.Random;
 
@@ -36,7 +39,7 @@ import java.util.Random;
 public class Display extends Application {
 
     Stage mainStage;
-    Scene Login_Scene, Forgot_Password_Scene, Enroll_idpass_Scene, Enroll_Scene, Employee_Login_Scene, User_Login_Scene, Post_Login_Scene;
+    Scene Login_Scene, Forgot_Password_Scene, Enroll_idpass_Scene, Enroll_Scene, Employee_Login_Scene, User_Login_Scene, Post_Login_Scene, Enroll_Success_Scene;
     File file = new File(".");
     Image Logo = new Image("ABIC_Logo.png");
 
@@ -284,6 +287,13 @@ public class Display extends Application {
         submit.setAlignment(Pos.CENTER);
         button_Box.getChildren().addAll(Cancel_Button(), submit);
         grid.add(button_Box, 1, 7, 1, 1);
+
+        //Row 8
+        Label console_Label = new Label();
+        console_Label.setText("");
+        console_Label.setTextFill(Color.RED);
+        grid.add(console_Label,0,8,2,1);
+
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -291,7 +301,17 @@ public class Display extends Application {
                 String password = password_Field.getText();
                 //Validate username and password
                 //Search DB
-
+                String sql;
+                sql = "SELECT ID, USERNAME, PASSWORD "
+                        + "FROM 'LOCAL ACCOUNT' WHERE USERNAME LIKE " + "\"" + username + "\"";
+                DatabaseDriver db = new DatabaseDriver();
+                db.searchAll(sql);
+                if (username.equals("username") && password.equals("password")){
+                    Post_Login_Call();
+                }
+                else{
+                    console_Label.setText("Username and password does not match");
+                }
             }
         });
 
@@ -457,8 +477,10 @@ public class Display extends Application {
                         sql = String.format("INSERT INTO  'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
                                 "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
 
-                        if (DatabaseDriver.checkDuplicates("USERNAME", "LOCAL ACCOUNT", "USERNAME=" + username)) {
-                            //DatabaseDriver.run(sql);
+                        if (!DatabaseDriver.checkDuplicates(username)) {
+
+                            DatabaseDriver.run(sql);
+
                             DatabaseDriver.viewTable("'LOCAL ACCOUNT'");
                             Enroll_Call(username);
                         }
@@ -879,6 +901,7 @@ public class Display extends Application {
                     DatabaseDriver.viewTable("CUSTOMER");
 
                     System.out.println("Passed!");
+                    Enroll_Success_Call(First_Name_Field.getText());
                 }
             }
         });
@@ -886,6 +909,45 @@ public class Display extends Application {
         //Start new screen
         Enroll_Scene = new Scene(grid, 800, 600);
         mainStage.setScene(Enroll_Scene);
+    }
+
+
+    private void Enroll_Success_Call(String first_Name){
+        //Main Gridpane set up
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(5);
+        grid.setVgap(5);
+        grid.setPadding(new Insets(10, 10, 20, 20));
+        grid.setStyle("-fx-background-color: white");
+
+        //Row 1 (Logo)
+        ImageView LogoView = new ImageView();
+        LogoView.setImage(Logo);
+        LogoView.setFitWidth(Logo.getWidth() / 4);
+        LogoView.setFitHeight(Logo.getHeight() / 4);
+        grid.add(LogoView, 4, 0, 3, 1);
+
+        //Row 1 (Label with users name)
+        Label thanks_Label = new Label();
+        thanks_Label.setText("Thank you " + first_Name + "!");
+        thanks_Label.setFont(Font.font("", FontWeight.BOLD, 13));
+        grid.add(thanks_Label,0,1,1,1);
+
+        //Row 2
+        Label info_Label = new Label();
+        info_Label.setText("You can now use your account to use our online banking service");
+        info_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
+        grid.add(info_Label,0,2,1,1);
+
+        //Row 3
+        Button back_Button = new Button();
+        back_Button = Cancel_Button();
+        back_Button.setText("Login Page");
+        grid.add(back_Button,1,3,1,1);
+
+        Enroll_Success_Scene = new Scene(grid,800,600);
+        mainStage.setScene(Enroll_Success_Scene);
     }
 
     /**
@@ -940,7 +1002,6 @@ public class Display extends Application {
         Post_Login_Scene = new Scene(grid, 800, 600);
         mainStage.setScene(Post_Login_Scene);
     }
-
 
     private Button Cancel_Button() {
         Button cancel_Button = new Button("Cancel");
