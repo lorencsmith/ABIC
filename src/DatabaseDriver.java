@@ -19,7 +19,7 @@ public class DatabaseDriver {
             if (conn != null) {
                 DatabaseMetaData meta = conn.getMetaData();
                 //System.out.println("The driver name is " + meta.getDriverName());
-                System.out.println("A new database has been created");
+//                System.out.println("A new database has been created");
             }
 
         } catch (SQLException e) {
@@ -40,7 +40,7 @@ public class DatabaseDriver {
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:./Database Files/Main.db");
-            System.out.println("Opened database Successfully");
+//            System.out.println("Opened database Successfully");
 
             stmt = c.createStatement();
 
@@ -52,7 +52,7 @@ public class DatabaseDriver {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Table created successfully");
+//        System.out.println("Table created successfully");
     }
 
     public static void viewTable(String tableName) {
@@ -64,7 +64,7 @@ public class DatabaseDriver {
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:./Database Files/Main.db");
-            System.out.println("Opened database Successfully");
+//            System.out.println("Opened database Successfully");
 
             DBTablePrinter.printTable(c, tableName);
 
@@ -72,7 +72,7 @@ public class DatabaseDriver {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Viewing Table");
+//        System.out.println("Viewing Table");
 
     }
 
@@ -86,7 +86,7 @@ public class DatabaseDriver {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:./Database Files/Main.db");
             c.setAutoCommit(false);
-            System.out.println("Opened database Successfully");
+//            System.out.println("Opened database Successfully");
 
             stmt = c.createStatement();
             stmt.executeUpdate(sql);
@@ -98,8 +98,20 @@ public class DatabaseDriver {
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
+        } finally {
+
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) { /* ignored */}
+            }
+            if (c != null) {
+                try {
+                    c.close();
+                } catch (SQLException e) { /* ignored */}
+            }
         }
-        System.out.println("Records created successfully");
+//        System.out.println("Records created successfully");
     }
 
     public static void search(String sql) {
@@ -221,14 +233,15 @@ public class DatabaseDriver {
 
     public static String createLocalAccount() {
         return "CREATE TABLE IF NOT EXISTS 'LOCAL ACCOUNT' " +
-                "(ID INT PRIMARY KEY     NOT NULL," +
-                " USERNAME       TEXT    NOT NULL," +
+                "(Pk_LocalAccount_Id INT PRIMARY KEY     NOT NULL," +
+                " USERNAME       TEXT    NOT NULL UNIQUE," +
                 " PASSWORD       INT     NOT NULL)";
     }
 
-    public static String createCustomer() {
-        return "CREATE TABLE IF NOT EXISTS CUSTOMER  " +
-                "('FIRST NAME'   TEXT  NOT NULL," +
+    public static String createPerson() {
+        return "CREATE TABLE IF NOT EXISTS Person" +
+                "(Pk_Person_Id INT PRIMARY KEY," +
+                "'FIRST NAME'   TEXT  NOT NULL," +
                 "'LAST NAME'    TEXT  NOT NULL," +
                 "'SSN'          TEXT NOT NULL," +
                 "DOB            TEXT NOT NULL," +
@@ -238,25 +251,38 @@ public class DatabaseDriver {
                 "'ZIP CODE'     INT   NOT NULL," +
                 "'HOME NUMBER' TEXT  NOT NULL," +
                 "'WORK NUMBER'  TEXT NOT NULL," +
-                "ID            INT PRIMARY KEY  NOT NULL, " +
-                "FOREIGN KEY (ID) REFERENCES 'LOCAL ACCOUNT' (ID))";
+                "FOREIGN KEY (Pk_Person_Id) REFERENCES 'LOCAL ACCOUNT' (Pk_LocalAccount_Id))";
     }
 
-    public static String testCustomer() {
-        return "CREATE TABLE suppliers (\n" +
-                " supplier_id integer PRIMARY KEY,\n" +
-                " supplier_name text NOT NULL,\n" +
-                " group_id integer,\n" +
-                " FOREIGN KEY (group_id) REFERENCES supplier_groups (group_id) \n" +
-                "  ON UPDATE SET NULL\n" +
-                ")";
-    }
 
     public static void main(String[] args) {
         createNewDatabase("Main.db");
         createNewTable(createLocalAccount());
-        createNewTable(createCustomer());
+        createNewTable(createAccount());
+        createNewTable(createPerson());
     }
+        /**
+         * Account table stores bank account details, it consists of
+         * Pk_Account_Id: Random number generated on 'LOCAL ACCOUNT' Creation, used to link tables
+         * Account_Number: Random number, unique, used to identify bank accounts
+         * Type: 0 or 1, 0 = Checking, 1 = Savings
+         * Balance: The ammount of money in the account
+         * Interest_Rate: The interest rate on the account
+         * Overdraft: Ammount overdrafted
+         * Last_Access_Time_Stamp
+         * @return
+         */
 
-
+    public static String createAccount() {
+        return "CREATE TABLE IF NOT EXISTS Account" +
+                "(Pk_Account_Id INTEGER," +
+                "Account_Number INTEGER UNIQUE," +
+                "Type INTEGER," +
+                "Balance DECIMAL(5, 2)," +
+                "Interest_Rate DECIMAL," +
+                "Overdraft DECIMAL(5, 2)," +
+                "Last_Access_Time_Stamp TIMESTAMP," +
+                "FOREIGN KEY (Pk_Account_Id) REFERENCES Person(Pk_Customer_Id))";
+    }
 }
+
