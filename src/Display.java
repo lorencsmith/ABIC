@@ -44,7 +44,11 @@ public class Display extends Application {
     Image Logo = new Image("ABIC_Logo.png");
 
     public static void main(String[] args) {
-
+        DatabaseDriver db = new DatabaseDriver();
+        db.createNewDatabase("Main.db");
+        db.createNewTable(db.createLocalAccount());
+        db.createNewTable(db.createAccount());
+        db.createNewTable(db.createPerson());
         launch(args);
     }
 
@@ -302,8 +306,8 @@ public class Display extends Application {
                 //Validate username and password
                 //Search DB
                 String sql;
-                sql = "SELECT ID, USERNAME, PASSWORD "
-                        + "FROM 'LOCAL ACCOUNT' WHERE USERNAME LIKE " + "\"" + username + "\"";
+                sql = "SELECT Pk_LocalAccount_Id, USERNAME, PASSWORD "
+                        + "FROM 'LOCAL ACCOUNT' WHERE USERNAME = " + "\"" + username + "\"";
                 DatabaseDriver db = new DatabaseDriver();
                 db.searchAll(sql);
                 if (username.equals("username") && password.equals("password")){
@@ -474,7 +478,7 @@ public class Display extends Application {
 
                     // Tries to insert username into database, tells user if username already exists
                     try {
-                        sql = String.format("INSERT INTO  'LOCAL ACCOUNT' (ID, USERNAME, PASSWORD)" +
+                        sql = String.format("INSERT INTO  'LOCAL ACCOUNT' (Pk_LocalAccount_Id, USERNAME, PASSWORD)" +
                                 "VALUES (%d, \"%s\", \"%s\")", randomNumber, username, password);
 
                         if (!DatabaseDriver.checkDuplicates(username)) {
@@ -891,14 +895,14 @@ public class Display extends Application {
                     passed = false;
                 }
                 if (passed) {
-                    String sql = String.format("INSERT INTO CUSTOMER ('FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER', ID)" +
-                                    "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", (SELECT ID FROM 'LOCAL ACCOUNT' WHERE USERNAME = \"%s\" limit 1))",
+                    String sql = String.format("INSERT INTO Person (Pk_Person_Id, 'FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER')" +
+                                    "VALUES ((SELECT Pk_LocalAccount_Id FROM 'LOCAL ACCOUNT' WHERE USERNAME = \"%s\" limit 1), \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")",
                             First_Name_Field.getText(), Last_Name_Field.getText(), ssn_Field.getText(), datePicker.getValue().toString(),
                             address_Field.getText(), city_Field.getText(), state_combo_box.getValue().toString(), zip_Field.getText(), hPhone_Field.getText(),
                             wPhone_Field.getText(), username);
 
                     DatabaseDriver.run(sql);
-                    DatabaseDriver.viewTable("CUSTOMER");
+                    DatabaseDriver.viewTable("Person");
 
                     System.out.println("Passed!");
                     Enroll_Success_Call(First_Name_Field.getText());
