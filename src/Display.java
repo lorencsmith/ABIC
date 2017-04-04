@@ -306,11 +306,10 @@ public class Display extends Application {
                 //Validate username and password
                 //Search DB
                 String sql;
-                sql = "SELECT Pk_LocalAccount_Id, USERNAME, PASSWORD "
+                sql = "SELECT PASSWORD "
                         + "FROM 'LOCAL ACCOUNT' WHERE USERNAME = " + "\"" + username + "\"";
                 DatabaseDriver db = new DatabaseDriver();
-                db.searchAll(sql);
-                if (username.equals("username") && password.equals("password")){
+                if(password.equals(db.getPassword(sql))){
                     Post_Login_Call();
                 }
                 else{

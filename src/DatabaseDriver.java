@@ -9,6 +9,13 @@ import java.util.Random;
 
 public class DatabaseDriver {
 
+    public static void main(String[] args) {
+        createNewDatabase("Main.db");
+        createNewTable(createLocalAccount());
+        createNewTable(createAccount());
+        createNewTable(createPerson());
+    }
+
     public static void createNewDatabase(String filename) {
         String url = "jdbc:sqlite:./Database Files/" + filename;
         //String url = "jdbc:sqllite:\\Database Files\\" + filename;
@@ -155,23 +162,18 @@ public class DatabaseDriver {
         }
     }
 
-    public void getUsernamePassword(String sql, String username){
+    public String getPassword(String sql){
         try (Connection conn = this.connect();
              PreparedStatement pstmt  = conn.prepareStatement(sql)){
 
             // set the value
-            pstmt.setString(1, username);
             ResultSet rs  = pstmt.executeQuery();
 
-            // loop through the result set
-            while (rs.next()) {
-                System.out.println(rs.getInt("ID") +  "\t" +
-                        rs.getString("USERNAME") + "\t" +
-                        rs.getString("PASSWORD"));
-            }
+            return rs.getString("PASSWORD");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        return "";
     }
 
     private Connection connect() {
@@ -235,7 +237,7 @@ public class DatabaseDriver {
         return "CREATE TABLE IF NOT EXISTS 'LOCAL ACCOUNT' " +
                 "(Pk_LocalAccount_Id INT PRIMARY KEY     NOT NULL," +
                 " USERNAME       TEXT    NOT NULL UNIQUE," +
-                " PASSWORD       INT     NOT NULL)";
+                " PASSWORD       TEXT     NOT NULL)";
     }
 
     public static String createPerson() {
@@ -255,12 +257,7 @@ public class DatabaseDriver {
     }
 
 
-    public static void main(String[] args) {
-        createNewDatabase("Main.db");
-        createNewTable(createLocalAccount());
-        createNewTable(createAccount());
-        createNewTable(createPerson());
-    }
+
         /**
          * Account table stores bank account details, it consists of
          * Pk_Account_Id: Random number generated on 'LOCAL ACCOUNT' Creation, used to link tables
