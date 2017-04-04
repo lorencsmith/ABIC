@@ -897,9 +897,9 @@ public class Display extends Application {
                 if (passed) {
                     String sql = String.format("INSERT INTO Person (Pk_Person_Id, 'FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER')" +
                                     "VALUES ((SELECT Pk_LocalAccount_Id FROM 'LOCAL ACCOUNT' WHERE USERNAME = \"%s\" limit 1), \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")",
-                            First_Name_Field.getText(), Last_Name_Field.getText(), ssn_Field.getText(), datePicker.getValue().toString(),
+                            username, First_Name_Field.getText(), Last_Name_Field.getText(), ssn_Field.getText(), datePicker.getValue().toString(),
                             address_Field.getText(), city_Field.getText(), state_combo_box.getValue().toString(), zip_Field.getText(), hPhone_Field.getText(),
-                            wPhone_Field.getText(), username);
+                            wPhone_Field.getText());
 
                     DatabaseDriver.run(sql);
                     DatabaseDriver.viewTable("Person");
