@@ -202,6 +202,110 @@ public class DatabaseDriver {
         return "";
     }
 
+    public String getSSN(String sql){
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            ResultSet rs  = pstmt.executeQuery();
+            return rs.getString("SSN");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
+    public String getDOB(String sql){
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            ResultSet rs  = pstmt.executeQuery();
+            return rs.getString("DOB");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
+    public String getADDRESS(String sql){
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            ResultSet rs  = pstmt.executeQuery();
+            return rs.getString("ADDRESS");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
+    public String getCITY(String sql){
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            ResultSet rs  = pstmt.executeQuery();
+            return rs.getString("CITY");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
+    public String getSTATE(String sql){
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            ResultSet rs  = pstmt.executeQuery();
+            return rs.getString("STATE");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
+    public String getZIPCODE(String sql){
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            ResultSet rs  = pstmt.executeQuery();
+            return rs.getString("ZIP CODE");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
+    public String getHOMENUMBER(String sql){
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            ResultSet rs  = pstmt.executeQuery();
+            return rs.getString("HOME NUMBER");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
+    public String getWORKNUMBER(String sql){
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            ResultSet rs  = pstmt.executeQuery();
+            return rs.getString("WORK NUMBER");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
     public String getAccountNumber(String sql){
         try (Connection conn = this.connect();
              PreparedStatement pstmt  = conn.prepareStatement(sql)){
