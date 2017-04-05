@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
@@ -21,6 +20,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.sqlite.SQLiteException;
+import sun.java2d.cmm.Profile;
 
 import javax.xml.crypto.Data;
 import java.awt.image.DataBuffer;
@@ -43,7 +43,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Display extends Application {
 
     Stage mainStage;
-    Scene Login_Scene, Forgot_Password_Scene, Enroll_idpass_Scene, Enroll_Scene, Employee_Login_Scene, User_Login_Scene, Post_Login_Scene, Enroll_Success_Scene;
+    Scene Login_Scene, Forgot_Password_Scene, Enroll_idpass_Scene, Enroll_Scene, Profile_Scene, User_Login_Scene, Post_Login_Scene, Enroll_Success_Scene;
     File file = new File(".");
     Image Logo = new Image("ABIC_Logo.png");
 
@@ -86,7 +86,7 @@ public class Display extends Application {
         grid.add(LogoView, 6, 0, 3, 1);
 
         //Row 2
-        
+
 
         //Row3
         Button User_Login_Button = new Button("User Login");
@@ -147,7 +147,7 @@ public class Display extends Application {
         LogoView.setImage(Logo);
         LogoView.setFitWidth(Logo.getWidth() / 4);
         LogoView.setFitHeight(Logo.getHeight() / 4);
-        grid.add(LogoView, 6, 0, 3, 1);
+        grid.add(LogoView, 3, 0, 3, 1);
 
         //Row 1
         Label welcome = new Label();
@@ -194,28 +194,33 @@ public class Display extends Application {
         Label console_Label = new Label();
         console_Label.setText("");
         console_Label.setTextFill(Color.RED);
-        grid.add(console_Label,0,8,2,1);
+        grid.add(console_Label,0,8,4,1);
 
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                String username = user_Field.getText();
-                String password = password_Field.getText();
-                //Validate username and password
-                //Search DB
-                String sql;
-                sql = "SELECT PASSWORD "
-                        + "FROM 'LOCAL ACCOUNT' WHERE USERNAME = " + "\"" + username + "\"";
-                DatabaseDriver db = new DatabaseDriver();
-                if(password.equals(db.getPassword(sql))){
-                    String sql2;
-                    sql2 = "SELECT Pk_LocalAccount_Id "
-                            + "FROM 'LOCAL ACCOUNT' WHERE USERNAME = " + "\"" + username + "\"";
-                    String accountNumber = db.getAccountNumber(sql2);
-                    Post_Login_Call(accountNumber);
+                if (user_Field.getText().isEmpty() || password_Field.getText().isEmpty()){
+                    console_Label.setText("Please enter username and password");
                 }
                 else{
-                    console_Label.setText("Username and password does not match");
+                    String username = user_Field.getText();
+                    String password = password_Field.getText();
+                    //Validate username and password
+                    //Search DB
+                    String sql;
+                    sql = "SELECT PASSWORD "
+                            + "FROM 'LOCAL ACCOUNT' WHERE USERNAME = " + "\"" + username + "\"";
+                    DatabaseDriver db = new DatabaseDriver();
+                    if(password.equals(db.getPassword(sql))){
+                        String sql2;
+                        sql2 = "SELECT Pk_LocalAccount_Id "
+                                + "FROM 'LOCAL ACCOUNT' WHERE USERNAME = " + "\"" + username + "\"";
+                        String accountNumber = db.getAccountNumber(sql2);
+                        Post_Login_Call(accountNumber);
+                    }
+                    else{
+                        console_Label.setText("Username and password does not match");
+                    }
                 }
             }
         });
@@ -328,7 +333,7 @@ public class Display extends Application {
 
         //Row 1
         Label username_Label = new Label();
-        username_Label.setText("username");
+        username_Label.setText("Username");
         grid.add(username_Label, 0, 1, 1, 1);
 
         //Row 2
@@ -339,22 +344,30 @@ public class Display extends Application {
         //Row 3
         Label password_Label = new Label();
         password_Label.setText("Enter password");
+        Label password_Label2 = new Label();
+        password_Label2.setText("Confirm Password");
         grid.add(password_Label, 0, 3, 1, 1);
+        grid.add(password_Label2,1,3,1,1);
 
         //Row 4
         PasswordField password_Field = new PasswordField();
         grid.add(password_Field, 0, 4, 1, 1);
+        PasswordField password_Field2 = new PasswordField();
+        grid.add(password_Field2,1,4,1,1);
 
         //Row 5
+
+        //Row 6
         HBox button_Box = new HBox();
         Button submit = new Button();
         submit.setText("Submit");
+        grid.add(button_Box, 0, 6, 1, 1);
 
-        //Row 6
+        //Row 7
         Label username_Console = new Label();
         username_Console.setTextFill(Color.RED);
         username_Console.setText("");
-        grid.add(username_Console, 0, 6, 1, 1);
+        grid.add(username_Console, 0, 7, 3, 1);
 
         /**
          EventHandle
@@ -367,11 +380,16 @@ public class Display extends Application {
                 boolean passed = true;
                 String username = username_Field.getText();
                 String password = password_Field.getText();
+                String password2 = password_Field2.getText();
                 //If the username or password field is empty, it will ask user to fill the field
                 if (username.isEmpty() || password.isEmpty()) {
                     username_Console.setText("Please Enter username and password");
                     passed = false;
-                } else {
+                }
+                else if (!password.equals(password2)){
+                    username_Console.setText("Passwords does not match");
+                }
+                else {
                     int max = 999999999;
                     int min = 100000000;
                     int randomNumber = ThreadLocalRandom.current().nextInt(min, max + 1);
@@ -406,7 +424,7 @@ public class Display extends Application {
         button_Box.setSpacing(5);
         button_Box.getChildren().addAll(Cancel_Button(), submit);
 
-        grid.add(button_Box, 0, 5, 1, 1);
+
 
         //Start the scene
         Enroll_idpass_Scene = new Scene(grid, 800, 600);
@@ -799,7 +817,7 @@ public class Display extends Application {
                     String sql = String.format("INSERT INTO Person (Pk_Person_Id, 'FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER')" +
                                     "VALUES ((SELECT Pk_LocalAccount_Id FROM 'LOCAL ACCOUNT' WHERE USERNAME = \"%s\" limit 1), \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")",
                             username, First_Name_Field.getText(), Last_Name_Field.getText(), ssn_Field.getText(), datePicker.getValue().toString(),
-                            address_Field.getText(), city_Field.getText(), state_combo_box.getValue().toString(), zip_Field.getText(), hPhone_Field.getText(),
+                            address_Field.getText() + " " + address2_Field.getText(), city_Field.getText(), state_combo_box.getValue().toString(), zip_Field.getText(), hPhone_Field.getText(),
                             wPhone_Field.getText());
 
                     DatabaseDriver.run(sql);
@@ -884,40 +902,6 @@ public class Display extends Application {
         LogoView.setFitHeight(Logo.getHeight()/4);
         grid.add(LogoView,4,0,1,1);
 
-        //Row 1
-        Label account_Detail = new Label();
-        account_Detail.setText("Account Details");
-        account_Detail.setFont(Font.font("",FontWeight.BOLD,12));
-        grid.add(account_Detail,1,1,1,1);
-
-        //Row 2
-        DatabaseDriver db = new DatabaseDriver();
-        System.out.println(accountNumber);;
-        Label hello_Label = new Label();
-        hello_Label.setFont(Font.font("",FontWeight.NORMAL,13));
-        hello_Label.setAlignment(Pos.CENTER);
-        String hello_text = "Hello ";
-        String sql = "SELECT * "
-                + " FROM Person WHERE Pk_Person_Id = " + "\"" + accountNumber + "\"";
-        hello_text = hello_text + db.getFirstName(sql)+ " " + db.getLastName(sql);
-        hello_Label.setText(hello_text);
-        grid.add(hello_Label,1,2,1,1);
-
-        //Row 3
-        Label balance_Label = new Label();
-        balance_Label.setText("Your balance is: ");
-        balance_Label.setFont(Font.font("",FontWeight.BOLD,12));
-        grid.add(balance_Label,1,3,1,1);
-
-        sql = "SELECT Balance "
-                + "FROM Account WHERE Pk_Account_Id = " + "\"" + accountNumber + "\"";
-
-        Label balance = new Label();
-        balance.setAlignment(Pos.CENTER_RIGHT);
-        balance.setText("$ " + db.getBalance(sql));
-        balance.setFont(Font.font("",FontWeight.NORMAL,12));
-        grid.add(balance,2,3,1,1);
-
         //Menu Box
         VBox menu_Box = new VBox();
         menu_Box.setAlignment(Pos.CENTER_LEFT);
@@ -963,7 +947,7 @@ public class Display extends Application {
         profile_Link.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //Profile call
+                Profile_Call(accountNumber);
             }
         });
         profile_Link.setBorder(Border.EMPTY);
@@ -1116,8 +1100,268 @@ public class Display extends Application {
                 logout_Link);
         grid.add(menu_Box,0,2,1,10);
 
+        //Row 1
+        Label account_Detail = new Label();
+        account_Detail.setText("Account Details");
+        account_Detail.setFont(Font.font("",FontWeight.BOLD,12));
+        grid.add(account_Detail,1,1,1,1);
+
+        //Row 2
+        DatabaseDriver db = new DatabaseDriver();
+        System.out.println(accountNumber);;
+        Label hello_Label = new Label();
+        hello_Label.setFont(Font.font("",FontWeight.NORMAL,13));
+        hello_Label.setAlignment(Pos.CENTER);
+        String hello_text = "Hello ";
+        String sql = "SELECT * "
+                + " FROM Person WHERE Pk_Person_Id = " + "\"" + accountNumber + "\"";
+        hello_text = hello_text + db.getFirstName(sql)+ " " + db.getLastName(sql);
+        hello_Label.setText(hello_text);
+        grid.add(hello_Label,1,2,1,1);
+
+        //Row 3
+        Label balance_Label = new Label();
+        balance_Label.setText("Your balance is: ");
+        balance_Label.setFont(Font.font("",FontWeight.BOLD,12));
+        grid.add(balance_Label,1,3,1,1);
+
+        sql = "SELECT Balance "
+                + "FROM Account WHERE Pk_Account_Id = " + "\"" + accountNumber + "\"";
+
+        Label balance = new Label();
+        balance.setAlignment(Pos.CENTER_RIGHT);
+        balance.setText("$ " + db.getBalance(sql));
+        balance.setFont(Font.font("",FontWeight.NORMAL,12));
+        grid.add(balance,2,3,1,1);
+
         Post_Login_Scene = new Scene(grid, 800, 600);
         mainStage.setScene(Post_Login_Scene);
+    }
+
+    private void Profile_Call(String accountNumber){
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(5);
+        grid.setVgap(5);
+        grid.setPadding(new Insets(10,10,20,20));
+        grid.setStyle("-fx-background-color: white");
+
+        //Row 0 (Logo)
+        ImageView LogoView = new ImageView();
+        LogoView.setImage(Logo);
+        LogoView.setFitWidth(Logo.getWidth()/4);
+        LogoView.setFitHeight(Logo.getHeight()/4);
+        grid.add(LogoView,4,0,1,1);
+
+        //Menu Box
+        VBox menu_Box = new VBox();
+        menu_Box.setAlignment(Pos.CENTER_LEFT);
+        menu_Box.setMinWidth(100);
+
+        Hyperlink overview_Link = new Hyperlink();
+        overview_Link.setText("Overview");
+        overview_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        overview_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                overview_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        overview_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                overview_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        overview_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Post_Login_Call(accountNumber);
+            }
+        });
+        overview_Link.setBorder(Border.EMPTY);
+
+        Hyperlink profile_Link = new Hyperlink();
+        profile_Link.setText("Profile");
+        profile_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        profile_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                profile_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        profile_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                profile_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        profile_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Profile_Call(accountNumber);
+            }
+        });
+        profile_Link.setBorder(Border.EMPTY);
+
+        Hyperlink withdrawal_Link = new Hyperlink();
+        withdrawal_Link.setText("Withdrawal");
+        withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        withdrawal_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                withdrawal_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        withdrawal_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        withdrawal_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //withdrawal call
+            }
+        });
+        withdrawal_Link.setBorder(Border.EMPTY);
+
+        Hyperlink deposit_Link = new Hyperlink();
+        deposit_Link.setText("Deposit");
+        deposit_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        deposit_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                deposit_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        deposit_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                deposit_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        deposit_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //deposit call
+            }
+        });
+        deposit_Link.setBorder(Border.EMPTY);
+
+        Hyperlink transfer_Link = new Hyperlink();
+        transfer_Link.setText("Transfer");
+        transfer_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        transfer_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                transfer_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        transfer_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                transfer_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        transfer_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //transfer call
+            }
+        });
+        transfer_Link.setBorder(Border.EMPTY);
+
+        Hyperlink billpay_Link = new Hyperlink();
+        billpay_Link.setText("Bill pay");
+        billpay_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        billpay_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                billpay_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        billpay_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                billpay_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        billpay_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //billpay call
+            }
+        });
+        transfer_Link.setBorder(Border.EMPTY);
+
+        Hyperlink logout_Link = new Hyperlink();
+        logout_Link.setText("Logout");
+        logout_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        logout_Link.setTextFill(Color.RED);
+        logout_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                logout_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        logout_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                logout_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        logout_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Login_Scene_Call();
+            }
+        });
+
+        Hyperlink help_Link = new Hyperlink();
+        help_Link.setText("Help");
+        help_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        help_Link.setTextFill(Color.BLUE);
+        help_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                help_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        help_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                help_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        help_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //Help Scene call
+            }
+        });
+
+        menu_Box.getChildren().addAll(
+                overview_Link,
+                profile_Link,
+                withdrawal_Link,
+                deposit_Link,
+                transfer_Link,
+                help_Link,
+                logout_Link);
+        grid.add(menu_Box,0,2,1,10);
+
+        //Row 1
+        Label profile_Top_Label = new Label();
+        profile_Top_Label.setText("Profile");
+        profile_Top_Label.setFont(Font.font("",FontWeight.BOLD,14));
+        grid.add(profile_Top_Label,1,1,1,1);
+
+
+        Profile_Scene = new Scene(grid, 800, 600);
+        mainStage.setScene(Profile_Scene);
+
     }
 
     private Button Cancel_Button() {
