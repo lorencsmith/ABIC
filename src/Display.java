@@ -11,8 +11,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -979,6 +981,9 @@ public class Display extends Application {
         grid.add(account_Detail,1,1,1,1);
 
         //Row 2
+        VBox menu_Box = new VBox();
+        menu_Box.setAlignment(Pos.CENTER_LEFT);
+        menu_Box.setMinWidth(100);
         Hyperlink overview_Link = new Hyperlink();
         overview_Link.setText("Overview");
         overview_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
@@ -1000,7 +1005,32 @@ public class Display extends Application {
                 Post_Login_Call();
             }
         });
-        grid.add(overview_Link,0,2,1,1);
+        overview_Link.setBorder(Border.EMPTY);
+
+        Hyperlink logout_Link = new Hyperlink();
+        logout_Link.setText("Logout");
+        logout_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        logout_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                logout_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        logout_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                logout_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        logout_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Login_Scene_Call();
+            }
+        });
+
+        menu_Box.getChildren().addAll(overview_Link,logout_Link);
+        grid.add(menu_Box,0,1,1,10);
 
         Post_Login_Scene = new Scene(grid, 800, 600);
         mainStage.setScene(Post_Login_Scene);
