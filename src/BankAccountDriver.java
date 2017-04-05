@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 import java.sql.*;
 
 /**
@@ -28,6 +30,12 @@ public class BankAccountDriver {
 
             currentBalance = rs.getDouble("Balance");
 
+            //System.out.println("bal: " + currentBalance);
+
+            rs.close();
+            pstmt.close();
+            conn.close();
+
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
@@ -55,6 +63,7 @@ public class BankAccountDriver {
 
             System.out.println("Deposit successful");
 
+            stmt.close();
             conn.close();
 
         } catch (Exception e) {
@@ -63,47 +72,42 @@ public class BankAccountDriver {
         }
     }
 
-    public void withhdraw(double balance, int pkID, int accNo) {
+    public void withdraw(double balance, int pkID, int accNo) {
 
-        String url = "jdbc:sqllite:/Database Files/Main.db";
+        String url = "jdbc:sqllite:./Database Files/Main.db";
 
         Connection conn = null;
-
-        PreparedStatement stmt = null;
 
         try {
             conn = DriverManager.getConnection("jdbc:sqlite:./Database Files/Main.db");
 
+            System.out.println("Current balance = " + getBalance(pkID, accNo));
+
             String query = "UPDATE Account SET balance = ? WHERE Pk_Account_Id = ? AND Account_Number = ?";
-            stmt = conn.prepareStatement(query);
-            stmt.setDouble(1, balance - getBalance(pkID, accNo));
+            PreparedStatement stmt = null;stmt = conn.prepareStatement(query);
+            stmt.setDouble(1,getBalance(pkID, accNo) - balance);
+            System.out.println(getBalance(pkID, accNo));
             stmt.setInt(2, pkID);
             stmt.setInt(3, accNo);
             stmt.executeUpdate();
 
+            stmt.close();
+
+            System.out.println("New balance = " + getBalance(pkID, accNo));
+
+
             System.out.println("Withdraw successful");
 
-            conn.close();
+
+
 
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
-        } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) { }
-            }
-
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {}
-            }
         }
     }
 
-    public void transfer(double amount, int pkID, int fromAccNo, int toAccNo) {
+    public void transfer(double amount, int frompkID, int topkID, int fromAccNo, int toAccNo) {
 
         String url = "jdbc:sqllite:/Database Files/Main.db";
 
@@ -115,17 +119,19 @@ public class BankAccountDriver {
             // deducts money from the account you are sending money from
             String deduct = "UPDATE Account SET balance = ? WHERE Pk_Account_Id = ? AND Account_Number = ?";
             PreparedStatement stmt = conn.prepareStatement(deduct);
-            stmt.setDouble(1, balance - getBalance(pkID, fromAccNo));
-            stmt.setInt(2, pkID);
+            stmt.setDouble(1, getBalance(frompkID, fromAccNo) - amount);
+            //System.out.printf("balance = %f",(double) getBalance(frompkID, fromAccNo) - amount);
+            stmt.setInt(2, frompkID);
             stmt.setInt(3, fromAccNo);
             stmt.executeUpdate();
 
-            String applyt = "UPDATE Account SET balance = ? WHERE Pk_Account_Id = ? AND Account_Number = ?";
-            PreparedStatement pstmt = conn.prepareStatement(deduct);
-            pstmt.setDouble(1, balance + getBalance(pkID, toAccNo));
-            stmt.setInt(2, pkID);
-            stmt.setInt(3, toAccNo);
-            stmt.executeUpdate();
+            String apply = "UPDATE Account SET balance = ? WHERE Pk_Account_Id = ? AND Account_Number = ?";
+            PreparedStatement pstmt = conn.prepareStatement(apply);
+
+            pstmt.setDouble(1, getBalance(topkID, toAccNo) + amount);
+            pstmt.setInt(2, topkID);
+            pstmt.setInt(3, toAccNo);
+            pstmt.executeUpdate();
 
             System.out.println("Transaction successful");
 

@@ -1,3 +1,4 @@
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,9 +20,14 @@ public class BankAccountDemo {
         BankAccountDriver test = new BankAccountDriver();
 
         System.out.println("Withdrawing $100");
-        test.withhdraw(100.0, 717, 101);
+        test.withdraw(100.0, 717, 101);
         DatabaseDriver.viewTable("Account");
 
+        test.deposit(5000.50, 717, 101);
+        DatabaseDriver.viewTable("Account");
+
+        test.transfer(4000.00, 717, 717, 101, 102);
+        DatabaseDriver.viewTable("Account");
 
     }
 
@@ -84,6 +90,7 @@ public class BankAccountDemo {
 
 
     }
+
 
 
 }
