@@ -176,6 +176,32 @@ public class DatabaseDriver {
         return "";
     }
 
+    public String getFirstName(String sql){
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            ResultSet rs  = pstmt.executeQuery();
+            return rs.getString("FIRST NAME");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
+    public String getLastName(String sql){
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            ResultSet rs  = pstmt.executeQuery();
+            return rs.getString("LAST NAME");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
     public String getAccountNumber(String sql){
         try (Connection conn = this.connect();
              PreparedStatement pstmt  = conn.prepareStatement(sql)){
@@ -203,7 +229,6 @@ public class DatabaseDriver {
         }
         return "";
     }
-
     private Connection connect() {
         // SQLite connection string
         String url = "jdbc:sqlite:./Database Files/Main.db";
@@ -307,7 +332,7 @@ public class DatabaseDriver {
                 "Interest_Rate DECIMAL," +
                 "Overdraft DECIMAL(5, 2)," +
                 "Last_Access_Time_Stamp TIMESTAMP," +
-                "FOREIGN KEY (Pk_Account_Id) REFERENCES Person(Pk_Customer_Id))";
+                "FOREIGN KEY (Pk_Account_Id) REFERENCES Person(Pk_Person_Id))";
     }
 }
 

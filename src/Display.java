@@ -30,6 +30,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -85,18 +86,7 @@ public class Display extends Application {
         grid.add(LogoView, 6, 0, 3, 1);
 
         //Row 2
-        Button Employee_Login_Button = new Button("Employee Login");
-        Employee_Login_Button.setAlignment(Pos.CENTER);
-        Employee_Login_Button.setPadding(new Insets(5, 5, 5, 5));
-        Employee_Login_Button.setFont(Font.font("Tahoma", FontWeight.BOLD, 12));
-        Employee_Login_Button.setMinWidth(200);
-        grid.add(Employee_Login_Button, 0, 2, 2, 1);
-        Employee_Login_Button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Employee_Login_Call();
-            }
-        });
+        
 
         //Row3
         Button User_Login_Button = new Button("User Login");
@@ -142,101 +132,6 @@ public class Display extends Application {
         });
         Login_Scene = new Scene(grid, 800, 600);
         mainStage.setScene(Login_Scene);
-    }
-
-    private void Employee_Login_Call() {
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(5);
-        grid.setVgap(5);
-        grid.setPadding(new Insets(10, 10, 20, 20));
-        grid.setStyle("-fx-background-color: white");
-
-        //Row 0 (Logo)
-        ImageView LogoView = new ImageView();
-        LogoView.setImage(Logo);
-        LogoView.setFitWidth(Logo.getWidth() / 4);
-        LogoView.setFitHeight(Logo.getHeight() / 4);
-        grid.add(LogoView, 6, 0, 3, 1);
-
-        //Row 1
-        Label welcome = new Label();
-        welcome.setText("Welcome to ABIC");
-        welcome.setFont(Font.font("Calibri", FontWeight.BOLD, 14));
-        grid.add(welcome, 0, 1, 2, 1);
-
-        //Row 2
-        Label user_Label = new Label();
-        user_Label.setText("Username");
-        user_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
-        user_Label.setAlignment(Pos.CENTER_LEFT);
-        grid.add(user_Label, 1, 2, 1, 1);
-
-        //Row 3
-        TextField user_Field = new TextField();
-        grid.add(user_Field, 1, 3, 1, 1);
-
-        //Row 4
-
-
-        //Row 5
-        Label password_Label = new Label();
-        password_Label.setText("Password");
-        password_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
-        password_Label.setAlignment(Pos.CENTER_LEFT);
-        grid.add(password_Label, 1, 5, 1, 1);
-
-        //Row 6
-        PasswordField password_Field = new PasswordField();
-        grid.add(password_Field, 1, 6, 1, 1);
-
-        //Row 7
-        HBox button_Box = new HBox();
-        button_Box.setAlignment(Pos.CENTER_RIGHT);
-        button_Box.setSpacing(5);
-        Button submit = new Button();
-        submit.setText("Submit");
-        submit.setAlignment(Pos.CENTER);
-        Button postbox = new Button();
-        postbox.setText("PostBOX");
-        postbox.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            }
-
-        });
-        button_Box.getChildren().addAll(Cancel_Button(), submit, postbox);
-        grid.add(button_Box, 1, 7, 1, 1);
-
-        //Row 8
-        Text console = new Text();
-        console.setText("                     ");
-        console.setFont(Font.font("", FontWeight.NORMAL, 11));
-        console.setFill(Color.WHITE);
-        grid.add(console, 0, 8, 7, 1);
-
-        //Eventhandler
-        submit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String username = user_Field.getText();
-                String password = password_Field.getText();
-                //Validate username and password
-                //Search DB
-                if (username.equals("Username") && password.equals("password")) {
-                    console.setFill(Color.BLACK);
-                    console.setText("Username & Password match");
-                } else {
-                    console.setFill(Color.RED);
-                    console.setText("Username & Password does not match");
-
-                }
-            }
-        });
-
-        //Start the Scene
-        Employee_Login_Scene = new Scene(grid, 800, 600);
-        mainStage.setScene(Employee_Login_Scene);
     }
 
     private void User_Login_Call() {
@@ -910,9 +805,16 @@ public class Display extends Application {
                     DatabaseDriver.run(sql);
                     DatabaseDriver.viewTable("Person");
 
-                    Random rand = new Random();
-                    String randN = String.valueOf(rand.ints(100000000,999999999));
+                    Calendar calendar = Calendar.getInstance();
 
+                    java.sql.Timestamp currentTimestamp = new java.sql.Timestamp(calendar.getTime().getTime());
+
+                    int min = 100000000;
+                    int max = 999999999;
+                    int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
+                    String sql2 = String.format("INSERT INTO Account ('Pk_Account_Id', Account_Number, Type, Balance, Interest_Rate, Overdraft, Last_Access_Time_Stamp)" +
+                            "VALUES ((SELECT Pk_LocalAccount_Id FROM 'LOCAL ACCOUNT' WHERE USERNAME = \"%s\" limit 1), \"%s\", \"1\", \"0.0\", \"0\", \"0.00\", \"%s\")", username, randomNum, currentTimestamp);
+                    DatabaseDriver.run(sql2);
                     System.out.println("Passed!");
                     Enroll_Success_Call(First_Name_Field.getText());
                 }
@@ -988,22 +890,33 @@ public class Display extends Application {
         account_Detail.setFont(Font.font("",FontWeight.BOLD,12));
         grid.add(account_Detail,1,1,1,1);
 
+        //Row 2
+        DatabaseDriver db = new DatabaseDriver();
+        System.out.println(accountNumber);;
+        Label hello_Label = new Label();
+        hello_Label.setFont(Font.font("",FontWeight.NORMAL,13));
+        hello_Label.setAlignment(Pos.CENTER);
+        String hello_text = "Hello ";
+        String sql = "SELECT * "
+                + " FROM Person WHERE Pk_Person_Id = " + "\"" + accountNumber + "\"";
+        hello_text = hello_text + db.getFirstName(sql)+ " " + db.getLastName(sql);
+        hello_Label.setText(hello_text);
+        grid.add(hello_Label,1,2,1,1);
+
+        //Row 3
         Label balance_Label = new Label();
         balance_Label.setText("Your balance is: ");
         balance_Label.setFont(Font.font("",FontWeight.BOLD,12));
-        grid.add(balance_Label,1,2,1,1);
+        grid.add(balance_Label,1,3,1,1);
 
-        String sql;
-        //Placeholder account number
         sql = "SELECT Balance "
-                + "FROM Account WHERE Pk_Account_Id = 717" ;
-                //" + "\"" + accountNumber + "\"";
-        DatabaseDriver db = new DatabaseDriver();
+                + "FROM Account WHERE Pk_Account_Id = " + "\"" + accountNumber + "\"";
 
         Label balance = new Label();
-        balance.setText(db.getBalance(sql));
-        balance.setFont(Font.font("",FontWeight.BOLD,12));
-        grid.add(balance,2,2,1,1);
+        balance.setAlignment(Pos.CENTER_RIGHT);
+        balance.setText("$ " + db.getBalance(sql));
+        balance.setFont(Font.font("",FontWeight.NORMAL,12));
+        grid.add(balance,2,3,1,1);
 
         //Menu Box
         VBox menu_Box = new VBox();
