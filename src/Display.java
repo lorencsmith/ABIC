@@ -202,8 +202,8 @@ public class Display extends Application {
         postbox.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Post_Login_Call();
             }
+
         });
         button_Box.getChildren().addAll(Cancel_Button(), submit, postbox);
         grid.add(button_Box, 1, 7, 1, 1);
@@ -313,7 +313,11 @@ public class Display extends Application {
                         + "FROM 'LOCAL ACCOUNT' WHERE USERNAME = " + "\"" + username + "\"";
                 DatabaseDriver db = new DatabaseDriver();
                 if(password.equals(db.getPassword(sql))){
-                    Post_Login_Call();
+                    String sql2;
+                    sql2 = "SELECT Pk_LocalAccount_Id "
+                            + "FROM 'LOCAL ACCOUNT' WHERE USERNAME = " + "\"" + username + "\"";
+                    String accountNumber = db.getAccountNumber(sql2);
+                    Post_Login_Call(accountNumber);
                 }
                 else{
                     console_Label.setText("Username and password does not match");
@@ -963,7 +967,7 @@ public class Display extends Application {
      * @return Return cancel button that will take user back to main menu(login scene)
      */
 
-    private void Post_Login_Call(){
+    private void Post_Login_Call(String accountNumber){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(5);
@@ -984,7 +988,24 @@ public class Display extends Application {
         account_Detail.setFont(Font.font("",FontWeight.BOLD,12));
         grid.add(account_Detail,1,1,1,1);
 
-        //Row 2
+        Label balance_Label = new Label();
+        balance_Label.setText("Your balance is: ");
+        balance_Label.setFont(Font.font("",FontWeight.BOLD,12));
+        grid.add(balance_Label,1,2,1,1);
+
+        String sql;
+        //Placeholder account number
+        sql = "SELECT Balance "
+                + "FROM Account WHERE Pk_Account_Id = 717" ;
+                //" + "\"" + accountNumber + "\"";
+        DatabaseDriver db = new DatabaseDriver();
+
+        Label balance = new Label();
+        balance.setText(db.getBalance(sql));
+        balance.setFont(Font.font("",FontWeight.BOLD,12));
+        grid.add(balance,2,2,1,1);
+
+        //Menu Box
         VBox menu_Box = new VBox();
         menu_Box.setAlignment(Pos.CENTER_LEFT);
         menu_Box.setMinWidth(100);
@@ -1007,7 +1028,6 @@ public class Display extends Application {
         overview_Link.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Post_Login_Call();
             }
         });
         overview_Link.setBorder(Border.EMPTY);
@@ -1031,7 +1051,6 @@ public class Display extends Application {
             @Override
             public void handle(ActionEvent event) {
                 //Profile call
-                Post_Login_Call();
             }
         });
         profile_Link.setBorder(Border.EMPTY);

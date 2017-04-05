@@ -176,6 +176,34 @@ public class DatabaseDriver {
         return "";
     }
 
+    public String getAccountNumber(String sql){
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            ResultSet rs  = pstmt.executeQuery();
+
+            return rs.getString("Pk_LocalAccount_Id");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
+    public String getBalance(String sql){
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            ResultSet rs  = pstmt.executeQuery();
+
+            return rs.getString("Balance");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
     private Connection connect() {
         // SQLite connection string
         String url = "jdbc:sqlite:./Database Files/Main.db";
