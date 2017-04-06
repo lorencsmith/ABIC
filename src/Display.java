@@ -51,6 +51,7 @@ public class Display extends Application {
         //CAll Login scene at the start of the program
         mainStage = primaryStage;
         Login_Scene_Call();
+        mainStage.getIcons().add(new Image("ABIC_icon.png"));
         mainStage.setTitle("");
         mainStage.show();
     }
@@ -252,43 +253,56 @@ public class Display extends Application {
         grid.add(reset_password_info, 0, 2, 2, 1);
 
         //Row 3
-        Label email_label = new Label();
-        email_label.setText("○ E-mail verification:");
-        email_label.setFont(Font.font("Calibri", FontWeight.NORMAL, 11));
-        TextField email_Field = new TextField();
-        email_Field.setPromptText("Enter email");
-        grid.add(email_label, 1, 3, 1, 1);
-        grid.add(email_Field, 2, 3, 2, 1);
+        Label username_label = new Label();
+        username_label.setText("○ Username:");
+        username_label.setFont(Font.font("Calibri", FontWeight.NORMAL, 11));
+        TextField username_Field = new TextField();
+        username_Field.setPromptText("Enter username");
+        grid.add(username_label, 1, 3, 1, 1);
+        grid.add(username_Field, 2, 3, 2, 1);
 
         //Row 4
-        Label mobile_label = new Label();
-        mobile_label.setText("○ Mobile number:");
-        mobile_label.setFont(Font.font("Calibri", FontWeight.NORMAL, 11));
-        TextField mobile_Field = new TextField();
-        mobile_Field.setPromptText("Enter mobile number");
-        grid.add(mobile_label, 1, 4, 1, 1);
-        grid.add(mobile_Field, 2, 4, 2, 1);
+        Label ssn_label = new Label();
+        ssn_label.setText("○ Social Security Number:");
+        ssn_label.setFont(Font.font("Calibri", FontWeight.NORMAL, 11));
+        TextField ssn_Field = new TextField();
+        ssn_Field.setPromptText("Enter SSN");
+        grid.add(ssn_label, 1, 4, 1, 1);
+        grid.add(ssn_Field, 2, 4, 2, 1);
 
         //Row 5
         Label empty_label = new Label(" ");
-        grid.add(empty_label, 0, 5, 1, 1);
+        empty_label.setTextFill(Color.RED);
+        grid.add(empty_label, 0, 5, 5, 1);
 
         //Row 6
-        Label ssn_Label = new Label();
-        ssn_Label.setText("Please verify your Social Security Number: ");
-        ssn_Label.setFont(Font.font("Calibri", FontWeight.NORMAL, 11));
-        TextField ssn_Field = new TextField();
-        ssn_Field.setPromptText("_________");
-        grid.add(ssn_Label, 0, 6, 2, 1);
-        grid.add(ssn_Field, 2, 6, 2, 1);
 
         //Row 7
         Button submit_Button = new Button("Submit");
         submit_Button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //Validate information on textfields
-                //Search Database and return informations.
+                DatabaseDriver db = new DatabaseDriver();
+                String sql = "";
+                if (username_Field.getText().isEmpty() || ssn_Field.getText().isEmpty()){
+                    empty_label.setText("Please enter username and Social security number");
+                }
+                else {
+                    sql = "SELECT * "
+                            + " FROM Person WHERE SSN = " + "\"" + ssn_Field.getText() + "\"";
+                    String result = db.getSSN(sql);
+                    if (result.isEmpty()){
+                        empty_label.setText("No such account exists");
+                    }
+                    else{
+                        sql = "SELECT Pk_Person_Id FROM Person WHERE SSN = " + "\"" + ssn_Field.getText() + "\"";
+                        String accountNumber = db.getAccountNumber2(sql);
+                        sql = "SELECT PASSWORD FROM 'LOCAL ACCOUNT' WHERE Pk_LocalAccount_Id = "
+                                + "\"" + accountNumber + "\"";
+                        empty_label.setText("Your password is " + db.getPassword(sql));
+                        empty_label.setTextFill(Color.BLUE);
+                    }
+                }
             }
         });
         HBox button_Box = new HBox();
@@ -533,7 +547,6 @@ public class Display extends Application {
             @Override
             public void handle(ActionEvent event) {
                 LocalDate date = datePicker.getValue();
-
             }
         });
         Label dob_Console = new Label();
