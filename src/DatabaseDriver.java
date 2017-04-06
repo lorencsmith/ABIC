@@ -2,12 +2,28 @@
  * Created by Grandy Nguyen on 3/29/2017.
  */
 
-import com.sun.istack.internal.NotNull;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TableView;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 import java.sql.*;
-import java.util.Random;
+
+
 
 public class DatabaseDriver {
+
+    private ObservableList<ObservableList> data;
+    private TableView tableview;
 
     public static void main(String[] args) {
         createNewDatabase("Main.db");
@@ -141,19 +157,19 @@ public class DatabaseDriver {
             c.close();
 
         } catch (Exception e) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
     }
 
-    public void searchAll(String sql){
+    public void searchAll(String sql) {
         try (Connection conn = this.connect();
-             Statement stmt  = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(sql)){
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
             // loop through the result set
             while (rs.next()) {
-                System.out.println(rs.getInt("ID") +  "\t" +
+                System.out.println(rs.getInt("ID") + "\t" +
                         rs.getString("USERNAME") + "\t" +
                         rs.getString("PASSWORD"));
             }
@@ -162,12 +178,12 @@ public class DatabaseDriver {
         }
     }
 
-    public String getPassword(String sql){
+    public String getPassword(String sql) {
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the value
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
 
             return rs.getString("PASSWORD");
         } catch (SQLException e) {
@@ -176,12 +192,12 @@ public class DatabaseDriver {
         return "";
     }
 
-    public String getFirstName(String sql){
+    public String getFirstName(String sql) {
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the value
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             return rs.getString("FIRST NAME");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -189,12 +205,12 @@ public class DatabaseDriver {
         return "";
     }
 
-    public String getLastName(String sql){
+    public String getLastName(String sql) {
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the value
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             return rs.getString("LAST NAME");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -202,12 +218,12 @@ public class DatabaseDriver {
         return "";
     }
 
-    public String getSSN(String sql){
+    public String getSSN(String sql) {
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the value
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             return rs.getString("SSN");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -215,12 +231,12 @@ public class DatabaseDriver {
         return "";
     }
 
-    public String getDOB(String sql){
+    public String getDOB(String sql) {
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the value
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             return rs.getString("DOB");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -228,12 +244,12 @@ public class DatabaseDriver {
         return "";
     }
 
-    public String getADDRESS(String sql){
+    public String getADDRESS(String sql) {
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the value
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             return rs.getString("ADDRESS");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -241,12 +257,12 @@ public class DatabaseDriver {
         return "";
     }
 
-    public String getCITY(String sql){
+    public String getCITY(String sql) {
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the value
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             return rs.getString("CITY");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -254,12 +270,12 @@ public class DatabaseDriver {
         return "";
     }
 
-    public String getSTATE(String sql){
+    public String getSTATE(String sql) {
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the value
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             return rs.getString("STATE");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -267,12 +283,12 @@ public class DatabaseDriver {
         return "";
     }
 
-    public String getZIPCODE(String sql){
+    public String getZIPCODE(String sql) {
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the value
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             return rs.getString("ZIP CODE");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -280,12 +296,12 @@ public class DatabaseDriver {
         return "";
     }
 
-    public String getHOMENUMBER(String sql){
+    public String getHOMENUMBER(String sql) {
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the value
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             return rs.getString("HOME NUMBER");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -293,12 +309,12 @@ public class DatabaseDriver {
         return "";
     }
 
-    public String getWORKNUMBER(String sql){
+    public String getWORKNUMBER(String sql) {
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the value
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             return rs.getString("WORK NUMBER");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -306,12 +322,13 @@ public class DatabaseDriver {
         return "";
     }
 
-    public String getAccountNumber(String sql){
+
+    public String getAccountNumber(String sql) {
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the value
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
 
             return rs.getString("Pk_LocalAccount_Id");
         } catch (SQLException e) {
@@ -320,12 +337,26 @@ public class DatabaseDriver {
         return "";
     }
 
-    public String getBalance(String sql){
+    public String getAccountNumber2(String sql) {
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the value
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
+
+            return rs.getString("Pk_Person_Id");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
+    public String getBalance(String sql) {
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            // set the value
+            ResultSet rs = pstmt.executeQuery();
 
             return rs.getString("Balance");
         } catch (SQLException e) {
@@ -333,6 +364,7 @@ public class DatabaseDriver {
         }
         return "";
     }
+
     private Connection connect() {
         // SQLite connection string
         String url = "jdbc:sqlite:./Database Files/Main.db";
@@ -381,6 +413,7 @@ public class DatabaseDriver {
         return value;
     }
 
+
     /**
      * LOCAL ACCOUNT table consists of
      * ID: RANDOM #
@@ -388,7 +421,6 @@ public class DatabaseDriver {
      * PASSWORD: STRING
      * Note: Encrypt Password (using SALT)
      */
-
 
     public static String createLocalAccount() {
         return "CREATE TABLE IF NOT EXISTS 'LOCAL ACCOUNT' " +

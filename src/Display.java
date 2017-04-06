@@ -19,6 +19,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import javax.swing.text.*;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -822,7 +824,7 @@ public class Display extends Application {
                             "VALUES ((SELECT Pk_LocalAccount_Id FROM 'LOCAL ACCOUNT' WHERE USERNAME = \"%s\" limit 1), \"%s\", \"1\", \"0.0\", \"0\", \"0.00\", \"%s\")", username, randomNum, currentTimestamp);
                     DatabaseDriver.run(sql2);
                     System.out.println("Passed!");
-                    Enroll_Success_Call(First_Name_Field.getText());
+                    Enroll_Success_Call(First_Name_Field.getText(), ssn_Field.getText());
                 }
             }
         });
@@ -833,7 +835,7 @@ public class Display extends Application {
     }
 
 
-    private void Enroll_Success_Call(String first_Name){
+    private void Enroll_Success_Call(String first_Name, String ssn){
         //Main Gridpane set up
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -856,16 +858,24 @@ public class Display extends Application {
         grid.add(thanks_Label,0,1,1,1);
 
         //Row 2
+        String sql = "SELECT * FROM Person WHERE SSN = " + ssn;
+        DatabaseDriver db = new DatabaseDriver();
+        Label account_Info_Label = new Label();
+        account_Info_Label.setText("Your account number is " + db.getAccountNumber2(sql));
+        account_Info_Label.setFont(Font.font("",FontWeight.BOLD,13));
+        grid.add(account_Info_Label,0,2,1,1);
+
+        //Row 3
         Label info_Label = new Label();
         info_Label.setText("You can now use your account to use our online banking service");
         info_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
-        grid.add(info_Label,0,2,1,1);
+        grid.add(info_Label,0,3,1,1);
 
-        //Row 3
+        //Row 4
         Button back_Button = new Button();
         back_Button = Cancel_Button();
         back_Button.setText("Login Page");
-        grid.add(back_Button,1,3,1,1);
+        grid.add(back_Button,1,4,1,1);
 
         Enroll_Success_Scene = new Scene(grid,800,600);
         mainStage.setScene(Enroll_Success_Scene);
@@ -1125,6 +1135,7 @@ public class Display extends Application {
         balance.setFont(Font.font("",FontWeight.NORMAL,12));
         grid.add(balance,2,3,1,1);
 
+        //Start the scene
         Post_Login_Scene = new Scene(grid, 800, 600);
         mainStage.setScene(Post_Login_Scene);
     }
@@ -1675,6 +1686,22 @@ public class Display extends Application {
                 help_Link,
                 logout_Link);
         grid.add(menu_Box,0,2,1,10);
+
+        String sql = "";
+
+        //Row 1
+        Label withdrawal_Label = new Label();
+        withdrawal_Label.setText("Withdrawal");
+        withdrawal_Label.setFont(Font.font("",FontWeight.BOLD,13));
+        grid.add(withdrawal_Label,1,1,1,1);
+
+        //Row 2
+        Label current_Label = new Label();
+        current_Label.setText("Current Balance: ");
+        current_Label.setFont(Font.font("",FontWeight.NORMAL, 11));
+        grid.add(current_Label,1,2,1,1);
+        TextField current_Field = new TextField();
+
 
         //Start the scene
         Withdrawal_Scene = new Scene(grid,800,600);
@@ -2559,6 +2586,8 @@ public class Display extends Application {
                 logout_Link);
         grid.add(menu_Box,0,2,1,10);
 
+
+
         //Start the scene
         Help_Scene = new Scene(grid,800,600);
         mainStage.setScene(Help_Scene);
@@ -2792,6 +2821,7 @@ public class Display extends Application {
         });
         return cancel_Button;
     }
+
 
     /**
      * @return red-colored * to be used in various labels
