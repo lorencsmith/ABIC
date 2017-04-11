@@ -19,9 +19,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import javax.swing.text.*;
-import java.io.File;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.concurrent.ThreadLocalRandom;
@@ -34,7 +31,9 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Display extends Application {
 
     Stage mainStage;
-    Scene Login_Scene, Forgot_Password_Scene, Enroll_idpass_Scene, Enroll_Scene, Profile_Scene, Withdrawal_Scene, Deposit_Scene, Transfer_Scene, Billpay_Scene, Post_Transaction_Scene, Help_Scene,User_Login_Scene, Post_Login_Scene, Enroll_Success_Scene;
+    Scene Login_Scene, Forgot_Password_Scene, Enroll_idpass_Scene, Enroll_Scene, Profile_Scene, Withdrawal_Scene,
+            Deposit_Scene, Transfer_Scene, Billpay_Scene, Post_Transaction_Scene, Help_Scene,User_Login_Scene,
+            Post_Login_Scene, Enroll_Success_Scene, Reset_Password_Scene, Reset_Password_Success_Scene;
     Image Logo = new Image("ABIC_Logo.png");
 
     public static void main(String[] args) {
@@ -239,7 +238,7 @@ public class Display extends Application {
         LogoView.setImage(Logo);
         LogoView.setFitWidth(Logo.getWidth() / 4);
         LogoView.setFitHeight(Logo.getHeight() / 4);
-        grid.add(LogoView, 6, 0, 3, 1);
+        grid.add(LogoView, 4, 0, 3, 1);
 
         //Row 1
         Label Forgot_Password_Label = new Label("Forgot Password");
@@ -297,14 +296,12 @@ public class Display extends Application {
                     else{
                         sql = "SELECT Pk_Person_Id FROM Person WHERE SSN = " + "\"" + ssn_Field.getText() + "\"";
                         String accountNumber = db.getAccountNumber2(sql);
-                        sql = "SELECT PASSWORD FROM 'LOCAL ACCOUNT' WHERE Pk_LocalAccount_Id = "
-                                + "\"" + accountNumber + "\"";
-                        empty_label.setText("Your password is " + db.getPassword(sql));
-                        empty_label.setTextFill(Color.BLUE);
+                        Reset_Password_Call(accountNumber);
                     }
                 }
             }
         });
+
         HBox button_Box = new HBox();
         button_Box.setSpacing(5);
         button_Box.setPadding(new Insets(5, 5, 5, 5));
@@ -392,6 +389,9 @@ public class Display extends Application {
                 }
                 else if (!password.equals(password2)){
                     username_Console.setText("Passwords does not match");
+                }
+                else if (password.length() < 4){
+                    username_Console.setText("Password is too short. Please enter more than 4 letters");
                 }
                 else {
                     int max = 999999999;
@@ -900,7 +900,7 @@ public class Display extends Application {
 
     private void Post_Login_Call(String accountNumber){
         GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
+        grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(5);
         grid.setVgap(5);
         grid.setPadding(new Insets(10,10,20,20));
@@ -1155,7 +1155,7 @@ public class Display extends Application {
 
     private void Profile_Call(String accountNumber){
         GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
+        grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(5);
         grid.setVgap(5);
         grid.setPadding(new Insets(10,10,20,20));
@@ -1487,7 +1487,7 @@ public class Display extends Application {
 
     private void Withdrawal_Call(String accountNumber){
         GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
+        grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(5);
         grid.setVgap(5);
         grid.setPadding(new Insets(10,10,20,20));
@@ -1709,12 +1709,54 @@ public class Display extends Application {
         grid.add(withdrawal_Label,1,1,1,1);
 
         //Row 2
+        DatabaseDriver db = new DatabaseDriver();
         Label current_Label = new Label();
-        current_Label.setText("Current Balance: ");
+        current_Label.setText("Current Balance: $");
         current_Label.setFont(Font.font("",FontWeight.NORMAL, 11));
         grid.add(current_Label,1,2,1,1);
         TextField current_Field = new TextField();
+        sql = "SELECT * FROM Account WHERE Pk_Account_Id = " + accountNumber;
+        double current_Balance = Double.valueOf(db.getBalance(sql));
+        current_Field.setText(String.valueOf(current_Balance));
+        current_Field.setEditable(false);
+        grid.add(current_Field,2,2,1,1);
 
+        //Row 3
+        Label desire_Label = new Label();
+        desire_Label.setText("Enter withdrawal amount");
+        desire_Label.setFont(Font.font("",FontWeight.NORMAL, 11));
+        grid.add(desire_Label,1,3,1,1);
+        TextField desire_Field = new TextField();
+        desire_Field.setPromptText("Enter amount");
+        grid.add(desire_Field,2,3,1,1);
+
+        //Row 4
+        Label console = new Label();
+        console.setTextFill(Color.RED);
+        grid.add(console,1,4,4,1);
+
+        //Row 5
+        Button submit = new Button();
+        submit.setText("Submit");
+        submit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(desire_Field.getText().isEmpty() || Double.valueOf(desire_Field.getText()) == 0 ) {
+                    console.setText("Please enter withdrawal amount");
+                }
+                else if(Double.valueOf(desire_Field.getText()) > current_Balance){
+                    console.setText("Not enough Balance");
+                    }
+                else{
+                    String sql2 = "SELECT * FROM Account WHERE Pk_Account_Id = " + accountNumber;;
+                    BankAccountDriver bd = new BankAccountDriver();
+                    double new_balance = current_Balance - Double.valueOf(desire_Field.getText());
+                    bd.withdraw(Double.valueOf(desire_Field.getText()), Integer.valueOf(accountNumber), Integer.valueOf(db.getBankAccount(sql2)));
+                    Post_Transaction_Call(accountNumber,new_balance);
+                }
+            }
+        });
+        grid.add(submit, 1,5,1,1);
 
         //Start the scene
         Withdrawal_Scene = new Scene(grid,800,600);
@@ -1723,7 +1765,7 @@ public class Display extends Application {
 
     private void Deposit_Call(String accountNumber){
         GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
+        grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(5);
         grid.setVgap(5);
         grid.setPadding(new Insets(10,10,20,20));
@@ -1937,6 +1979,59 @@ public class Display extends Application {
                 logout_Link);
         grid.add(menu_Box,0,2,1,10);
 
+        //Row 1
+        Label deposit_Label = new Label();
+        deposit_Label.setText("Deposit");
+        deposit_Label.setFont(Font.font("",FontWeight.BOLD,13));
+        grid.add(deposit_Label,1,1,1,1);
+
+        //Row 2
+        DatabaseDriver db = new DatabaseDriver();
+        Label current_Label = new Label();
+        current_Label.setText("Current Balance: $");
+        current_Label.setFont(Font.font("",FontWeight.NORMAL, 11));
+        grid.add(current_Label,1,2,1,1);
+        TextField current_Field = new TextField();
+        String sql = "SELECT * FROM Account WHERE Pk_Account_Id = " + accountNumber;
+        double current_Balance = Double.valueOf(db.getBalance(sql));
+        current_Field.setText(String.valueOf(current_Balance));
+        current_Field.setEditable(false);
+        grid.add(current_Field,2,2,1,1);
+
+        //Row 3
+        Label desire_Label = new Label();
+        desire_Label.setText("Enter deposit amount");
+        desire_Label.setFont(Font.font("",FontWeight.NORMAL, 11));
+        grid.add(desire_Label,1,3,1,1);
+        TextField desire_Field = new TextField();
+        desire_Field.setPromptText("Enter amount");
+        grid.add(desire_Field,2,3,1,1);
+
+        //Row 4
+        Label console = new Label();
+        console.setTextFill(Color.RED);
+        grid.add(console,1,4,4,1);
+
+        //Row 5
+        Button submit = new Button();
+        submit.setText("Submit");
+        submit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (desire_Field.getText().isEmpty()){
+                    console.setText("Please enter deposit amount");
+                }
+                else {
+                    String sql2 = "SELECT * FROM Account WHERE Pk_Account_Id = " + accountNumber;
+                    BankAccountDriver bd = new BankAccountDriver();
+                    bd.deposit(Double.valueOf(desire_Field.getText()), Integer.valueOf(accountNumber), Integer.valueOf(db.getBankAccount(sql2)));
+                    double new_balance = current_Balance + Double.valueOf(desire_Field.getText());
+                    Post_Transaction_Call(accountNumber, new_balance);
+                }
+            }
+        });
+        grid.add(submit, 1,5,1,1);
+
         //Start the scene
         Deposit_Scene = new Scene(grid,800,600);
         mainStage.setScene(Deposit_Scene);
@@ -1944,8 +2039,7 @@ public class Display extends Application {
 
     private void Transfer_Call(String accountNumber){
         GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(5);
+        grid.setAlignment(Pos.CENTER_LEFT);
         grid.setVgap(5);
         grid.setPadding(new Insets(10,10,20,20));
         grid.setStyle("-fx-background-color: white");
@@ -2165,7 +2259,7 @@ public class Display extends Application {
 
     private void Billpay_Call(String accountNumber){
         GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
+        grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(5);
         grid.setVgap(5);
         grid.setPadding(new Insets(10,10,20,20));
@@ -2385,7 +2479,7 @@ public class Display extends Application {
 
     private void Help_Call(String accountNumber){
         GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
+        grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(5);
         grid.setVgap(5);
         grid.setPadding(new Insets(10,10,20,20));
@@ -2599,6 +2693,66 @@ public class Display extends Application {
                 logout_Link);
         grid.add(menu_Box,0,2,1,10);
 
+        Label FAQ_Label = new Label();
+        FAQ_Label.setText("FAQ");
+        FAQ_Label.setFont(Font.font("", FontWeight.EXTRA_BOLD, 16));
+        FAQ_Label.setAlignment(Pos.CENTER);
+        grid.add(FAQ_Label,1,1,1,1);
+
+        Label FAQ_Q1_Label = new Label();
+        FAQ_Q1_Label.setText("How do I enroll?");
+        FAQ_Q1_Label.setFont(Font.font("", FontWeight.BOLD, 12));
+        FAQ_Q1_Label.setAlignment(Pos.CENTER);
+        grid.add(FAQ_Q1_Label,1,2,1,1);
+
+        Label FAQ_A1_Label = new Label();
+        FAQ_A1_Label.setText("After clicking the enroll button on the main page, you will be prompted to enter personal information for your account.");
+        FAQ_A1_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
+        FAQ_A1_Label.setWrapText(true);
+        FAQ_A1_Label.setAlignment(Pos.CENTER);
+        grid.add(FAQ_A1_Label,1,3,1,1);
+
+        Label FAQ_Q2_Label = new Label();
+        FAQ_Q2_Label.setText("What happens if I forgot my password?");
+        FAQ_Q2_Label.setFont(Font.font("", FontWeight.BOLD, 12));
+        FAQ_Q2_Label.setWrapText(true);
+        FAQ_Q2_Label.setAlignment(Pos.CENTER);
+        grid.add(FAQ_Q2_Label,1,4,1,1);
+
+        Label FAQ_A2_Label = new Label();
+        FAQ_A2_Label.setText("Using the Forgot Password option, the user can see their current password. It will request the username and Social Security Number associated with the account.");
+        FAQ_A2_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
+        FAQ_A2_Label.setWrapText(true);
+        FAQ_A2_Label.setAlignment(Pos.CENTER);
+        grid.add(FAQ_A2_Label,1,5,1,1);
+
+        Label FAQ_Q3_Label = new Label();
+        FAQ_Q3_Label.setText("Somebody else knows my password. How can I change it?");
+        FAQ_Q3_Label.setFont(Font.font("", FontWeight.BOLD, 12));
+        FAQ_Q3_Label.setWrapText(true);
+        FAQ_Q3_Label.setAlignment(Pos.CENTER);
+        grid.add(FAQ_Q3_Label,1,6,1,1);
+
+        Label FAQ_A3_Label = new Label();
+        FAQ_A3_Label.setText("Under the profile option in the menu, you can change your password by inputting a new password and then confirming the password in a separate box.");
+        FAQ_A3_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
+        FAQ_A3_Label.setWrapText(true);
+        FAQ_A3_Label.setAlignment(Pos.CENTER);
+        grid.add(FAQ_A3_Label,1,7,1,1);
+
+        Label FAQ_Q4_Label = new Label();
+        FAQ_Q4_Label.setText("Will my password expire?");
+        FAQ_Q4_Label.setFont(Font.font("", FontWeight.BOLD, 12));
+        FAQ_Q4_Label.setWrapText(true);
+        FAQ_Q4_Label.setAlignment(Pos.CENTER);
+        grid.add(FAQ_Q4_Label,1,8,1,1);
+
+        Label FAQ_A4_Label = new Label();
+        FAQ_A4_Label.setText("No. User set passwords don't expire, but for security purposes, we suggest changing your password periodically.");
+        FAQ_A4_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
+        FAQ_A4_Label.setWrapText(true);
+        FAQ_A4_Label.setAlignment(Pos.CENTER);
+        grid.add(FAQ_A4_Label,1,9,1,1);
 
 
         //Start the scene
@@ -2606,9 +2760,9 @@ public class Display extends Application {
         mainStage.setScene(Help_Scene);
     }
 
-    private void Post_Transaction_Call(String accountNumber){
+    private void Post_Transaction_Call(String accountNumber, double balance){
         GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
+        grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(5);
         grid.setVgap(5);
         grid.setPadding(new Insets(10,10,20,20));
@@ -2822,6 +2976,115 @@ public class Display extends Application {
                 logout_Link);
         grid.add(menu_Box,0,2,1,10);
 
+        //Row 1
+        Label post_trans_Label = new Label();
+        post_trans_Label.setText("Your transaction was successful");
+        post_trans_Label.setFont(Font.font("",FontWeight.BOLD,13));
+        grid.add(post_trans_Label, 1,1,1,1);
+
+        //Row 2
+        Label post_Trans_balance_Label = new Label();
+        post_Trans_balance_Label.setText("Your new balance is: $" + balance);
+        post_Trans_balance_Label.setFont(Font.font("",FontWeight.NORMAL,11));
+        grid.add(post_Trans_balance_Label, 1,2,1,1);
+
+        Post_Transaction_Scene = new Scene(grid,800,600);
+        mainStage.setScene(Post_Transaction_Scene);
+    }
+
+    private void Reset_Password_Call(String accountNumber){
+        //Main Gridpane set up
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(5);
+        grid.setVgap(5);
+        grid.setPadding(new Insets(10, 10, 20, 20));
+        grid.setStyle("-fx-background-color: white");
+
+        //Row 0 (Logo)
+        ImageView LogoView = new ImageView();
+        LogoView.setImage(Logo);
+        LogoView.setFitWidth(Logo.getWidth() / 4);
+        LogoView.setFitHeight(Logo.getHeight() / 4);
+        grid.add(LogoView, 4, 0, 3, 1);
+
+        //Row 1
+        Label reset_Label = new Label();
+        reset_Label.setText("Reset Password");
+        reset_Label.setFont(Font.font("",FontWeight.NORMAL,13));
+        grid.add(reset_Label,0,1,1,1);
+
+        //Row 2
+        Label new_Pass_Label = new Label();
+        new_Pass_Label.setText("Enter new password ");
+        PasswordField new_pass_Field = new PasswordField();
+        grid.add(new_Pass_Label,0,2,1,1);
+        grid.add(new_pass_Field,1,2,1,1);
+
+        //Row 3
+        Label new_Pass_Label2 = new Label();
+        new_Pass_Label2.setText("Confirm new password ");
+        PasswordField new_pass_Field2 = new PasswordField();
+        grid.add(new_Pass_Label2,0,3,1,1);
+        grid.add(new_pass_Field2,1,3,1,1);
+
+        //Row 4
+        Text console = new Text();
+        console.setFill(Color.RED);
+        grid.add(console, 0,4,6,1);
+
+        //Row 5
+        Button submit = new Button();
+        submit.setText("Submit");
+        submit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (new_pass_Field.getText().equals(new_pass_Field2.getText())){
+                    BankAccountDriver bd = new BankAccountDriver();
+                    bd.reset_Password(new_pass_Field.getText(),Integer.valueOf(accountNumber));
+                    Reset_Password_Success_Call();
+                }
+                else{
+                    console.setText("Passwords does not match");
+                }
+            }
+        });
+        grid.add(submit,0,5,1,1);
+
+        Reset_Password_Scene = new Scene(grid,800,600);
+        mainStage.setScene(Reset_Password_Scene);
+    }
+
+    private void Reset_Password_Success_Call(){
+        //Main Gridpane set up
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(5);
+        grid.setVgap(5);
+        grid.setPadding(new Insets(10, 10, 20, 20));
+        grid.setStyle("-fx-background-color: white");
+
+        //Row 0 (Logo)
+        ImageView LogoView = new ImageView();
+        LogoView.setImage(Logo);
+        LogoView.setFitWidth(Logo.getWidth() / 4);
+        LogoView.setFitHeight(Logo.getHeight() / 4);
+        grid.add(LogoView, 4, 0, 3, 1);
+
+        //Row 1
+        Label reset_Label = new Label();
+        reset_Label.setText("Password has been reseted. Please use your new password to login");
+        reset_Label.setFont(Font.font("",FontWeight.NORMAL,13));
+        grid.add(reset_Label,0,1,1,1);
+
+        //Row 2
+        Button back = new Button();
+        back = Cancel_Button();
+        back.setText("Back");
+        grid.add(back,0,2,1,1);
+
+        Reset_Password_Success_Scene = new Scene(grid,800,600);
+        mainStage.setScene(Reset_Password_Success_Scene);
     }
 
     private Button Cancel_Button() {

@@ -45,6 +45,32 @@ public class BankAccountDriver {
 
     }
 
+    public void reset_Password(String password, int accountNumber) {
+
+        String url = "jdbc:sqllite:/Database Files/Main.db";
+
+        Connection conn = null;
+
+        try {
+            conn = DriverManager.getConnection("jdbc:sqlite:./Database Files/Main.db");
+
+            String query = "UPDATE 'LOCAL ACCOUNT' SET PASSWORD = ? WHERE Pk_LocalAccount_Id = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, password);
+            stmt.setInt(2, accountNumber);
+            stmt.executeUpdate();
+
+            System.out.println("Deposit successful");
+
+            stmt.close();
+            conn.close();
+
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+    }
+
     public void deposit(double balance, int pkID, int accNo) {
 
         String url = "jdbc:sqllite:/Database Files/Main.db";
