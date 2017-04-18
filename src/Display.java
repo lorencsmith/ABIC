@@ -2693,67 +2693,10 @@ public class Display extends Application {
                 logout_Link);
         grid.add(menu_Box,0,2,1,10);
 
-        Label FAQ_Label = new Label();
-        FAQ_Label.setText("FAQ");
-        FAQ_Label.setFont(Font.font("", FontWeight.EXTRA_BOLD, 16));
-        FAQ_Label.setAlignment(Pos.CENTER);
-        grid.add(FAQ_Label,1,1,1,1);
+        Help help= new Help();
 
-        Label FAQ_Q1_Label = new Label();
-        FAQ_Q1_Label.setText("How do I enroll?");
-        FAQ_Q1_Label.setFont(Font.font("", FontWeight.BOLD, 12));
-        FAQ_Q1_Label.setAlignment(Pos.CENTER);
-        grid.add(FAQ_Q1_Label,1,2,1,1);
-
-        Label FAQ_A1_Label = new Label();
-        FAQ_A1_Label.setText("After clicking the enroll button on the main page, you will be prompted to enter personal information for your account.");
-        FAQ_A1_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
-        FAQ_A1_Label.setWrapText(true);
-        FAQ_A1_Label.setAlignment(Pos.CENTER);
-        grid.add(FAQ_A1_Label,1,3,1,1);
-
-        Label FAQ_Q2_Label = new Label();
-        FAQ_Q2_Label.setText("What happens if I forgot my password?");
-        FAQ_Q2_Label.setFont(Font.font("", FontWeight.BOLD, 12));
-        FAQ_Q2_Label.setWrapText(true);
-        FAQ_Q2_Label.setAlignment(Pos.CENTER);
-        grid.add(FAQ_Q2_Label,1,4,1,1);
-
-        Label FAQ_A2_Label = new Label();
-        FAQ_A2_Label.setText("Using the Forgot Password option, the user can see their current password. It will request the username and Social Security Number associated with the account.");
-        FAQ_A2_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
-        FAQ_A2_Label.setWrapText(true);
-        FAQ_A2_Label.setAlignment(Pos.CENTER);
-        grid.add(FAQ_A2_Label,1,5,1,1);
-
-        Label FAQ_Q3_Label = new Label();
-        FAQ_Q3_Label.setText("Somebody else knows my password. How can I change it?");
-        FAQ_Q3_Label.setFont(Font.font("", FontWeight.BOLD, 12));
-        FAQ_Q3_Label.setWrapText(true);
-        FAQ_Q3_Label.setAlignment(Pos.CENTER);
-        grid.add(FAQ_Q3_Label,1,6,1,1);
-
-        Label FAQ_A3_Label = new Label();
-        FAQ_A3_Label.setText("Under the profile option in the menu, you can change your password by inputting a new password and then confirming the password in a separate box.");
-        FAQ_A3_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
-        FAQ_A3_Label.setWrapText(true);
-        FAQ_A3_Label.setAlignment(Pos.CENTER);
-        grid.add(FAQ_A3_Label,1,7,1,1);
-
-        Label FAQ_Q4_Label = new Label();
-        FAQ_Q4_Label.setText("Will my password expire?");
-        FAQ_Q4_Label.setFont(Font.font("", FontWeight.BOLD, 12));
-        FAQ_Q4_Label.setWrapText(true);
-        FAQ_Q4_Label.setAlignment(Pos.CENTER);
-        grid.add(FAQ_Q4_Label,1,8,1,1);
-
-        Label FAQ_A4_Label = new Label();
-        FAQ_A4_Label.setText("No. User set passwords don't expire, but for security purposes, we suggest changing your password periodically.");
-        FAQ_A4_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
-        FAQ_A4_Label.setWrapText(true);
-        FAQ_A4_Label.setAlignment(Pos.CENTER);
-        grid.add(FAQ_A4_Label,1,9,1,1);
-
+        help.FAQ(grid);
+        help.contact(grid);
 
         //Start the scene
         Help_Scene = new Scene(grid,800,600);
