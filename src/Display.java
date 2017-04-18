@@ -2697,6 +2697,9 @@ public class Display extends Application {
 
         help.FAQ(grid);
         help.contact(grid);
+        help.privacy(grid);
+
+
 
         //Start the scene
         Help_Scene = new Scene(grid,800,600);
