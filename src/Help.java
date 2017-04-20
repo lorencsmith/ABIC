@@ -163,8 +163,11 @@ public class Help {
             @Override
             public void handle(ActionEvent event) {
 
-                Desktop desktop = Desktop.getDesktop();
-                File f = new File("./out/privacy.pdf");
+                System.out.println("clicked");
+
+                String filename = "privacy.pdf";
+
+                File f = new File("./src/" + filename);
                 if(f.exists()){
                     System.out.println("file exists");
                     try {
