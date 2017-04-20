@@ -484,7 +484,5 @@ public class DatabaseDriver {
                 "Last_Access_Time_Stamp TIMESTAMP," +
                 "FOREIGN KEY (Pk_Account_Id) REFERENCES Person(Pk_Person_Id))";
     }
-
-
 }
 

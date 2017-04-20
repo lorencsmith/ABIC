@@ -47,7 +47,7 @@ public class Display extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        //CAll Login scene at the start of the program
+        //Call Login scene at the start of the program
         mainStage = primaryStage;
         Login_Scene_Call();
         mainStage.getIcons().add(new Image("ABIC_icon.png"));
@@ -59,7 +59,7 @@ public class Display extends Application {
      * Login Scene will be called at the beginning of the program
      * And it will be the main menu throughout the program
      */
-    private void Login_Scene_Call() {
+    protected void Login_Scene_Call() {
         //Main Gridpane set up
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -124,7 +124,7 @@ public class Display extends Application {
         mainStage.setScene(Login_Scene);
     }
 
-    private void User_Login_Call() {
+    protected void User_Login_Call() {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(5);
@@ -225,7 +225,7 @@ public class Display extends Application {
      * it will search and validate the input using database and return current password back to user
      * Since the program is strictly used in infranet, it won't involve sending emails
      */
-    private void Forgot_Password_Call() {
+    protected void Forgot_Password_Call() {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(5);
@@ -317,7 +317,7 @@ public class Display extends Application {
      * Program will ask user to input username and password for enrollment.
      * it will take username parameter and search the database to see if it already exists in the database
      */
-    private void Enroll_idpass_Call() {
+    protected void Enroll_idpass_Call() {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(5);
@@ -440,7 +440,7 @@ public class Display extends Application {
      * After username and password is validated, program will ask for personal information and validate it.
      * After validation, it will store the data into database
      */
-    private void Enroll_Call(String username) {
+    protected void Enroll_Call(String username) {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(5);
@@ -848,7 +848,7 @@ public class Display extends Application {
     }
 
 
-    private void Enroll_Success_Call(String first_Name, String ssn){
+    protected void Enroll_Success_Call(String first_Name, String ssn){
         //Main Gridpane set up
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -898,7 +898,7 @@ public class Display extends Application {
      * @return Return cancel button that will take user back to main menu(login scene)
      */
 
-    private void Post_Login_Call(String accountNumber){
+    protected void Post_Login_Call(String accountNumber){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(5);
@@ -1054,7 +1054,7 @@ public class Display extends Application {
                 Billpay_Call(accountNumber);
             }
         });
-        transfer_Link.setBorder(Border.EMPTY);
+        billpay_Link.setBorder(Border.EMPTY);
 
 
         Hyperlink help_Link = new Hyperlink();
@@ -1079,6 +1079,7 @@ public class Display extends Application {
                 Help_Call(accountNumber);
             }
         });
+        help_Link.setBorder(Border.EMPTY);
 
         Hyperlink logout_Link = new Hyperlink();
         logout_Link.setText("Logout");
@@ -1102,6 +1103,7 @@ public class Display extends Application {
                 Login_Scene_Call();
             }
         });
+        logout_Link.setBorder(Border.EMPTY);
 
         menu_Box.getChildren().addAll(
                 overview_Link,
@@ -1153,7 +1155,7 @@ public class Display extends Application {
         mainStage.setScene(Post_Login_Scene);
     }
 
-    private void Profile_Call(String accountNumber){
+    protected void Profile_Call(String accountNumber){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(5);
@@ -1309,7 +1311,7 @@ public class Display extends Application {
                 Billpay_Call(accountNumber);
             }
         });
-        transfer_Link.setBorder(Border.EMPTY);
+        billpay_Link.setBorder(Border.EMPTY);
 
         Hyperlink logout_Link = new Hyperlink();
         logout_Link.setText("Logout");
@@ -1333,6 +1335,7 @@ public class Display extends Application {
                 Login_Scene_Call();
             }
         });
+        logout_Link.setBorder(Border.EMPTY);
 
         Hyperlink help_Link = new Hyperlink();
         help_Link.setText("Help");
@@ -1356,6 +1359,7 @@ public class Display extends Application {
                 Help_Call(accountNumber);
             }
         });
+        help_Link.setBorder(Border.EMPTY);
 
         menu_Box.getChildren().addAll(
                 overview_Link,
@@ -1485,7 +1489,7 @@ public class Display extends Application {
 
     }
 
-    private void Withdrawal_Call(String accountNumber){
+    protected void Withdrawal_Call(String accountNumber){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(5);
@@ -1641,7 +1645,7 @@ public class Display extends Application {
                 Billpay_Call(accountNumber);
             }
         });
-        transfer_Link.setBorder(Border.EMPTY);
+        billpay_Link.setBorder(Border.EMPTY);
 
 
         Hyperlink help_Link = new Hyperlink();
@@ -1666,6 +1670,7 @@ public class Display extends Application {
                 Help_Call(accountNumber);
             }
         });
+        help_Link.setBorder(Border.EMPTY);
 
         Hyperlink logout_Link = new Hyperlink();
         logout_Link.setText("Logout");
@@ -1689,6 +1694,8 @@ public class Display extends Application {
                 Login_Scene_Call();
             }
         });
+        logout_Link.setBorder(Border.EMPTY);
+
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
@@ -1763,7 +1770,7 @@ public class Display extends Application {
         mainStage.setScene(Withdrawal_Scene);
     }
 
-    private void Deposit_Call(String accountNumber){
+    protected void Deposit_Call(String accountNumber){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(5);
@@ -1919,7 +1926,7 @@ public class Display extends Application {
                 Billpay_Call(accountNumber);
             }
         });
-        transfer_Link.setBorder(Border.EMPTY);
+        billpay_Link.setBorder(Border.EMPTY);
 
 
         Hyperlink help_Link = new Hyperlink();
@@ -1944,6 +1951,7 @@ public class Display extends Application {
                 Help_Call(accountNumber);
             }
         });
+        help_Link.setBorder(Border.EMPTY);
 
         Hyperlink logout_Link = new Hyperlink();
         logout_Link.setText("Logout");
@@ -1967,6 +1975,7 @@ public class Display extends Application {
                 Login_Scene_Call();
             }
         });
+        logout_Link.setBorder(Border.EMPTY);
 
         menu_Box.getChildren().addAll(
                 overview_Link,
@@ -2037,7 +2046,7 @@ public class Display extends Application {
         mainStage.setScene(Deposit_Scene);
     }
 
-    private void Transfer_Call(String accountNumber){
+    protected void Transfer_Call(String accountNumber){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER_LEFT);
         grid.setVgap(5);
@@ -2192,7 +2201,7 @@ public class Display extends Application {
                 Billpay_Call(accountNumber);
             }
         });
-        transfer_Link.setBorder(Border.EMPTY);
+        billpay_Link.setBorder(Border.EMPTY);
 
 
         Hyperlink help_Link = new Hyperlink();
@@ -2217,6 +2226,7 @@ public class Display extends Application {
                 Help_Call(accountNumber);
             }
         });
+        help_Link.setBorder(Border.EMPTY);
 
         Hyperlink logout_Link = new Hyperlink();
         logout_Link.setText("Logout");
@@ -2240,6 +2250,7 @@ public class Display extends Application {
                 Login_Scene_Call();
             }
         });
+        logout_Link.setBorder(Border.EMPTY);
 
         menu_Box.getChildren().addAll(
                 overview_Link,
@@ -2257,7 +2268,7 @@ public class Display extends Application {
 
     }
 
-    private void Billpay_Call(String accountNumber){
+    protected void Billpay_Call(String accountNumber){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(5);
@@ -2413,7 +2424,7 @@ public class Display extends Application {
                 Billpay_Call(accountNumber);
             }
         });
-        transfer_Link.setBorder(Border.EMPTY);
+        billpay_Link.setBorder(Border.EMPTY);
 
 
         Hyperlink help_Link = new Hyperlink();
@@ -2438,6 +2449,7 @@ public class Display extends Application {
                 Help_Call(accountNumber);
             }
         });
+        help_Link.setBorder(Border.EMPTY);
 
         Hyperlink logout_Link = new Hyperlink();
         logout_Link.setText("Logout");
@@ -2461,6 +2473,7 @@ public class Display extends Application {
                 Login_Scene_Call();
             }
         });
+        logout_Link.setBorder(Border.EMPTY);
 
         menu_Box.getChildren().addAll(
                 overview_Link,
@@ -2477,7 +2490,7 @@ public class Display extends Application {
         mainStage.setScene(Billpay_Scene);
     }
 
-    private void Help_Call(String accountNumber){
+    protected void Help_Call(String accountNumber){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(5);
@@ -2633,7 +2646,7 @@ public class Display extends Application {
                 Billpay_Call(accountNumber);
             }
         });
-        transfer_Link.setBorder(Border.EMPTY);
+        billpay_Link.setBorder(Border.EMPTY);
 
 
         Hyperlink help_Link = new Hyperlink();
@@ -2658,6 +2671,7 @@ public class Display extends Application {
                 Help_Call(accountNumber);
             }
         });
+        help_Link.setBorder(Border.EMPTY);
 
         Hyperlink logout_Link = new Hyperlink();
         logout_Link.setText("Logout");
@@ -2681,6 +2695,7 @@ public class Display extends Application {
                 Login_Scene_Call();
             }
         });
+        logout_Link.setBorder(Border.EMPTY);
 
         menu_Box.getChildren().addAll(
                 overview_Link,
@@ -2706,7 +2721,7 @@ public class Display extends Application {
         mainStage.setScene(Help_Scene);
     }
 
-    private void Post_Transaction_Call(String accountNumber, double balance){
+    protected void Post_Transaction_Call(String accountNumber, double balance){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(5);
@@ -2862,7 +2877,7 @@ public class Display extends Application {
                 Billpay_Call(accountNumber);
             }
         });
-        transfer_Link.setBorder(Border.EMPTY);
+        billpay_Link.setBorder(Border.EMPTY);
 
 
         Hyperlink help_Link = new Hyperlink();
@@ -2887,6 +2902,7 @@ public class Display extends Application {
                 Help_Call(accountNumber);
             }
         });
+        help_Link.setBorder(Border.EMPTY);
 
         Hyperlink logout_Link = new Hyperlink();
         logout_Link.setText("Logout");
@@ -2910,6 +2926,7 @@ public class Display extends Application {
                 Login_Scene_Call();
             }
         });
+        logout_Link.setBorder(Border.EMPTY);
 
         menu_Box.getChildren().addAll(
                 overview_Link,
@@ -2938,7 +2955,7 @@ public class Display extends Application {
         mainStage.setScene(Post_Transaction_Scene);
     }
 
-    private void Reset_Password_Call(String accountNumber){
+    protected void Reset_Password_Call(String accountNumber){
         //Main Gridpane set up
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -3001,7 +3018,7 @@ public class Display extends Application {
         mainStage.setScene(Reset_Password_Scene);
     }
 
-    private void Reset_Password_Success_Call(){
+    protected void Reset_Password_Success_Call(){
         //Main Gridpane set up
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -3033,7 +3050,7 @@ public class Display extends Application {
         mainStage.setScene(Reset_Password_Success_Scene);
     }
 
-    private Button Cancel_Button() {
+    protected Button Cancel_Button() {
         Button cancel_Button = new Button("Cancel");
         cancel_Button.setOnAction(new EventHandler<ActionEvent>() {
             @Override

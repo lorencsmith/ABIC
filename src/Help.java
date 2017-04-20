@@ -68,6 +68,7 @@ public class Help {
 
     }
     public void FAQ(GridPane grid) {
+
         Label FAQ_Label = new Label();
         FAQ_Label.setText("FAQ");
         FAQ_Label.setFont(Font.font("", FontWeight.EXTRA_BOLD, 16));
@@ -76,62 +77,64 @@ public class Help {
         grid.add(FAQ_Label, 1, 10, 1, 1);
 
         Label FAQ_Q1_Label = new Label();
-        FAQ_Q1_Label.setText("I recently moved to a different address. How can I change my mailing address?");
+        FAQ_Q1_Label.setText("Q: I recently moved to a different address. How can I change my mailing address?");
         FAQ_Q1_Label.setFont(Font.font("", FontWeight.BOLD, 12));
+        FAQ_Q1_Label.setWrapText(true);
         FAQ_Q1_Label.setAlignment(Pos.CENTER);
         grid.add(FAQ_Q1_Label, 1, 11, 1, 1);
 
         Label FAQ_A1_Label = new Label();
-        FAQ_A1_Label.setText("Under the profile option in the menu, you can view and change your address.");
+        FAQ_A1_Label.setText("A: Under the profile option in the menu, you can view and change your address.");
         FAQ_A1_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
         FAQ_A1_Label.setWrapText(true);
         FAQ_A1_Label.setAlignment(Pos.CENTER);
-        FAQ_Label.setTextFill(Color.RED);
+        FAQ_A1_Label.setTextFill(Color.BLUE);
         grid.add(FAQ_A1_Label, 1, 12, 1, 1);
 
         Label FAQ_Q2_Label = new Label();
-        FAQ_Q2_Label.setText("What happens if I forgot my password?");
+        FAQ_Q2_Label.setText("Q: What happens if I forgot my password?");
         FAQ_Q2_Label.setFont(Font.font("", FontWeight.BOLD, 12));
         FAQ_Q2_Label.setWrapText(true);
         FAQ_Q2_Label.setAlignment(Pos.CENTER);
         grid.add(FAQ_Q2_Label, 1, 13, 1, 1);
 
         Label FAQ_A2_Label = new Label();
-        FAQ_A2_Label.setText("Using the Forgot Password option, the user can see their current password. It will request the username and Social Security Number associated with the account.");
+        FAQ_A2_Label.setText("A: Using the Forgot Password option, the user can see their current password. It will request the username and Social Security Number associated with the account.");
         FAQ_A2_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
         FAQ_A2_Label.setWrapText(true);
         FAQ_A2_Label.setAlignment(Pos.CENTER);
-        FAQ_Label.setTextFill(Color.RED);
+        FAQ_A2_Label.setTextFill(Color.BLUE);
         grid.add(FAQ_A2_Label, 1, 14, 1, 1);
 
         Label FAQ_Q3_Label = new Label();
-        FAQ_Q3_Label.setText("Somebody else knows my password. How can I change it?");
+        FAQ_Q3_Label.setText("Q: Somebody else knows my password. How can I change it?");
         FAQ_Q3_Label.setFont(Font.font("", FontWeight.BOLD, 12));
         FAQ_Q3_Label.setWrapText(true);
         FAQ_Q3_Label.setAlignment(Pos.CENTER);
         grid.add(FAQ_Q3_Label, 1, 15, 1, 1);
 
+
         Label FAQ_A3_Label = new Label();
-        FAQ_A3_Label.setText("Under the profile option in the menu, you can change your password by inputting a new password and then confirming the password in a separate box.");
+        FAQ_A3_Label.setText("A: Under the profile option in the menu, you can change your password by inputting a new password and then confirming the password in a separate box.");
         FAQ_A3_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
         FAQ_A3_Label.setWrapText(true);
         FAQ_A3_Label.setAlignment(Pos.CENTER);
-        FAQ_Label.setTextFill(Color.RED);
+        FAQ_A3_Label.setTextFill(Color.BLUE);
         grid.add(FAQ_A3_Label, 1, 16, 1, 1);
 
         Label FAQ_Q4_Label = new Label();
-        FAQ_Q4_Label.setText("Will my password expire?");
+        FAQ_Q4_Label.setText("Q: Will my password expire?");
         FAQ_Q4_Label.setFont(Font.font("", FontWeight.BOLD, 12));
         FAQ_Q4_Label.setWrapText(true);
         FAQ_Q4_Label.setAlignment(Pos.CENTER);
         grid.add(FAQ_Q4_Label, 1, 17, 1, 1);
 
         Label FAQ_A4_Label = new Label();
-        FAQ_A4_Label.setText("No. User set passwords don't expire, but for security purposes, we suggest changing your password periodically.");
+        FAQ_A4_Label.setText("A: No. User set passwords don't expire, but for security purposes, we suggest changing your password periodically.");
         FAQ_A4_Label.setFont(Font.font("", FontWeight.NORMAL, 12));
         FAQ_A4_Label.setWrapText(true);
         FAQ_A4_Label.setAlignment(Pos.CENTER);
-        FAQ_Label.setTextFill(Color.RED);
+        FAQ_A4_Label.setTextFill(Color.BLUE);
         grid.add(FAQ_A4_Label, 1, 18, 1, 1);
     }
 
@@ -160,20 +163,17 @@ public class Help {
             @Override
             public void handle(ActionEvent event) {
 
+                Desktop desktop = Desktop.getDesktop();
+                File f = new File("./out/privacy.pdf");
+                if(f.exists()){
+                    System.out.println("file exists");
+                    try {
+                        Desktop.getDesktop().open(f);
+                    }catch (IOException e){
+                    }
+                }
             }
         });
 
-        Desktop desktop = Desktop.getDesktop();
-        File f = new File("Users/lorensmith/ABIC/privacy.pdf");
-        if(f.exists()){
-            try {
-                desktop.open(f);
-            }catch (IOException e){
-
-            }
-        }
-
-
     }
-
 }
