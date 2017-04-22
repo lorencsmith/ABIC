@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="ABIC">
+    <output-path>$PROJECT_DIR$/out/artifacts/ABIC</output-path>
+    <root id="archive" name="ABIC.jar">
+      <element id="archive" name="ABIC.jar">
+        <element id="module-output" name="ABIC" />
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>
