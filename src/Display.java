@@ -3109,5 +3109,4 @@ public class Display extends Application {
         rs.setFill(Color.RED);
         return rs;
     }
-
 }
