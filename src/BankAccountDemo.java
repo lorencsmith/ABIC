@@ -70,7 +70,7 @@ public class BankAccountDemo {
                 "VALUES(\"100\", \"Admin\", \"pass\")");
         DatabaseDriver.run(sql);
 
-        sql = "INSERT INTO Person ('Pk_Person_Id','FIRST_NAME', 'LAST_NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME_NUMBER', 'WORK_NUMBER')" +
+        sql = "INSERT INTO Person ('Pk_Person_Id','FIRST NAME', 'LAST NAME', SSN, DOB, 'ADDRESS', CITY, STATE, 'ZIP CODE', 'HOME NUMBER', 'WORK NUMBER')" +
                 "VALUES ((SELECT Pk_LocalAccount_Id FROM 'LOCAL ACCOUNT' WHERE USERNAME = \"Admin\" limit 1), \"1\", \"2\", \"2\", \"2\", \"2\", \"2\", \"2\", \"2\", \"2\", \"2\")";
         DatabaseDriver.run(sql);
 

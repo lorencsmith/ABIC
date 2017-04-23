@@ -1,3 +1,4 @@
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,7 +32,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Display extends Application {
 
     Stage mainStage;
-    Scene Login_Scene, Forgot_Password_Scene, Enroll_idpass_Scene, Enroll_Scene, Profile_Scene, Withdrawal_Scene,
+    Scene Login_Scene, Forgot_Password_Scene, Enroll_idpass_Scene, Login_Help_Scene,
+            Enroll_Scene, Profile_Scene, Withdrawal_Scene, Post_Transfer_Scene,
             Deposit_Scene, Transfer_Scene, Billpay_Scene, Post_Transaction_Scene, Help_Scene,User_Login_Scene,
             Post_Login_Scene, Enroll_Success_Scene, Reset_Password_Scene, Reset_Password_Success_Scene;
     Image Logo = new Image("ABIC_Logo.png");
@@ -114,6 +116,20 @@ public class Display extends Application {
         Forgot_Button.setMinWidth(125);
         grid.add(Forgot_Button, 1, 4, 1, 1);
 
+        Button help_Button = new Button("Help");
+        help_Button.setAlignment(Pos.CENTER);
+        help_Button.setPadding(new Insets(5, 5, 5, 5));
+        help_Button.setFont(Font.font("Tahoma", FontWeight.BOLD, 12));
+        help_Button.setMinWidth(200);
+        grid.add(help_Button, 0, 5, 2, 1);
+
+        help_Button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                help_Call();
+            }
+        });
+
         Forgot_Button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -122,6 +138,37 @@ public class Display extends Application {
         });
         Login_Scene = new Scene(grid, 800, 600);
         mainStage.setScene(Login_Scene);
+    }
+
+    protected void help_Call(){
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(5);
+        grid.setVgap(5);
+        grid.setPadding(new Insets(10, 10, 20, 20));
+        grid.setStyle("-fx-background-color: white");
+
+        //Row 0 (Logo)
+        ImageView LogoView = new ImageView();
+        LogoView.setImage(Logo);
+        LogoView.setFitWidth(Logo.getWidth() / 4);
+        LogoView.setFitHeight(Logo.getHeight() / 4);
+        grid.add(LogoView, 3, 0, 3, 1);
+
+        Help help = new Help();
+        help.FAQ(grid);
+        help.contact(grid);
+        help.privacy(grid);
+
+        Button back_Button = new Button();
+        back_Button = Cancel_Button();
+        back_Button.setText("Back");
+        grid.add(back_Button, 1,21,1,1);
+
+        Login_Help_Scene = new Scene(grid,800,600);
+        mainStage.setScene(Login_Help_Scene);
+
+
     }
 
     protected void User_Login_Call() {
@@ -964,28 +1011,28 @@ public class Display extends Application {
         });
         profile_Link.setBorder(Border.EMPTY);
 
-        Hyperlink withdrawal_Link = new Hyperlink();
-        withdrawal_Link.setText("Withdrawal");
-        withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
-        withdrawal_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+        Hyperlink transaction_Link = new Hyperlink();
+        transaction_Link.setText("Transaction");
+        transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        transaction_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.BOLD,11));
+                transaction_Link.setFont(Font.font("",FontWeight.BOLD,11));
             }
         });
-        withdrawal_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+        transaction_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+                transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
             }
         });
-        withdrawal_Link.setOnAction(new EventHandler<ActionEvent>() {
+        transaction_Link.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Withdrawal_Call(accountNumber);
             }
         });
-        withdrawal_Link.setBorder(Border.EMPTY);
+        transaction_Link.setBorder(Border.EMPTY);
 
         Hyperlink deposit_Link = new Hyperlink();
         deposit_Link.setText("Deposit");
@@ -1108,7 +1155,7 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                withdrawal_Link,
+                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -1221,28 +1268,30 @@ public class Display extends Application {
         });
         profile_Link.setBorder(Border.EMPTY);
 
-        Hyperlink withdrawal_Link = new Hyperlink();
-        withdrawal_Link.setText("Withdrawal");
-        withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
-        withdrawal_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+
+        Hyperlink transaction_Link = new Hyperlink();
+        transaction_Link.setText("Transaction");
+        transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        transaction_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.BOLD,11));
+                transaction_Link.setFont(Font.font("",FontWeight.BOLD,11));
             }
         });
-        withdrawal_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+        transaction_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+                transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
             }
         });
-        withdrawal_Link.setOnAction(new EventHandler<ActionEvent>() {
+        transaction_Link.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Withdrawal_Call(accountNumber);
             }
         });
-        withdrawal_Link.setBorder(Border.EMPTY);
+        transaction_Link.setBorder(Border.EMPTY);
+
 
         Hyperlink deposit_Link = new Hyperlink();
         deposit_Link.setText("Deposit");
@@ -1364,7 +1413,7 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                withdrawal_Link,
+                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -1555,28 +1604,30 @@ public class Display extends Application {
         });
         profile_Link.setBorder(Border.EMPTY);
 
-        Hyperlink withdrawal_Link = new Hyperlink();
-        withdrawal_Link.setText("Withdrawal");
-        withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
-        withdrawal_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+
+        Hyperlink transaction_Link = new Hyperlink();
+        transaction_Link.setText("Transaction");
+        transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        transaction_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.BOLD,11));
+                transaction_Link.setFont(Font.font("",FontWeight.BOLD,11));
             }
         });
-        withdrawal_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+        transaction_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+                transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
             }
         });
-        withdrawal_Link.setOnAction(new EventHandler<ActionEvent>() {
+        transaction_Link.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Withdrawal_Call(accountNumber);
             }
         });
-        withdrawal_Link.setBorder(Border.EMPTY);
+        transaction_Link.setBorder(Border.EMPTY);
+
 
         Hyperlink deposit_Link = new Hyperlink();
         deposit_Link.setText("Deposit");
@@ -1699,7 +1750,7 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                withdrawal_Link,
+                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -1711,59 +1762,9 @@ public class Display extends Application {
 
         //Row 1
         Label withdrawal_Label = new Label();
-        withdrawal_Label.setText("Withdrawal");
+        withdrawal_Label.setText("Transaction History");
         withdrawal_Label.setFont(Font.font("",FontWeight.BOLD,13));
         grid.add(withdrawal_Label,1,1,1,1);
-
-        //Row 2
-        DatabaseDriver db = new DatabaseDriver();
-        Label current_Label = new Label();
-        current_Label.setText("Current Balance: $");
-        current_Label.setFont(Font.font("",FontWeight.NORMAL, 11));
-        grid.add(current_Label,1,2,1,1);
-        TextField current_Field = new TextField();
-        sql = "SELECT * FROM Account WHERE Pk_Account_Id = " + accountNumber;
-        double current_Balance = Double.valueOf(db.getBalance(sql));
-        current_Field.setText(String.valueOf(current_Balance));
-        current_Field.setEditable(false);
-        grid.add(current_Field,2,2,1,1);
-
-        //Row 3
-        Label desire_Label = new Label();
-        desire_Label.setText("Enter withdrawal amount");
-        desire_Label.setFont(Font.font("",FontWeight.NORMAL, 11));
-        grid.add(desire_Label,1,3,1,1);
-        TextField desire_Field = new TextField();
-        desire_Field.setPromptText("Enter amount");
-        grid.add(desire_Field,2,3,1,1);
-
-        //Row 4
-        Label console = new Label();
-        console.setTextFill(Color.RED);
-        grid.add(console,1,4,4,1);
-
-        //Row 5
-        Button submit = new Button();
-        submit.setText("Submit");
-        submit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if(desire_Field.getText().isEmpty() || Double.valueOf(desire_Field.getText()) == 0 ) {
-                    console.setText("Please enter withdrawal amount");
-                }
-                else if(Double.valueOf(desire_Field.getText()) > current_Balance){
-                    console.setText("Not enough Balance");
-                    }
-                else{
-                    String sql2 = "SELECT * FROM Account WHERE Pk_Account_Id = " + accountNumber;;
-                    BankAccountDriver bd = new BankAccountDriver();
-                    double new_balance = current_Balance - Double.valueOf(desire_Field.getText());
-                    bd.withdraw(Double.valueOf(desire_Field.getText()), Integer.valueOf(accountNumber), Integer.valueOf(db.getBankAccount(sql2)));
-                    Post_Transaction_Call(accountNumber,new_balance);
-                }
-            }
-        });
-        grid.add(submit, 1,5,1,1);
 
         //Start the scene
         Withdrawal_Scene = new Scene(grid,800,600);
@@ -1836,28 +1837,30 @@ public class Display extends Application {
         });
         profile_Link.setBorder(Border.EMPTY);
 
-        Hyperlink withdrawal_Link = new Hyperlink();
-        withdrawal_Link.setText("Withdrawal");
-        withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
-        withdrawal_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+
+        Hyperlink transaction_Link = new Hyperlink();
+        transaction_Link.setText("Transaction");
+        transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        transaction_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.BOLD,11));
+                transaction_Link.setFont(Font.font("",FontWeight.BOLD,11));
             }
         });
-        withdrawal_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+        transaction_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+                transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
             }
         });
-        withdrawal_Link.setOnAction(new EventHandler<ActionEvent>() {
+        transaction_Link.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Withdrawal_Call(accountNumber);
             }
         });
-        withdrawal_Link.setBorder(Border.EMPTY);
+        transaction_Link.setBorder(Border.EMPTY);
+
 
         Hyperlink deposit_Link = new Hyperlink();
         deposit_Link.setText("Deposit");
@@ -1980,7 +1983,7 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                withdrawal_Link,
+                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -2029,6 +2032,9 @@ public class Display extends Application {
             public void handle(ActionEvent event) {
                 if (desire_Field.getText().isEmpty()){
                     console.setText("Please enter deposit amount");
+                }
+                else if (Double.valueOf(desire_Field.getText()) < 0){
+                    console.setText("Please enter correct amount");
                 }
                 else {
                     String sql2 = "SELECT * FROM Account WHERE Pk_Account_Id = " + accountNumber;
@@ -2111,28 +2117,30 @@ public class Display extends Application {
         });
         profile_Link.setBorder(Border.EMPTY);
 
-        Hyperlink withdrawal_Link = new Hyperlink();
-        withdrawal_Link.setText("Withdrawal");
-        withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
-        withdrawal_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+
+        Hyperlink transaction_Link = new Hyperlink();
+        transaction_Link.setText("Transaction");
+        transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        transaction_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.BOLD,11));
+                transaction_Link.setFont(Font.font("",FontWeight.BOLD,11));
             }
         });
-        withdrawal_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+        transaction_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+                transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
             }
         });
-        withdrawal_Link.setOnAction(new EventHandler<ActionEvent>() {
+        transaction_Link.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Withdrawal_Call(accountNumber);
             }
         });
-        withdrawal_Link.setBorder(Border.EMPTY);
+        transaction_Link.setBorder(Border.EMPTY);
+
 
         Hyperlink deposit_Link = new Hyperlink();
         deposit_Link.setText("Deposit");
@@ -2255,7 +2263,7 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                withdrawal_Link,
+                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -2263,6 +2271,98 @@ public class Display extends Application {
                 logout_Link);
         grid.add(menu_Box,0,2,1,10);
 
+        //Row 1
+        Label transfer_Label = new Label();
+        transfer_Label.setText("Transfer");
+        transfer_Label.setFont(Font.font("",FontWeight.BOLD,13));
+        grid.add(transfer_Label,1,1,1,1);
+
+        //Row 2
+        Label current_acc_Label = new Label();
+        current_acc_Label.setText("Your account number ");
+        current_acc_Label.setFont(Font.font("",FontWeight.NORMAL,12));
+        TextField current_acc_Field = new TextField();
+        DatabaseDriver db = new DatabaseDriver();
+        String sql = "SELECT Account_Number "
+                + "FROM Account WHERE Pk_Account_Id = " + "\"" + accountNumber + "\"";
+        current_acc_Field.setText(db.getBankAccount(sql));
+        current_acc_Field.setEditable(false);
+        current_acc_Field.setStyle("-fx-control-inner-background: lightgrey");
+        grid.add(current_acc_Label,1,2,1,1);
+        grid.add(current_acc_Field,2,2,1,1);
+        //Saving user bank account number to use later
+        int user_account_number = Integer.valueOf(db.getBankAccount(sql));
+
+        //Row 3
+        Label current_balance_Label = new Label();
+        current_balance_Label.setText("Your current balance ");
+        current_balance_Label.setFont(Font.font("",FontWeight.NORMAL,12));
+        TextField current_balance_Field = new TextField();
+        sql = "SELECT Balance "
+                + "FROM Account WHERE Pk_Account_Id = " + "\"" + accountNumber + "\"";
+        current_balance_Field.setText("$ " + db.getBalance(sql));
+        current_balance_Field.setEditable(false);
+        current_balance_Field.setStyle("-fx-control-inner-background: lightgrey");
+        grid.add(current_balance_Label,1,3,1,1);
+        grid.add(current_balance_Field,2,3,1,1);
+        //Saving user bank account number to use later
+        double user_balance = Double.valueOf(db.getBalance(sql));
+
+        //Row 4
+        Label destination_Label = new Label();
+        destination_Label.setText("Designated account number ");
+        destination_Label.setFont(Font.font("",FontWeight.NORMAL,12));
+        TextField destination_Field = new TextField();
+        grid.add(destination_Label,1,4,1,1);
+        grid.add(destination_Field,2,4,1,1);
+
+        //Row 5
+        Label destination_balance_Label = new Label();
+        destination_balance_Label.setText("Transfer amount ");
+        destination_balance_Label.setFont(Font.font("",FontWeight.NORMAL,12));
+        TextField destination_balance_Field = new TextField();
+        grid.add(destination_balance_Label,1,5,1,1);
+        grid.add(destination_balance_Field,2,5,1,1);
+
+        //Row 6
+        Button submit = new Button();
+        submit.setText("Submit");
+        Label console = new Label();
+        console.setTextFill(Color.RED);
+        grid.add(submit,1,6,1,1);
+        grid.add(console,2,6,7,1);
+        db.viewTable("Account");
+        submit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try{
+                    if (Double.valueOf(destination_balance_Field.getText()) > user_balance){
+                        console.setText("Insufficient balance");
+                    }
+                    else if (Double.valueOf(destination_balance_Field.getText()) == 0 || destination_balance_Field.getText().isEmpty()){
+                        console.setText("Enter amount");
+                    }
+                    else if (Double.valueOf(destination_balance_Field.getText()) < 0){
+                        console.setText("Enter valid amount");
+                    }
+                    else{
+                        String sql2 = "SELECT * FROM Account WHERE Account_Number = " + destination_Field.getText();
+                        BankAccountDriver bd = new BankAccountDriver();
+                        bd.withdraw(Double.valueOf(destination_balance_Field.getText()),
+                                Integer.valueOf(accountNumber),
+                                user_account_number);
+                        bd.deposit(Double.valueOf(destination_balance_Field.getText()),
+                                Integer.valueOf(db.getAccountNumber3(sql2)),
+                                Integer.valueOf(destination_Field.getText()));
+                        Post_Transaction_Call(accountNumber, user_balance -
+                                Double.valueOf(destination_balance_Field.getText()));
+                    }
+                } catch (Exception e){
+                    console.setText("Enter valid amount and account number");
+                }
+                System.out.println("Success!");
+            }
+        });
         Transfer_Scene = new Scene(grid,800,600);
         mainStage.setScene(Transfer_Scene);
 
@@ -2334,28 +2434,30 @@ public class Display extends Application {
         });
         profile_Link.setBorder(Border.EMPTY);
 
-        Hyperlink withdrawal_Link = new Hyperlink();
-        withdrawal_Link.setText("Withdrawal");
-        withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
-        withdrawal_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+
+        Hyperlink transaction_Link = new Hyperlink();
+        transaction_Link.setText("Transaction");
+        transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        transaction_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.BOLD,11));
+                transaction_Link.setFont(Font.font("",FontWeight.BOLD,11));
             }
         });
-        withdrawal_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+        transaction_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+                transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
             }
         });
-        withdrawal_Link.setOnAction(new EventHandler<ActionEvent>() {
+        transaction_Link.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Withdrawal_Call(accountNumber);
             }
         });
-        withdrawal_Link.setBorder(Border.EMPTY);
+        transaction_Link.setBorder(Border.EMPTY);
+
 
         Hyperlink deposit_Link = new Hyperlink();
         deposit_Link.setText("Deposit");
@@ -2478,13 +2580,114 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                withdrawal_Link,
+                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
                 help_Link,
                 logout_Link);
         grid.add(menu_Box,0,2,1,10);
+
+        //Row 1
+        Label transfer_Label = new Label();
+        transfer_Label.setText("Bill Pay");
+        transfer_Label.setFont(Font.font("",FontWeight.BOLD,13));
+        grid.add(transfer_Label,1,1,1,1);
+
+        //Row 2
+        Label current_acc_Label = new Label();
+        current_acc_Label.setText("Your account number ");
+        current_acc_Label.setFont(Font.font("",FontWeight.NORMAL,12));
+        TextField current_acc_Field = new TextField();
+        DatabaseDriver db = new DatabaseDriver();
+        String sql = "SELECT Account_Number "
+                + "FROM Account WHERE Pk_Account_Id = " + "\"" + accountNumber + "\"";
+        current_acc_Field.setText(db.getBankAccount(sql));
+        current_acc_Field.setEditable(false);
+        current_acc_Field.setStyle("-fx-control-inner-background: lightgrey");
+        grid.add(current_acc_Label,1,2,1,1);
+        grid.add(current_acc_Field,2,2,1,1);
+        //Saving user bank account number to use later
+        int user_account_number = Integer.valueOf(db.getBankAccount(sql));
+
+        //Row 3
+        Label current_balance_Label = new Label();
+        current_balance_Label.setText("Your current balance ");
+        current_balance_Label.setFont(Font.font("",FontWeight.NORMAL,12));
+        TextField current_balance_Field = new TextField();
+        sql = "SELECT Balance "
+                + "FROM Account WHERE Pk_Account_Id = " + "\"" + accountNumber + "\"";
+        current_balance_Field.setText("$ " + db.getBalance(sql));
+        current_balance_Field.setEditable(false);
+        current_balance_Field.setStyle("-fx-control-inner-background: lightgrey");
+        grid.add(current_balance_Label,1,3,1,1);
+        grid.add(current_balance_Field,2,3,1,1);
+        //Saving user bank account number to use later
+        double user_balance = Double.valueOf(db.getBalance(sql));
+
+        //Row 4
+        Label company_Label = new Label();
+        company_Label.setText("Company name");
+        company_Label.setFont(Font.font("",FontWeight.NORMAL,12));
+        TextField company_Field = new TextField();
+        grid.add(company_Label,1,4,1,1);
+        grid.add(company_Field,2,4,1,1);
+
+        //Row 5
+        Label destination_Label = new Label();
+        destination_Label.setText("Designated account number ");
+        destination_Label.setFont(Font.font("",FontWeight.NORMAL,12));
+        TextField destination_Field = new TextField();
+        grid.add(destination_Label,1,5,1,1);
+        grid.add(destination_Field,2,5,1,1);
+
+        //Row 6
+        Label destination_balance_Label = new Label();
+        destination_balance_Label.setText("Transfer amount ");
+        destination_balance_Label.setFont(Font.font("",FontWeight.NORMAL,12));
+        TextField destination_balance_Field = new TextField();
+        grid.add(destination_balance_Label,1,6,1,1);
+        grid.add(destination_balance_Field,2,6,1,1);
+
+        //Row 7
+        Button submit = new Button();
+        submit.setText("Submit");
+        Label console = new Label();
+        console.setTextFill(Color.RED);
+        grid.add(submit,1,7,1,1);
+        grid.add(console,2,7,7,1);
+        db.viewTable("Account");
+        submit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try{
+                    if (Double.valueOf(destination_balance_Field.getText()) > user_balance){
+                        console.setText("Insufficient balance");
+                    }
+                    else if (Double.valueOf(destination_balance_Field.getText()) == 0 || destination_balance_Field.getText().isEmpty()){
+                        console.setText("Enter amount");
+                    }
+                    else if (Double.valueOf(destination_balance_Field.getText()) < 0){
+                        console.setText("Enter valid amount");
+                    }
+                    else{
+                        String sql2 = "SELECT * FROM Account WHERE Account_Number = " + destination_Field.getText();
+                        BankAccountDriver bd = new BankAccountDriver();
+                        bd.withdraw(Double.valueOf(destination_balance_Field.getText()),
+                                Integer.valueOf(accountNumber),
+                                user_account_number);
+                        bd.deposit(Double.valueOf(destination_balance_Field.getText()),
+                                Integer.valueOf(db.getAccountNumber3(sql2)),
+                                Integer.valueOf(destination_Field.getText()));
+                        Post_BillPay_Call(accountNumber, company_Field.getText(),user_balance -
+                                Double.valueOf(destination_balance_Field.getText()));
+                    }
+                } catch (Exception e){
+                    console.setText("Enter valid amount and account number");
+                }
+                System.out.println("Success!");
+            }
+        });
 
         Billpay_Scene = new Scene(grid,800,600);
         mainStage.setScene(Billpay_Scene);
@@ -2556,28 +2759,30 @@ public class Display extends Application {
         });
         profile_Link.setBorder(Border.EMPTY);
 
-        Hyperlink withdrawal_Link = new Hyperlink();
-        withdrawal_Link.setText("Withdrawal");
-        withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
-        withdrawal_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+
+        Hyperlink transaction_Link = new Hyperlink();
+        transaction_Link.setText("Transaction");
+        transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        transaction_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.BOLD,11));
+                transaction_Link.setFont(Font.font("",FontWeight.BOLD,11));
             }
         });
-        withdrawal_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+        transaction_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+                transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
             }
         });
-        withdrawal_Link.setOnAction(new EventHandler<ActionEvent>() {
+        transaction_Link.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Withdrawal_Call(accountNumber);
             }
         });
-        withdrawal_Link.setBorder(Border.EMPTY);
+        transaction_Link.setBorder(Border.EMPTY);
+
 
         Hyperlink deposit_Link = new Hyperlink();
         deposit_Link.setText("Deposit");
@@ -2700,7 +2905,7 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                withdrawal_Link,
+                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -2787,28 +2992,30 @@ public class Display extends Application {
         });
         profile_Link.setBorder(Border.EMPTY);
 
-        Hyperlink withdrawal_Link = new Hyperlink();
-        withdrawal_Link.setText("Withdrawal");
-        withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
-        withdrawal_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+
+        Hyperlink transaction_Link = new Hyperlink();
+        transaction_Link.setText("Transaction");
+        transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        transaction_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.BOLD,11));
+                transaction_Link.setFont(Font.font("",FontWeight.BOLD,11));
             }
         });
-        withdrawal_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+        transaction_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                withdrawal_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+                transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
             }
         });
-        withdrawal_Link.setOnAction(new EventHandler<ActionEvent>() {
+        transaction_Link.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Withdrawal_Call(accountNumber);
             }
         });
-        withdrawal_Link.setBorder(Border.EMPTY);
+        transaction_Link.setBorder(Border.EMPTY);
+
 
         Hyperlink deposit_Link = new Hyperlink();
         deposit_Link.setText("Deposit");
@@ -2931,7 +3138,7 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                withdrawal_Link,
+                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -2954,6 +3161,243 @@ public class Display extends Application {
         Post_Transaction_Scene = new Scene(grid,800,600);
         mainStage.setScene(Post_Transaction_Scene);
     }
+
+    protected void Post_BillPay_Call(String accountNumber, String company, double balance){
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER_LEFT);
+        grid.setHgap(5);
+        grid.setVgap(5);
+        grid.setPadding(new Insets(10,10,20,20));
+        grid.setStyle("-fx-background-color: white");
+
+        //Row 0 (Logo)
+        ImageView LogoView = new ImageView();
+        LogoView.setImage(Logo);
+        LogoView.setFitWidth(Logo.getWidth()/4);
+        LogoView.setFitHeight(Logo.getHeight()/4);
+        grid.add(LogoView,4,0,1,1);
+
+        //Menu Box
+        VBox menu_Box = new VBox();
+        menu_Box.setAlignment(Pos.CENTER_LEFT);
+        menu_Box.setMinWidth(100);
+
+        Hyperlink overview_Link = new Hyperlink();
+        overview_Link.setText("Overview");
+        overview_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        overview_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                overview_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        overview_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                overview_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        overview_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Post_Login_Call(accountNumber);
+            }
+        });
+        overview_Link.setBorder(Border.EMPTY);
+
+        Hyperlink profile_Link = new Hyperlink();
+        profile_Link.setText("Profile");
+        profile_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        profile_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                profile_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        profile_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                profile_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        profile_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Profile_Call(accountNumber);
+            }
+        });
+        profile_Link.setBorder(Border.EMPTY);
+
+
+        Hyperlink transaction_Link = new Hyperlink();
+        transaction_Link.setText("Transaction");
+        transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        transaction_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                transaction_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        transaction_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                transaction_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        transaction_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Withdrawal_Call(accountNumber);
+            }
+        });
+        transaction_Link.setBorder(Border.EMPTY);
+
+
+        Hyperlink deposit_Link = new Hyperlink();
+        deposit_Link.setText("Deposit");
+        deposit_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        deposit_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                deposit_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        deposit_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                deposit_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        deposit_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Deposit_Call(accountNumber);
+            }
+        });
+        deposit_Link.setBorder(Border.EMPTY);
+
+        Hyperlink transfer_Link = new Hyperlink();
+        transfer_Link.setText("Transfer");
+        transfer_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        transfer_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                transfer_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        transfer_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                transfer_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        transfer_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Transfer_Call(accountNumber);
+            }
+        });
+        transfer_Link.setBorder(Border.EMPTY);
+
+        Hyperlink billpay_Link = new Hyperlink();
+        billpay_Link.setText("Bill pay");
+        billpay_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        billpay_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                billpay_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        billpay_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                billpay_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        billpay_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Billpay_Call(accountNumber);
+            }
+        });
+        billpay_Link.setBorder(Border.EMPTY);
+
+
+        Hyperlink help_Link = new Hyperlink();
+        help_Link.setText("Help");
+        help_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        help_Link.setTextFill(Color.BLUE);
+        help_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                help_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        help_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                help_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        help_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Help_Call(accountNumber);
+            }
+        });
+        help_Link.setBorder(Border.EMPTY);
+
+        Hyperlink logout_Link = new Hyperlink();
+        logout_Link.setText("Logout");
+        logout_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+        logout_Link.setTextFill(Color.RED);
+        logout_Link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                logout_Link.setFont(Font.font("",FontWeight.BOLD,11));
+            }
+        });
+        logout_Link.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                logout_Link.setFont(Font.font("",FontWeight.NORMAL, 11));
+            }
+        });
+        logout_Link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Login_Scene_Call();
+            }
+        });
+        logout_Link.setBorder(Border.EMPTY);
+
+        menu_Box.getChildren().addAll(
+                overview_Link,
+                profile_Link,
+                transaction_Link,
+                deposit_Link,
+                transfer_Link,
+                billpay_Link,
+                help_Link,
+                logout_Link);
+        grid.add(menu_Box,0,2,1,10);
+
+        //Row 1
+        Label post_trans_Label = new Label();
+        post_trans_Label.setText("Your Billpay to " + company +" was successful");
+        post_trans_Label.setFont(Font.font("",FontWeight.BOLD,13));
+        grid.add(post_trans_Label, 1,1,1,1);
+
+        //Row 2
+        Label post_Trans_balance_Label = new Label();
+        post_Trans_balance_Label.setText("Your new balance is: $" + balance);
+        post_Trans_balance_Label.setFont(Font.font("",FontWeight.NORMAL,11));
+        grid.add(post_Trans_balance_Label, 1,2,1,1);
+
+        Post_Transaction_Scene = new Scene(grid,800,600);
+        mainStage.setScene(Post_Transaction_Scene);
+    }
+
 
     protected void Reset_Password_Call(String accountNumber){
         //Main Gridpane set up

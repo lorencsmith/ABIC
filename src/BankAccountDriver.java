@@ -118,13 +118,11 @@ public class BankAccountDriver {
             stmt.executeUpdate();
 
             stmt.close();
+            conn.close();
 
             System.out.println("New balance = " + getBalance(pkID, accNo));
 
-
             System.out.println("Withdraw successful");
-
-
 
 
         } catch (Exception e) {
@@ -159,7 +157,7 @@ public class BankAccountDriver {
             pstmt.setInt(3, toAccNo);
             pstmt.executeUpdate();
 
-            System.out.println("Transaction successful");
+            System.out.println("Transfer successful");
 
             conn.close();
 

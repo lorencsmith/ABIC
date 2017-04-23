@@ -351,6 +351,20 @@ public class DatabaseDriver {
         return "";
     }
 
+    public String getAccountNumber3(String sql) {
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            // set the value
+            ResultSet rs = pstmt.executeQuery();
+
+            return rs.getString("Pk_Account_Id");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
     public String getBalance(String sql) {
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
