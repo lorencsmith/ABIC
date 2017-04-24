@@ -2637,7 +2637,7 @@ public class Display extends Application {
 
         //Row 6
         Label destination_balance_Label = new Label();
-        destination_balance_Label.setText("Transfer amount ");
+        destination_balance_Label.setText("Pay amount ");
         destination_balance_Label.setFont(Font.font("",FontWeight.NORMAL,12));
         TextField destination_balance_Field = new TextField();
         grid.add(destination_balance_Label,1,6,1,1);
