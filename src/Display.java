@@ -1155,7 +1155,6 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -1413,7 +1412,6 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -1750,7 +1748,6 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -1983,7 +1980,6 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -2263,7 +2259,6 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -2580,7 +2575,6 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -2905,7 +2899,6 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -3138,7 +3131,6 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
@@ -3374,7 +3366,6 @@ public class Display extends Application {
         menu_Box.getChildren().addAll(
                 overview_Link,
                 profile_Link,
-                transaction_Link,
                 deposit_Link,
                 transfer_Link,
                 billpay_Link,
